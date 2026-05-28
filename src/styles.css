@@ -1,0 +1,113 @@
+/* Freewrite framework component styles — standalone, no Tailwind required.
+   Theme-aware via prefers-color-scheme; consuming sites can override --fw-* vars. */
+
+:root {
+  --fw-fg: #0f172a;
+  --fw-muted: #64748b;
+  --fw-bg: #ffffff;
+  --fw-subtle: #f1f5f9;
+  --fw-border: #e2e8f0;
+  --fw-accent: #0f172a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fw-fg: #e2e8f0;
+    --fw-muted: #94a3b8;
+    --fw-bg: #0b1120;
+    --fw-subtle: #1e293b;
+    --fw-border: #1e293b;
+    --fw-accent: #e2e8f0;
+  }
+}
+
+/* Prose */
+.fw-prose { color: var(--fw-fg); line-height: 1.7; font-size: 16px; }
+.fw-prose h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin: 1.5rem 0 1rem; }
+.fw-prose h2 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; margin: 2rem 0 0.75rem; }
+.fw-prose h3 { font-size: 1.25rem; font-weight: 600; margin: 1.5rem 0 0.5rem; }
+.fw-prose h4 { font-size: 1.05rem; font-weight: 600; margin: 1.25rem 0 0.5rem; }
+.fw-prose p { margin: 0.85rem 0; }
+.fw-prose a { color: var(--fw-fg); text-decoration: underline; text-underline-offset: 2px; }
+.fw-prose ul, .fw-prose ol { margin: 0.85rem 0; padding-left: 1.4rem; }
+.fw-prose li { margin: 0.3rem 0; }
+.fw-prose blockquote { border-left: 2px solid var(--fw-border); padding-left: 1rem; color: var(--fw-muted); font-style: italic; margin: 1rem 0; }
+.fw-prose hr { border: 0; border-top: 1px solid var(--fw-border); margin: 2rem 0; }
+.fw-prose img { max-width: 100%; height: auto; }
+.fw-prose code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.875em; background: var(--fw-subtle); padding: 0.1em 0.35em; }
+.fw-prose pre { overflow-x: auto; padding: 1rem; margin: 1rem 0; font-size: 0.85rem; background: var(--fw-subtle); border: 1px solid var(--fw-border); }
+.fw-prose pre code { background: transparent; padding: 0; }
+.fw-prose table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.9rem; }
+.fw-prose th, .fw-prose td { border: 1px solid var(--fw-border); padding: 0.5rem 0.75rem; text-align: left; }
+
+/* Callouts */
+.fw-callout { border: 1px solid; padding: 0.85rem 1rem; margin: 1rem 0; font-size: 0.95rem; }
+.fw-callout-info { border-color: #3b82f680; background: #3b82f614; }
+.fw-callout-warning { border-color: #f59e0b80; background: #f59e0b14; }
+.fw-callout-error { border-color: #ef444480; background: #ef444414; }
+.fw-callout-success { border-color: #10b98180; background: #10b98114; }
+.fw-callout > :first-child { margin-top: 0; }
+.fw-callout > :last-child { margin-bottom: 0; }
+
+/* Embeds */
+.fw-embed { margin: 1rem 0; border: 1px solid var(--fw-border); }
+.fw-embed-16x9 { position: relative; padding-top: 56.25%; }
+.fw-embed-16x9 iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.fw-embed-link { display: inline-block; margin: 1rem 0; word-break: break-all; }
+
+/* Hero */
+.fw-hero { display: block; width: 100%; height: auto; margin: 1.5rem 0; border: 1px solid var(--fw-border); }
+
+/* Author bio */
+.fw-authorbio { display: flex; gap: 0.75rem; align-items: center; border: 1px solid var(--fw-border); padding: 0.85rem 1rem; margin: 1.5rem 0; }
+.fw-authorbio-avatar { width: 40px; height: 40px; object-fit: cover; }
+.fw-authorbio-name { font-weight: 600; }
+.fw-authorbio-text { color: var(--fw-muted); font-size: 0.9rem; }
+
+/* Related */
+.fw-related { border-top: 1px solid var(--fw-border); margin-top: 2rem; padding-top: 1rem; }
+.fw-related-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--fw-muted); margin: 0 0 0.5rem; }
+.fw-related ul { list-style: none; padding: 0; margin: 0; }
+
+/* Newsletter CTA */
+.fw-cta { border: 1px solid var(--fw-border); background: var(--fw-subtle); padding: 1.25rem; margin: 1.5rem 0; }
+.fw-cta-heading { font-weight: 600; margin: 0 0 0.75rem; }
+.fw-cta-note { color: var(--fw-muted); font-size: 0.875rem; }
+
+/* API reference */
+.fw-apiref { border: 1px solid var(--fw-border); margin: 1rem 0; }
+.fw-apiref-head { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.85rem; background: var(--fw-subtle); }
+.fw-apiref-method { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 0.15rem 0.4rem; color: #fff; }
+.fw-method-get { background: #10b981; }
+.fw-method-post { background: #3b82f6; }
+.fw-method-put, .fw-method-patch { background: #f59e0b; }
+.fw-method-delete { background: #ef4444; }
+.fw-apiref-path { font-family: ui-monospace, monospace; font-size: 0.9rem; }
+.fw-apiref-note { color: var(--fw-muted); font-size: 0.8rem; padding: 0.5rem 0.85rem; margin: 0; }
+
+/* Playground */
+.fw-playground { border: 1px dashed var(--fw-border); padding: 1.5rem; margin: 1rem 0; text-align: center; }
+.fw-playground-badge { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--fw-muted); }
+.fw-playground-note { color: var(--fw-muted); font-size: 0.875rem; margin: 0.5rem 0 0; }
+
+/* Unknown component fallback */
+.fw-unknown { border: 1px dashed var(--fw-border); padding: 0.5rem 0.75rem; margin: 0.5rem 0; font-size: 0.85rem; color: var(--fw-muted); }
+
+/* Subscribe form */
+.fw-subscribe { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.fw-subscribe input { flex: 1; min-width: 12rem; border: 1px solid var(--fw-border); background: var(--fw-bg); color: var(--fw-fg); padding: 0.55rem 0.75rem; font-size: 0.9rem; }
+.fw-subscribe button { border: 0; background: var(--fw-accent); color: var(--fw-bg); padding: 0.55rem 1rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+.fw-subscribe button:disabled { opacity: 0.5; cursor: default; }
+.fw-subscribe-done { color: var(--fw-muted); font-size: 0.9rem; }
+.fw-subscribe-error { color: #ef4444; font-size: 0.8rem; margin-top: 0.4rem; }
+
+/* Search dialog */
+.fw-search-trigger { display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid var(--fw-border); background: var(--fw-bg); color: var(--fw-muted); padding: 0.4rem 0.75rem; font-size: 0.85rem; cursor: pointer; }
+.fw-search-overlay { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,0.5); display: flex; align-items: flex-start; justify-content: center; padding: 12vh 1rem 1rem; }
+.fw-search-panel { width: 100%; max-width: 32rem; background: var(--fw-bg); border: 1px solid var(--fw-border); }
+.fw-search-input { width: 100%; box-sizing: border-box; border: 0; border-bottom: 1px solid var(--fw-border); background: transparent; color: var(--fw-fg); padding: 0.85rem 1rem; font-size: 0.95rem; outline: none; }
+.fw-search-results { max-height: 60vh; overflow: auto; margin: 0; padding: 0.25rem; list-style: none; }
+.fw-search-results li a { display: block; padding: 0.5rem 0.75rem; color: var(--fw-fg); text-decoration: none; }
+.fw-search-results li a:hover, .fw-search-results li a[data-active="true"] { background: var(--fw-subtle); }
+.fw-search-result-title { font-size: 0.9rem; }
+.fw-search-result-slug { font-family: ui-monospace, monospace; font-size: 0.75rem; color: var(--fw-muted); }
+.fw-search-empty { padding: 1.5rem; text-align: center; color: var(--fw-muted); font-size: 0.9rem; }
