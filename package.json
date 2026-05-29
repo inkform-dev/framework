@@ -21,7 +21,9 @@
     "./search": "./src/search.ts",
     "./search-dialog": "./src/search-dialog.tsx",
     "./subscribe-form": "./src/subscribe-form.tsx",
-    "./analytics-script": "./src/analytics-script.tsx"
+    "./analytics-script": "./src/analytics-script.tsx",
+    "./reactions": "./src/reactions.tsx",
+    "./comments": "./src/comments.tsx"
   },
   "files": ["src"],
   "scripts": {

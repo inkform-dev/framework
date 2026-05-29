@@ -8,6 +8,8 @@
   --fw-subtle: #f1f5f9;
   --fw-border: #e2e8f0;
   --fw-accent: #0f172a;
+  --fw-love: #ff5d8f; /* PS2 "character" pink — love reaction */
+  --fw-like: #6ea8ff; /* PS2 "character" blue — like reaction */
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -111,3 +113,30 @@
 .fw-search-result-title { font-size: 0.9rem; }
 .fw-search-result-slug { font-family: ui-monospace, monospace; font-size: 0.75rem; color: var(--fw-muted); }
 .fw-search-empty { padding: 1.5rem; text-align: center; color: var(--fw-muted); font-size: 0.9rem; }
+
+/* Reactions */
+.fw-reactions { display: flex; align-items: center; gap: 0.5rem; margin: 1.5rem 0; }
+.fw-reaction { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.7rem; background: var(--fw-subtle); border: 1px solid var(--fw-border); color: var(--fw-fg); font-size: 0.85rem; cursor: pointer; transition: transform 0.12s cubic-bezier(0.23,1,0.32,1), background 0.12s; }
+.fw-reaction:hover { background: var(--fw-bg); }
+.fw-reaction:active { transform: scale(0.97); }
+.fw-reaction-glyph { line-height: 1; }
+.fw-reaction-love .fw-reaction-glyph { color: var(--fw-love); text-shadow: 0 0 8px var(--fw-love); }
+.fw-reaction-like .fw-reaction-glyph { color: var(--fw-like); text-shadow: 0 0 8px var(--fw-like); }
+.fw-reaction-count { font-family: ui-monospace, monospace; font-size: 0.8rem; color: var(--fw-muted); }
+.fw-reaction-gate { font-size: 0.8rem; color: var(--fw-muted); }
+
+/* Comments */
+.fw-comments { margin: 2.5rem 0; }
+.fw-comments-title { font-size: 1rem; font-weight: 600; margin: 0 0 1rem; color: var(--fw-fg); }
+.fw-comment-compose { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+.fw-comment-compose textarea { width: 100%; padding: 0.6rem 0.75rem; background: var(--fw-bg); border: 1px solid var(--fw-border); color: var(--fw-fg); font: inherit; resize: vertical; }
+.fw-comment-compose button { align-self: flex-end; padding: 0.4rem 1rem; background: var(--fw-accent); color: var(--fw-bg); border: 0; font-size: 0.85rem; cursor: pointer; }
+.fw-comment-gate { font-size: 0.85rem; color: var(--fw-muted); padding: 0.75rem; border: 1px dashed var(--fw-border); margin-bottom: 1.5rem; }
+.fw-comment-list, .fw-comment-replies { list-style: none; margin: 0; padding: 0; }
+.fw-comment { padding: 0.75rem 0; }
+.fw-comment-replies { margin-left: 1rem; padding-left: 1rem; border-left: 1px solid var(--fw-border); }
+.fw-comment-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.25rem; }
+.fw-comment-author { font-size: 0.85rem; font-weight: 600; color: var(--fw-fg); }
+.fw-comment-date { font-family: ui-monospace, monospace; font-size: 0.72rem; color: var(--fw-muted); }
+.fw-comment-body { margin: 0; font-size: 0.9rem; line-height: 1.6; color: var(--fw-fg); white-space: pre-wrap; }
+.fw-comments-empty { font-size: 0.85rem; color: var(--fw-muted); }
