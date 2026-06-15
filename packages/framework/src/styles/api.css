@@ -30,6 +30,16 @@
 .fw-method-head    { background: var(--fw-method-head); }
 .fw-method-options { background: var(--fw-method-options); }
 
+/* Sidebar API method pill — a smaller, fixed-width variant of .fw-method-pill
+   used as the icon next to each endpoint in the API Reference sidebar. */
+.fw-sidebar-method {
+  font-size: 0.6rem;
+  min-width: 2.85rem;
+  padding-left: 0.3em;
+  padding-right: 0.3em;
+  letter-spacing: 0.04em;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    APIREF — two-column endpoint page
 ═══════════════════════════════════════════════════════════════ */
@@ -401,8 +411,8 @@
   border-bottom: 1px solid var(--fw-border);
 }
 
-.fw-apiref-status-ok  { color: var(--fw-method-get); }
-.fw-apiref-status-err { color: var(--fw-method-delete); }
+.fw-apiref-status-ok  { color: var(--fw-method-get); background: color-mix(in srgb, var(--fw-method-get) 14%, transparent); }
+.fw-apiref-status-err { color: var(--fw-method-delete); background: color-mix(in srgb, var(--fw-method-delete) 14%, transparent); }
 
 .fw-apiref-sample-json {
   margin: 0;

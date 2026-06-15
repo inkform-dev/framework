@@ -193,17 +193,7 @@ export function sidebarForApi(
     group: g.group,
     items: g.items.map((item): SidebarItem => {
       const methodEl = (
-        <span
-          className={`fw-method-${item.method.toLowerCase()}`}
-          style={{
-            fontSize: '0.625rem',
-            fontWeight: 700,
-            fontFamily: 'var(--fw-mono)',
-            letterSpacing: '0.05em',
-            minWidth: '2.5rem',
-            display: 'inline-block',
-          }}
-        >
+        <span className={`fw-method-pill fw-method-${item.method.toLowerCase()} fw-sidebar-method`}>
           {item.method.toUpperCase()}
         </span>
       ) as ReactNode;

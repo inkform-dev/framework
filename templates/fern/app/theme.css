@@ -169,11 +169,10 @@ html.dark {
   letter-spacing: -0.01em;
 }
 
-/* API operation sidebar method pills */
-.fw-method-get   { color: var(--fw-method-get); }
-.fw-method-post  { color: var(--fw-method-post); }
-.fw-method-put   { color: var(--fw-method-put); }
-.fw-method-patch { color: var(--fw-method-patch); }
-.fw-method-delete { color: var(--fw-method-delete); }
-.fw-method-head  { color: var(--fw-method-head); }
-.fw-method-options { color: var(--fw-method-options); }
+
+/* ── Header: hide secondary top-nav links on mobile (prevents overflow) ── */
+@media (max-width: 60rem) {
+  .fw-topnav-anchors,
+  .fw-topnav-navlink,
+  .fw-topnav-cta { display: none; }
+}

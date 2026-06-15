@@ -78,10 +78,39 @@ html.dark {
   --fw-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
 
-/* minimal reset scoped to framework regions */
-.fw-prose *,
-.fw-shell *,
-.fw-apiref *,
-.fw-askai * {
+/* ── Global reset + base document styling ──────────────────────────────────
+   A docs framework owns the page chrome, so it sets the box model and base
+   document styles. Without `body { margin: 0 }` the browser's default 8px
+   margin shows as a white border around the shell. */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+  background: var(--fw-bg);
+  color: var(--fw-fg);
+  font-family: var(--fw-font);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Media never overflows its container (a common source of horizontal scroll). */
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
 }
