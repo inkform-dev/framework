@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Markdown Guide favicon">
+  <!-- Sharp square background — zero radius, brutalist -->
+  <rect width="32" height="32" fill="#0a0a0a"/>
+  <!-- M mark inside a subtle inner rect -->
+  <rect x="3" y="3" width="26" height="26" fill="#1a9e5c" opacity="0.15"/>
+  <!-- M letterform — two peaks, centered -->
+  <polyline points="7,23 7,10 16,19 25,10 25,23" stroke="#1a9e5c" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+</svg>

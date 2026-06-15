@@ -1,0 +1,181 @@
+---
+title: Lists
+description: Unordered lists, ordered lists, nested lists, and definition lists in Markdown.
+---
+
+# Lists
+
+Lists are one of the most common structures in documentation. Markdown supports unordered (bullet) lists, ordered (numbered) lists, and nesting.
+
+## Unordered lists
+
+Start each item with `-`, `*`, or `+` followed by a space:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    - Apples
+    - Bananas
+    - Oranges
+    ```
+  </Tab>
+  <Tab title="Result">
+    - Apples
+    - Bananas
+    - Oranges
+  </Tab>
+</Tabs>
+
+<Note>
+  You can mix `-`, `*`, and `+` within a document, but do not mix them within a single list — some parsers will treat a mixed list as multiple separate lists.
+</Note>
+
+## Ordered lists
+
+Start each item with a number followed by a period and a space:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    1. First item
+    2. Second item
+    3. Third item
+    ```
+  </Tab>
+  <Tab title="Result">
+    1. First item
+    2. Second item
+    3. Third item
+  </Tab>
+</Tabs>
+
+### Numbering does not matter
+
+CommonMark ignores the actual numbers you write — it uses the first number as the starting point and increments from there:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    1. First
+    1. Second (also written as 1.)
+    1. Third (also written as 1.)
+    ```
+  </Tab>
+  <Tab title="Result">
+    1. First
+    2. Second
+    3. Third
+  </Tab>
+</Tabs>
+
+<Tip>
+  Writing all items as `1.` makes reordering items easy — you do not have to renumber. Your editor or tool will render them correctly.
+</Tip>
+
+### Starting from a different number
+
+The first number in a list sets the starting count:
+
+```markdown
+42. The answer
+43. Plus one
+44. Plus two
+```
+
+Renders as an ordered list starting at 42.
+
+## Nested lists
+
+Indent by two or four spaces to create a nested list:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    - Fruits
+      - Apples
+      - Bananas
+        - Cavendish
+        - Plantain
+    - Vegetables
+      - Carrots
+      - Broccoli
+    ```
+  </Tab>
+  <Tab title="Result">
+    - Fruits
+      - Apples
+      - Bananas
+    - Vegetables
+      - Carrots
+  </Tab>
+</Tabs>
+
+You can also mix ordered and unordered lists:
+
+```markdown
+1. Install dependencies
+   - Node.js 20 or later
+   - pnpm 9 or later
+2. Clone the repository
+3. Run the dev server
+```
+
+## Loose vs. tight lists
+
+A **tight** list has no blank lines between items. A **loose** list has blank lines between items. Loose lists wrap each item in a `<p>` tag:
+
+<Tabs>
+  <Tab title="Tight list">
+    ```markdown
+    - Item one
+    - Item two
+    - Item three
+    ```
+  </Tab>
+  <Tab title="Loose list">
+    ```markdown
+    - Item one
+
+    - Item two
+
+    - Item three
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  Use tight lists for short bullet points. Use loose lists when each item contains multiple sentences or paragraphs — the extra spacing improves readability.
+</Note>
+
+## Multi-paragraph list items
+
+A list item can contain multiple paragraphs. Indent continuation content by the same amount as the item text:
+
+```markdown
+- **First item**
+
+  This item has a second paragraph. Indent it to align with the first character
+  of the item text (after the bullet and space).
+
+- **Second item**
+
+  Another paragraph here.
+```
+
+## List items with code blocks
+
+Code blocks inside list items must be indented to align with the item content:
+
+```markdown
+1. Clone the repo
+
+   ```bash
+   git clone https://github.com/example/repo.git
+   ```
+
+2. Install dependencies
+
+   ```bash
+   pnpm install
+   ```
+```

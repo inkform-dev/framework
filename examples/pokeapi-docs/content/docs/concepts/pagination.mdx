@@ -1,0 +1,115 @@
+---
+title: Pagination
+description: All list endpoints in PokéAPI use offset-based pagination with limit and offset query parameters.
+---
+
+# Pagination
+
+Every collection endpoint in PokéAPI returns a **paginated list**. By default you get 20 results per page. You can control the page size and offset with query parameters.
+
+## Query parameters
+
+<ParamField query="limit" type="integer">
+  The number of results to return per page. Defaults to `20`. Maximum is `100000`
+  (though fetching all at once is rarely useful — see the bulk export for that).
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  The zero-based index of the first result to return. Defaults to `0`.
+</ParamField>
+
+## Response shape
+
+Every paginated response has this shape:
+
+```json
+{
+  "count": 1302,
+  "next": "https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20",
+  "previous": null,
+  "results": [
+    { "name": "bulbasaur", "url": "https://pokeapi.co/api/v2/pokemon/1/" },
+    { "name": "ivysaur",   "url": "https://pokeapi.co/api/v2/pokemon/2/" },
+    ...
+  ]
+}
+```
+
+<ResponseField name="count" type="integer" required>
+  Total number of resources in this collection across all pages.
+</ResponseField>
+
+<ResponseField name="next" type="string | null" required>
+  The URL of the next page, or `null` if this is the last page.
+</ResponseField>
+
+<ResponseField name="previous" type="string | null" required>
+  The URL of the previous page, or `null` if this is the first page.
+</ResponseField>
+
+<ResponseField name="results" type="NamedAPIResource[]" required>
+  Array of `{ name, url }` objects for this page.
+</ResponseField>
+
+## Examples
+
+### Page 1 (default)
+
+```bash
+curl "https://pokeapi.co/api/v2/pokemon/"
+# Returns Pokémon 1–20
+```
+
+### Page 2
+
+```bash
+curl "https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20"
+# Returns Pokémon 21–40
+```
+
+### Large page
+
+```bash
+curl "https://pokeapi.co/api/v2/pokemon/?limit=100"
+# Returns Pokémon 1–100
+```
+
+### Get all names in one request
+
+```bash
+curl "https://pokeapi.co/api/v2/pokemon/?limit=100000&offset=0"
+# Returns all 1302 Pokémon — useful for building a local search index
+```
+
+<Warning>
+  Fetching `limit=100000` returns all resource stubs (name + URL), not full
+  objects. It is a common pattern for building an autocomplete index but
+  should be cached — do not fetch it on every page load.
+</Warning>
+
+## Implementing pagination in JavaScript
+
+```js
+async function fetchAllPages(endpoint) {
+  const results = [];
+  let url = `https://pokeapi.co/api/v2/${endpoint}/?limit=100`;
+
+  while (url) {
+    const res = await fetch(url);
+    const page = await res.json();
+    results.push(...page.results);
+    url = page.next; // null on the last page — loop ends
+  }
+
+  return results;
+}
+
+const allPokemon = await fetchAllPages('pokemon');
+console.log(allPokemon.length); // 1302
+```
+
+<Tip>
+  If you only need names for a search box, fetch `/pokemon/?limit=100000&offset=0`
+  once, cache the response, and filter client-side. It is a small payload (~100 KB)
+  and saves hundreds of individual requests.
+</Tip>

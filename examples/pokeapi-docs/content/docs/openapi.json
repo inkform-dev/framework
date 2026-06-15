@@ -1,0 +1,454 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PokéAPI v2",
+    "version": "2.0.0",
+    "description": "The RESTful Pokémon API — free, open, and no authentication required. All data from the core Pokémon games accessible via simple HTTP GET requests."
+  },
+  "servers": [
+    { "url": "https://pokeapi.co/api/v2", "description": "Production (no auth required)" }
+  ],
+  "tags": [
+    { "name": "Pokémon", "description": "Core Pokémon data — stats, moves, sprites, abilities, and types." },
+    { "name": "Types", "description": "Type damage relations — super effective, resistances, and immunities." },
+    { "name": "Moves", "description": "Battle moves — power, accuracy, PP, and effects." },
+    { "name": "Abilities", "description": "Passive abilities Pokémon carry into battle." }
+  ],
+  "paths": {
+    "/pokemon": {
+      "get": {
+        "operationId": "list-pokemon",
+        "tags": ["Pokémon"],
+        "summary": "List Pokémon",
+        "description": "Returns a paginated list of all Pokémon. Each result is a name/URL stub — follow the URL to get the full Pokémon resource.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Number of results to return per page. Defaults to 20. Use `limit=100000` to fetch all names at once for an autocomplete index.",
+            "schema": { "type": "integer", "default": 20, "minimum": 1, "maximum": 100000 }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "description": "Zero-based index of the first result to return. Used for pagination.",
+            "schema": { "type": "integer", "default": 0, "minimum": 0 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A paginated list of Pokémon name/URL stubs.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NamedAPIResourceList" },
+                "example": {
+                  "count": 1302,
+                  "next": "https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20",
+                  "previous": null,
+                  "results": [
+                    { "name": "bulbasaur", "url": "https://pokeapi.co/api/v2/pokemon/1/" },
+                    { "name": "ivysaur",   "url": "https://pokeapi.co/api/v2/pokemon/2/" },
+                    { "name": "venusaur",  "url": "https://pokeapi.co/api/v2/pokemon/3/" }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pokemon/{name}": {
+      "get": {
+        "operationId": "get-pokemon",
+        "tags": ["Pokémon"],
+        "summary": "Get a Pokémon",
+        "description": "Returns full data for a single Pokémon — base stats, types, moves, abilities, sprites, and a link to the species resource for flavour text and evolution chain.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "The Pokémon's lowercase hyphenated name (e.g. `pikachu`, `mr-mime`) or its National Pokédex ID (e.g. `25`).",
+            "schema": { "type": "string", "example": "pikachu" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The full Pokémon resource.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Pokemon" },
+                "example": {
+                  "id": 25,
+                  "name": "pikachu",
+                  "base_experience": 112,
+                  "height": 4,
+                  "weight": 60,
+                  "is_default": true,
+                  "types": [
+                    { "slot": 1, "type": { "name": "electric", "url": "https://pokeapi.co/api/v2/type/13/" } }
+                  ],
+                  "stats": [
+                    { "base_stat": 35, "effort": 0, "stat": { "name": "hp", "url": "https://pokeapi.co/api/v2/stat/1/" } },
+                    { "base_stat": 55, "effort": 0, "stat": { "name": "attack", "url": "https://pokeapi.co/api/v2/stat/2/" } },
+                    { "base_stat": 90, "effort": 2, "stat": { "name": "speed", "url": "https://pokeapi.co/api/v2/stat/6/" } }
+                  ],
+                  "abilities": [
+                    { "ability": { "name": "static", "url": "https://pokeapi.co/api/v2/ability/9/" }, "is_hidden": false, "slot": 1 },
+                    { "ability": { "name": "lightning-rod", "url": "https://pokeapi.co/api/v2/ability/31/" }, "is_hidden": true, "slot": 3 }
+                  ],
+                  "sprites": {
+                    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+                    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png"
+                  },
+                  "species": { "name": "pikachu", "url": "https://pokeapi.co/api/v2/pokemon-species/25/" }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Pokémon not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotFound" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/type/{name}": {
+      "get": {
+        "operationId": "get-type",
+        "tags": ["Types"],
+        "summary": "Get a type",
+        "description": "Returns a Pokémon type with its full damage relation table — what the type is super effective against, resisted by, and immune to.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "The type's lowercase name (e.g. `fire`, `water`, `electric`) or its numeric ID.",
+            "schema": { "type": "string", "example": "electric" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The full type resource with damage relations.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Type" },
+                "example": {
+                  "id": 13,
+                  "name": "electric",
+                  "damage_relations": {
+                    "no_damage_to": [{ "name": "ground", "url": "https://pokeapi.co/api/v2/type/5/" }],
+                    "half_damage_to": [{ "name": "grass", "url": "..." }, { "name": "electric", "url": "..." }, { "name": "dragon", "url": "..." }],
+                    "double_damage_to": [{ "name": "flying", "url": "..." }, { "name": "water", "url": "..." }],
+                    "no_damage_from": [],
+                    "half_damage_from": [{ "name": "flying", "url": "..." }, { "name": "steel", "url": "..." }, { "name": "electric", "url": "..." }],
+                    "double_damage_from": [{ "name": "ground", "url": "..." }]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Type not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotFound" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ability/{name}": {
+      "get": {
+        "operationId": "get-ability",
+        "tags": ["Abilities"],
+        "summary": "Get an ability",
+        "description": "Returns an ability with its effect description, the generation it was introduced, and a list of all Pokémon that can have it (including hidden ability holders).",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "The ability's lowercase hyphenated name (e.g. `intimidate`, `speed-boost`) or its numeric ID.",
+            "schema": { "type": "string", "example": "intimidate" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The full ability resource.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Ability" },
+                "example": {
+                  "id": 22,
+                  "name": "intimidate",
+                  "is_main_series": true,
+                  "generation": { "name": "generation-iii", "url": "https://pokeapi.co/api/v2/generation/3/" },
+                  "effect_entries": [
+                    {
+                      "effect": "Lowers the opposing Pokémon's Attack by one stage when the Pokémon enters battle.",
+                      "short_effect": "Lowers the foe's attack by one stage upon entering battle.",
+                      "language": { "name": "en", "url": "..." }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ability not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotFound" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/move/{name}": {
+      "get": {
+        "operationId": "get-move",
+        "tags": ["Moves"],
+        "summary": "Get a move",
+        "description": "Returns a move with its type, damage class (physical/special/status), base power, accuracy, PP, effect description, and per-version history.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "The move's lowercase hyphenated name (e.g. `thunderbolt`, `close-combat`) or its numeric ID.",
+            "schema": { "type": "string", "example": "thunderbolt" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The full move resource.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Move" },
+                "example": {
+                  "id": 85,
+                  "name": "thunderbolt",
+                  "accuracy": 100,
+                  "effect_chance": 10,
+                  "pp": 15,
+                  "priority": 0,
+                  "power": 90,
+                  "type": { "name": "electric", "url": "https://pokeapi.co/api/v2/type/13/" },
+                  "damage_class": { "name": "special", "url": "https://pokeapi.co/api/v2/move-damage-class/3/" },
+                  "effect_entries": [
+                    {
+                      "effect": "Inflicts regular damage. Has a $effect_chance% chance to paralyze the target.",
+                      "short_effect": "Has a $effect_chance% chance to paralyze the target.",
+                      "language": { "name": "en", "url": "..." }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Move not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotFound" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NamedAPIResource": {
+        "type": "object",
+        "required": ["name", "url"],
+        "description": "A reference to another API resource by name and URL.",
+        "properties": {
+          "name": { "type": "string", "description": "The resource's lowercase hyphenated name." },
+          "url": { "type": "string", "format": "uri", "description": "The URL to fetch the full resource." }
+        }
+      },
+      "NamedAPIResourceList": {
+        "type": "object",
+        "required": ["count", "results"],
+        "description": "A paginated list of resource name/URL stubs.",
+        "properties": {
+          "count": { "type": "integer", "description": "Total number of resources in this collection." },
+          "next": { "type": "string", "format": "uri", "nullable": true, "description": "URL of the next page, or null if this is the last page." },
+          "previous": { "type": "string", "format": "uri", "nullable": true, "description": "URL of the previous page, or null if this is the first page." },
+          "results": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/NamedAPIResource" }
+          }
+        }
+      },
+      "PokemonType": {
+        "type": "object",
+        "required": ["slot", "type"],
+        "properties": {
+          "slot": { "type": "integer", "description": "The slot position (1 = primary, 2 = secondary)." },
+          "type": { "$ref": "#/components/schemas/NamedAPIResource" }
+        }
+      },
+      "PokemonStat": {
+        "type": "object",
+        "required": ["base_stat", "effort", "stat"],
+        "properties": {
+          "base_stat": { "type": "integer", "description": "The base value of the stat." },
+          "effort": { "type": "integer", "description": "EV yield when this Pokémon is defeated." },
+          "stat": { "$ref": "#/components/schemas/NamedAPIResource" }
+        }
+      },
+      "PokemonAbility": {
+        "type": "object",
+        "required": ["ability", "is_hidden", "slot"],
+        "properties": {
+          "ability": { "$ref": "#/components/schemas/NamedAPIResource" },
+          "is_hidden": { "type": "boolean", "description": "True if this is the Pokémon's hidden ability." },
+          "slot": { "type": "integer", "description": "The slot position (1, 2, or 3)." }
+        }
+      },
+      "PokemonSprites": {
+        "type": "object",
+        "properties": {
+          "front_default": { "type": "string", "format": "uri", "nullable": true, "description": "Front sprite URL." },
+          "front_shiny": { "type": "string", "format": "uri", "nullable": true, "description": "Front shiny sprite URL." },
+          "back_default": { "type": "string", "format": "uri", "nullable": true, "description": "Back sprite URL." },
+          "back_shiny": { "type": "string", "format": "uri", "nullable": true, "description": "Back shiny sprite URL." }
+        }
+      },
+      "Pokemon": {
+        "type": "object",
+        "required": ["id", "name", "types", "stats", "abilities", "sprites", "species"],
+        "description": "A Pokémon with its base stats, types, moves, abilities, and sprites.",
+        "properties": {
+          "id": { "type": "integer", "description": "National Pokédex number." },
+          "name": { "type": "string", "description": "Lowercase hyphenated name." },
+          "base_experience": { "type": "integer", "description": "Base XP gained when defeating this Pokémon." },
+          "height": { "type": "integer", "description": "Height in decimetres." },
+          "weight": { "type": "integer", "description": "Weight in hectograms." },
+          "is_default": { "type": "boolean", "description": "True if this is the default form of the species." },
+          "order": { "type": "integer", "description": "Order for sorting. Almost national order, except families are grouped together." },
+          "types": { "type": "array", "items": { "$ref": "#/components/schemas/PokemonType" } },
+          "stats": { "type": "array", "items": { "$ref": "#/components/schemas/PokemonStat" } },
+          "abilities": { "type": "array", "items": { "$ref": "#/components/schemas/PokemonAbility" } },
+          "sprites": { "$ref": "#/components/schemas/PokemonSprites" },
+          "species": { "$ref": "#/components/schemas/NamedAPIResource" }
+        }
+      },
+      "TypeRelations": {
+        "type": "object",
+        "description": "Damage multiplier relations for a type.",
+        "properties": {
+          "no_damage_to": { "type": "array", "items": { "$ref": "#/components/schemas/NamedAPIResource" }, "description": "Types this type deals 0× damage to." },
+          "half_damage_to": { "type": "array", "items": { "$ref": "#/components/schemas/NamedAPIResource" }, "description": "Types this type deals 0.5× damage to." },
+          "double_damage_to": { "type": "array", "items": { "$ref": "#/components/schemas/NamedAPIResource" }, "description": "Types this type deals 2× damage to." },
+          "no_damage_from": { "type": "array", "items": { "$ref": "#/components/schemas/NamedAPIResource" }, "description": "Types that deal 0× damage to this type." },
+          "half_damage_from": { "type": "array", "items": { "$ref": "#/components/schemas/NamedAPIResource" }, "description": "Types that deal 0.5× damage to this type." },
+          "double_damage_from": { "type": "array", "items": { "$ref": "#/components/schemas/NamedAPIResource" }, "description": "Types that deal 2× damage to this type." }
+        }
+      },
+      "Type": {
+        "type": "object",
+        "required": ["id", "name", "damage_relations"],
+        "description": "A Pokémon type with its full damage relation table.",
+        "properties": {
+          "id": { "type": "integer", "description": "Type ID (1–18)." },
+          "name": { "type": "string", "description": "Lowercase type name (e.g. `electric`)." },
+          "damage_relations": { "$ref": "#/components/schemas/TypeRelations" },
+          "pokemon": {
+            "type": "array",
+            "description": "All Pokémon with this type.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slot": { "type": "integer" },
+                "pokemon": { "$ref": "#/components/schemas/NamedAPIResource" }
+              }
+            }
+          },
+          "moves": {
+            "type": "array",
+            "description": "All moves of this type.",
+            "items": { "$ref": "#/components/schemas/NamedAPIResource" }
+          }
+        }
+      },
+      "VerboseEffect": {
+        "type": "object",
+        "properties": {
+          "effect": { "type": "string", "description": "Full effect description. Use `$effect_chance` as a template token." },
+          "short_effect": { "type": "string", "description": "Short version of the effect." },
+          "language": { "$ref": "#/components/schemas/NamedAPIResource" }
+        }
+      },
+      "Ability": {
+        "type": "object",
+        "required": ["id", "name", "is_main_series", "generation", "effect_entries"],
+        "description": "A passive Pokémon ability.",
+        "properties": {
+          "id": { "type": "integer", "description": "Ability ID." },
+          "name": { "type": "string", "description": "Lowercase hyphenated name." },
+          "is_main_series": { "type": "boolean", "description": "True if this ability appears in a main-series game." },
+          "generation": { "$ref": "#/components/schemas/NamedAPIResource" },
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "language": { "$ref": "#/components/schemas/NamedAPIResource" }
+              }
+            }
+          },
+          "effect_entries": { "type": "array", "items": { "$ref": "#/components/schemas/VerboseEffect" } },
+          "pokemon": {
+            "type": "array",
+            "description": "All Pokémon that can have this ability.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "is_hidden": { "type": "boolean" },
+                "slot": { "type": "integer" },
+                "pokemon": { "$ref": "#/components/schemas/NamedAPIResource" }
+              }
+            }
+          }
+        }
+      },
+      "Move": {
+        "type": "object",
+        "required": ["id", "name", "type", "damage_class", "pp", "effect_entries"],
+        "description": "A Pokémon move with type, damage class, power, accuracy, and effects.",
+        "properties": {
+          "id": { "type": "integer", "description": "Move ID." },
+          "name": { "type": "string", "description": "Lowercase hyphenated name." },
+          "accuracy": { "type": "integer", "nullable": true, "description": "Accuracy percentage (1–100). Null for moves that never miss." },
+          "effect_chance": { "type": "integer", "nullable": true, "description": "Percent chance that the secondary effect fires." },
+          "pp": { "type": "integer", "description": "Base power points." },
+          "priority": { "type": "integer", "description": "Turn order modifier. Positive = goes first, negative = goes last." },
+          "power": { "type": "integer", "nullable": true, "description": "Base power. Null for status moves." },
+          "type": { "$ref": "#/components/schemas/NamedAPIResource" },
+          "damage_class": { "$ref": "#/components/schemas/NamedAPIResource" },
+          "effect_entries": { "type": "array", "items": { "$ref": "#/components/schemas/VerboseEffect" } }
+        }
+      },
+      "NotFound": {
+        "type": "string",
+        "description": "PokéAPI returns a plain text 'Not Found' string for 404 responses.",
+        "example": "Not Found"
+      }
+    }
+  }
+}

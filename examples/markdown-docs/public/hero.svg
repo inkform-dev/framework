@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" fill="none" role="img" aria-label="Markdown Guide hero — plain text in, structured HTML out">
+  <!-- Near-black terminal background -->
+  <rect width="800" height="360" fill="#0a0a0a"/>
+
+  <!-- Dot grid pattern — Mono signature -->
+  <defs>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#222222"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="360" fill="url(#dots)"/>
+
+  <!-- ── LEFT PANEL: Markdown source ──────────────────────────────────────── -->
+  <rect x="48" y="56" width="316" height="248" fill="#0e0e0e" stroke="#2a2a2a" stroke-width="1.5"/>
+  <!-- Header bar -->
+  <rect x="48" y="56" width="316" height="30" fill="#141414" stroke="#2a2a2a" stroke-width="1.5"/>
+  <!-- Green accent bar — Markdown Guide accent -->
+  <rect x="48" y="56" width="3" height="30" fill="#1a9e5c"/>
+  <text x="60" y="75" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="9.5" fill="#7a7a7a" letter-spacing="0.06em">README.md</text>
+
+  <!-- Markdown source lines -->
+  <!-- # Heading -->
+  <text x="64" y="108" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="11" fill="#1a9e5c" letter-spacing="0.02em">#</text>
+  <rect x="78" y="99" width="120" height="9" fill="#2a2a2a"/>
+
+  <!-- blank -->
+
+  <!-- paragraph -->
+  <rect x="64" y="127" width="230" height="8" fill="#1e1e1e"/>
+  <rect x="64" y="142" width="180" height="8" fill="#1e1e1e"/>
+
+  <!-- blank -->
+
+  <!-- **bold** -->
+  <text x="64" y="168" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#7a7a7a">**</text>
+  <rect x="84" y="159" width="80" height="8" fill="#2a2a2a"/>
+  <text x="168" y="168" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#7a7a7a">**</text>
+
+  <!-- _italic_ -->
+  <text x="64" y="185" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#7a7a7a">_</text>
+  <rect x="74" y="176" width="60" height="8" fill="#1e1e1e"/>
+  <text x="138" y="185" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#7a7a7a">_</text>
+
+  <!-- blank -->
+
+  <!-- - list items -->
+  <text x="64" y="205" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#1a9e5c">-</text>
+  <rect x="76" y="196" width="140" height="8" fill="#1e1e1e"/>
+  <text x="64" y="221" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#1a9e5c">-</text>
+  <rect x="76" y="212" width="100" height="8" fill="#1e1e1e"/>
+  <text x="64" y="237" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#1a9e5c">-</text>
+  <rect x="76" y="228" width="120" height="8" fill="#1e1e1e"/>
+
+  <!-- blank -->
+
+  <!-- [link](url) -->
+  <text x="64" y="258" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#7a7a7a">[</text>
+  <rect x="73" y="249" width="60" height="8" fill="#1e1e1e"/>
+  <text x="136" y="258" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#7a7a7a">](</text>
+  <rect x="152" y="249" width="100" height="8" fill="#1a9e5c" opacity="0.35"/>
+  <text x="256" y="258" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="10" fill="#7a7a7a">)</text>
+
+  <!-- blinking cursor -->
+  <rect x="64" y="278" width="8" height="13" fill="#1a9e5c" opacity="0.85"/>
+
+  <!-- ── ARROW connector ───────────────────────────────────────────────────── -->
+  <line x1="364" y1="180" x2="434" y2="180" stroke="#2a2a2a" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <!-- Arrow head -->
+  <polyline points="428,174 436,180 428,186" stroke="#1a9e5c" stroke-width="1.5" stroke-linecap="square" fill="none"/>
+  <!-- Label -->
+  <text x="374" y="175" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="8.5" fill="#1a9e5c" letter-spacing="0.08em">RENDER</text>
+
+  <!-- ── RIGHT PANEL: HTML output ──────────────────────────────────────────── -->
+  <rect x="436" y="56" width="316" height="248" fill="#0e0e0e" stroke="#2a2a2a" stroke-width="1.5"/>
+  <!-- Header bar -->
+  <rect x="436" y="56" width="316" height="30" fill="#141414" stroke="#2a2a2a" stroke-width="1.5"/>
+  <!-- Green accent bar -->
+  <rect x="436" y="56" width="3" height="30" fill="#1a9e5c"/>
+  <text x="448" y="75" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="9.5" fill="#7a7a7a" letter-spacing="0.06em">OUTPUT</text>
+
+  <!-- Rendered HTML lines -->
+  <!-- h1 — large heading bar -->
+  <rect x="452" y="95" width="180" height="14" fill="#2a2a2a"/>
+  <!-- separator line under h1 -->
+  <line x1="452" y1="114" x2="636" y2="114" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- paragraph lines -->
+  <rect x="452" y="122" width="240" height="8" fill="#1e1e1e"/>
+  <rect x="452" y="136" width="200" height="8" fill="#1e1e1e"/>
+
+  <!-- bold word — slightly brighter block -->
+  <rect x="452" y="152" width="80" height="9" fill="#2a2a2a"/>
+
+  <!-- italic word -->
+  <rect x="452" y="168" width="60" height="8" fill="#1e1e1e"/>
+
+  <!-- ul list — three items with dots -->
+  <circle cx="460" cy="189" r="2.5" fill="#1a9e5c"/>
+  <rect x="468" y="184" width="140" height="8" fill="#1e1e1e"/>
+  <circle cx="460" cy="204" r="2.5" fill="#1a9e5c"/>
+  <rect x="468" y="199" width="110" height="8" fill="#1e1e1e"/>
+  <circle cx="460" cy="219" r="2.5" fill="#1a9e5c"/>
+  <rect x="468" y="214" width="130" height="8" fill="#1e1e1e"/>
+
+  <!-- anchor link — green underline -->
+  <rect x="452" y="234" width="100" height="8" fill="#1e1e1e"/>
+  <line x1="452" y1="243" x2="552" y2="243" stroke="#1a9e5c" stroke-width="1"/>
+
+  <!-- tag indicators — subtle HTML angle bracket marks -->
+  <text x="452" y="264" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="8.5" fill="#2a2a2a" letter-spacing="0.02em">&lt;h1&gt; &lt;p&gt; &lt;ul&gt; &lt;a&gt;</text>
+
+  <!-- subtle watermark M↓ bottom right -->
+  <text x="698" y="326" font-family="ui-monospace,'JetBrains Mono',monospace" font-size="26" font-weight="700" fill="#1a9e5c" opacity="0.08" letter-spacing="-0.02em">M↓</text>
+</svg>

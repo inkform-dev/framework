@@ -1,0 +1,142 @@
+---
+title: Links & Images
+description: Inline links, reference links, images, and link titles in Markdown.
+---
+
+# Links & Images
+
+Links and images share a similar syntax — images are just links prefixed with `!`.
+
+## Inline links
+
+The basic link syntax is `[text](url)`:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    Visit [CommonMark](https://commonmark.org) for the spec.
+
+    [Relative link to another page](/basics/headings)
+    ```
+  </Tab>
+  <Tab title="Result">
+    Visit [CommonMark](https://commonmark.org) for the spec.
+
+    [Relative link to another page](/basics/headings)
+  </Tab>
+</Tabs>
+
+## Link titles
+
+Add a title (tooltip) as a quoted string after the URL:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    [CommonMark](https://commonmark.org "The CommonMark specification")
+    ```
+  </Tab>
+  <Tab title="Result">
+    The title appears as a tooltip on hover: [CommonMark](https://commonmark.org "The CommonMark specification")
+  </Tab>
+</Tabs>
+
+## Reference links
+
+For long URLs used multiple times, define the link once and reference it by label:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    Check the [CommonMark spec][cm] and the [GFM spec][gfm] for details.
+
+    Read more at the [CommonMark spec][cm].
+
+    [cm]: https://commonmark.org
+    [gfm]: https://github.github.com/gfm/
+    ```
+  </Tab>
+  <Tab title="Result">
+    Check the [CommonMark spec](https://commonmark.org) and the [GFM spec](https://github.github.com/gfm/) for details.
+
+    Reference definitions do not appear in the rendered output — they are invisible in the final HTML.
+  </Tab>
+</Tabs>
+
+<Tip>
+  Reference links make long Markdown files easier to read, since URLs are collected at the bottom rather than inline with the prose.
+</Tip>
+
+## Autolinks
+
+Wrap a bare URL or email in angle brackets and it becomes a clickable link:
+
+```markdown
+<https://example.com>
+
+<user@example.com>
+```
+
+GFM also auto-links bare URLs without angle brackets (see [Autolinks](/gfm/strikethrough-autolinks)).
+
+## Images
+
+Images use the same syntax as links, but with a `!` prefix. The text in `[]` becomes the `alt` attribute:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    ![A monospace terminal grid](/hero.svg)
+
+    ![Logo](/logo.svg "Markdown Guide logo")
+    ```
+  </Tab>
+  <Tab title="Result">
+    The image is rendered inline at its natural size. The `alt` text is used by screen readers and displayed when the image fails to load.
+  </Tab>
+</Tabs>
+
+## Image links
+
+Combine an image with a link to make the image clickable:
+
+```markdown
+[![Logo](/logo.svg "Go to home")](/)
+```
+
+This wraps the `<img>` in an `<a>` tag.
+
+## Image sizing
+
+Standard Markdown has no syntax for controlling image dimensions. Options:
+
+<CardGroup cols={2}>
+  <Card title="HTML inside Markdown">
+    Most renderers accept raw HTML inside Markdown files:
+
+    ```html
+    <img src="/hero.svg" alt="Hero" width="400" />
+    ```
+  </Card>
+  <Card title="MDX components">
+    In MDX, use a `<Frame>` component or a custom image component that accepts width/height props. See the [MDX section](/mdx/using-components).
+  </Card>
+</CardGroup>
+
+## Best practices
+
+<Steps>
+  <Step title="Always write descriptive alt text">
+    Alt text is read aloud by screen readers. Write what the image conveys, not what it looks like: `![Bar chart showing 40% growth in Q3]` not `![chart]`.
+  </Step>
+  <Step title="Use relative paths for internal links">
+    `/basics/headings` instead of `https://yourdomain.com/basics/headings`. Relative links survive domain changes and work in local preview.
+  </Step>
+  <Step title="Use reference links for long repeated URLs">
+    If the same URL appears three or more times, define it as a reference. It keeps the prose readable and makes URL updates a single edit.
+  </Step>
+</Steps>
+
+<Warning>
+  Avoid spaces in image file names. `my image.png` becomes `my%20image.png` in a URL. Name files with hyphens instead: `my-image.png`.
+</Warning>

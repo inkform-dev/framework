@@ -1,0 +1,68 @@
+---
+title: GFM Overview
+description: GitHub-Flavored Markdown — the most widely-used Markdown extension, covering tables, task lists, footnotes, and more.
+---
+
+# GitHub-Flavored Markdown
+
+GitHub-Flavored Markdown (GFM) is a strict superset of CommonMark, defined by [GitHub's published specification](https://github.github.com/gfm/). It adds features that CommonMark does not have and is the dialect used by GitHub, GitLab, Bitbucket, and most modern documentation tools.
+
+<Note>
+  GFM is fully backward-compatible with CommonMark. All valid CommonMark documents are valid GFM. GFM only adds new syntax — it does not remove or change existing CommonMark behavior.
+</Note>
+
+## What GFM adds
+
+<CardGroup cols={2}>
+  <Card title="Tables" icon="table" href="/basics/tables">
+    Pipe-delimited tables with optional column alignment. The most widely used GFM extension.
+  </Card>
+  <Card title="Task lists" icon="check-square" href="/gfm/task-lists">
+    Checkboxes in lists: `- [x] Done` and `- [ ] Todo`. Used in GitHub issues and project docs.
+  </Card>
+  <Card title="Strikethrough" icon="strikethrough" href="/gfm/strikethrough-autolinks">
+    `~~struck~~` renders with a line through it. Useful for showing deprecated or removed items.
+  </Card>
+  <Card title="Autolinks" icon="link" href="/gfm/strikethrough-autolinks">
+    Bare URLs like `https://example.com` become clickable links without `<>` angle brackets.
+  </Card>
+  <Card title="Footnotes" icon="superscript" href="/gfm/footnotes">
+    `[^1]` inline markers with `[^1]: text` definitions — rendered as superscript links and a footnote section.
+  </Card>
+  <Card title="Disallowed raw HTML" icon="shield">
+    GFM filters certain raw HTML tags (like `<script>` and `<iframe>`) for security. Rendered as literal text.
+  </Card>
+</CardGroup>
+
+## Tooling support
+
+| Tool | GFM support |
+|---|---|
+| GitHub Issues / PRs | Full GFM |
+| GitHub README files | Full GFM |
+| GitLab | Full GFM |
+| VS Code preview | Full GFM |
+| Pandoc | GFM via `--from=gfm` |
+| Next.js + remark-gfm | Full GFM |
+| Docusaurus | Full GFM |
+| This site | Full GFM (via remark-gfm) |
+
+## Checking your Markdown flavor
+
+If you are unsure which dialect your tool uses, test the following snippet. If the checkbox and the table render correctly, you have GFM:
+
+```markdown
+- [x] Task lists work
+
+| A | B |
+|---|---|
+| 1 | 2 |
+```
+
+<Tip>
+  When writing Markdown that must render correctly on GitHub, test it in the GitHub preview — the canonical GFM renderer. Subtle differences exist between renderers even for the same spec version.
+</Tip>
+
+## Spec version
+
+The [GFM specification](https://github.github.com/gfm/) is versioned. GitHub updates it periodically. As of 2024, GFM is based on CommonMark 0.30. Check the spec for the authoritative definition of any ambiguous behavior.

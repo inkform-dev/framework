@@ -1,0 +1,179 @@
+/*
+ * Aurora theme — token overrides for @freewrite-cms/framework.
+ * This file is imported AFTER framework/styles.css so its declarations win.
+ * Only --fw-* tokens and small Aurora-specific accents are set here.
+ * The framework's structural CSS is untouched.
+ */
+
+/* ── Font variables (set by next/font in layout.tsx) ─────────────────────── */
+/* The variables --font-sans and --font-mono are injected onto <html> by Next. */
+:root {
+  --fw-font: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-font-heading: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-mono: var(--font-mono, ui-monospace, "Menlo", "Consolas", monospace);
+}
+
+/* ── Light mode (default) ────────────────────────────────────────────────── */
+:root {
+  /* Surfaces */
+  --fw-bg: #ffffff;
+  --fw-bg-subtle: #f8f9fb;
+  --fw-fg: #0f172a;
+  --fw-muted: #64748b;
+  --fw-border: #e2e8f0;
+  --fw-border-strong: #cbd5e1;
+  --fw-card: #ffffff;
+  --fw-card-hover: #f8f9fb;
+  --fw-code-bg: #f1f5f9;
+  --fw-kbd-bg: #eef2f7;
+
+  /* Brand — Pokédex red */
+  --fw-primary: #dc2626;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: rgba(220, 38, 38, 0.08);
+
+  /* Shape */
+  --fw-radius: 8px;
+  --fw-radius-sm: 6px;
+
+  /* Shadows — hard offset, minimal blur (per ui-guardrails) */
+  --fw-shadow: 2px 2px 0 rgba(15, 23, 42, 0.06);
+  --fw-shadow-lg: 4px 4px 0 rgba(15, 23, 42, 0.08);
+  --fw-ring: 0 0 0 3px rgba(220, 38, 38, 0.28);
+}
+
+/* ── Dark mode ───────────────────────────────────────────────────────────── */
+html.dark {
+  /* True near-black surfaces */
+  --fw-bg: #0a0a0b;
+  --fw-bg-subtle: #111114;
+  --fw-fg: #e8eaf0;
+  --fw-muted: #8b9bb4;
+  --fw-border: #1e2230;
+  --fw-border-strong: #2d3348;
+  --fw-card: #111114;
+  --fw-card-hover: #15171e;
+  --fw-code-bg: #0d0e12;
+  --fw-kbd-bg: #1a1c24;
+
+  /* Brand — lighter red for dark backgrounds */
+  --fw-primary: #f87171;
+  --fw-primary-fg: #0a0a0b;
+  --fw-primary-subtle: rgba(248, 113, 113, 0.12);
+
+  /* Shadows on dark */
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.6);
+  --fw-ring: 0 0 0 3px rgba(248, 113, 113, 0.28);
+}
+
+/* ── Aurora top-bar accents ──────────────────────────────────────────────── */
+
+/* Tab links */
+.fw-topnav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.fw-topnav-tab {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fw-muted);
+  border-radius: var(--fw-radius-sm);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+  border: 1px solid transparent;
+}
+
+.fw-topnav-tab:hover {
+  color: var(--fw-fg);
+  background: var(--fw-bg-subtle);
+}
+
+.fw-topnav-tab--active {
+  color: var(--fw-fg);
+  border-color: var(--fw-border);
+  background: var(--fw-card);
+}
+
+/* Anchor links */
+.fw-topnav-anchors {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fw-topnav-anchor {
+  font-size: 0.875rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.fw-topnav-anchor:hover {
+  color: var(--fw-fg);
+}
+
+/* Navbar links */
+.fw-topnav-navlink {
+  font-size: 0.875rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.fw-topnav-navlink:hover {
+  color: var(--fw-fg);
+}
+
+/* CTA button */
+.fw-topnav-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--fw-primary-fg);
+  background: var(--fw-primary);
+  border-radius: var(--fw-radius-sm);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  box-shadow: var(--fw-shadow);
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.fw-topnav-cta:hover {
+  opacity: 0.88;
+  box-shadow: var(--fw-shadow-lg);
+}
+
+/* Brand name / logo in top bar */
+.fw-shell-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.fw-shell-brand-logo {
+  height: 24px;
+  width: auto;
+}
+
+.fw-shell-brand-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fw-fg);
+  letter-spacing: -0.01em;
+}
+
+/* API operation sidebar method pills */
+.fw-method-get   { color: var(--fw-method-get); }
+.fw-method-post  { color: var(--fw-method-post); }
+.fw-method-put   { color: var(--fw-method-put); }
+.fw-method-patch { color: var(--fw-method-patch); }
+.fw-method-delete { color: var(--fw-method-delete); }
+.fw-method-head  { color: var(--fw-method-head); }
+.fw-method-options { color: var(--fw-method-options); }

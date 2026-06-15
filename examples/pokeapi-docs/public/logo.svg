@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 36" fill="none" role="img" aria-label="PokéAPI Docs">
+  <!-- Poké Ball mark -->
+  <!-- Outer circle -->
+  <circle cx="18" cy="18" r="14" fill="#dc2626"/>
+  <!-- Lower half -->
+  <path d="M4 18 A14 14 0 0 0 32 18 Z" fill="#e2e8f0"/>
+  <!-- Center band -->
+  <rect x="4" y="16" width="28" height="4" fill="#1e293b"/>
+  <!-- Center button -->
+  <circle cx="18" cy="18" r="4" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+  <circle cx="18" cy="18" r="2" fill="#dc2626"/>
+  <!-- Wordmark -->
+  <text x="40" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" letter-spacing="-0.02em" fill="currentColor">PokéAPI</text>
+  <text x="113" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="400" letter-spacing="-0.01em" fill="currentColor" opacity="0.55">Docs</text>
+</svg>

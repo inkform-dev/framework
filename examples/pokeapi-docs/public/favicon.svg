@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="PokéAPI">
+  <!-- Poké Ball favicon -->
+  <circle cx="16" cy="16" r="15" fill="#dc2626" stroke="#b91c1c" stroke-width="1"/>
+  <path d="M1 16 A15 15 0 0 0 31 16 Z" fill="#f1f5f9"/>
+  <rect x="1" y="14.5" width="30" height="3" fill="#1e293b"/>
+  <circle cx="16" cy="16" r="5" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+  <circle cx="16" cy="16" r="2.5" fill="#dc2626"/>
+</svg>

@@ -1,0 +1,54 @@
+{
+  "name": "PokéAPI Docs",
+  "version": "2.0",
+  "logo": "/logo.svg",
+  "favicon": "/favicon.svg",
+  "colors": { "primary": "#dc2626" },
+  "navbarLinks": [
+    { "name": "pokeapi.co", "href": "https://pokeapi.co" },
+    { "name": "GitHub", "href": "https://github.com/PokeAPI/pokeapi" }
+  ],
+  "anchors": [
+    { "name": "PokéAPI", "href": "https://pokeapi.co", "icon": "globe" },
+    { "name": "GitHub", "href": "https://github.com/PokeAPI/pokeapi", "icon": "github" }
+  ],
+  "cta": { "label": "Try it Free", "href": "https://pokeapi.co/api/v2/pokemon/pikachu" },
+  "tabs": [
+    {
+      "tab": "Guides",
+      "navigation": [
+        {
+          "group": "Get Started",
+          "pages": [
+            { "title": "Introduction", "slug": "", "file": "index.mdx", "icon": "book-open" },
+            { "title": "Quickstart", "slug": "quickstart", "file": "quickstart.mdx", "icon": "rocket" },
+            { "title": "Fair Use Policy", "slug": "fair-use", "file": "fair-use.mdx", "icon": "shield" }
+          ]
+        },
+        {
+          "group": "Core Concepts",
+          "pages": [
+            { "title": "Resources & Endpoints", "slug": "concepts/resources", "file": "concepts/resources.mdx", "icon": "layers" },
+            { "title": "Pagination", "slug": "concepts/pagination", "file": "concepts/pagination.mdx", "icon": "list" },
+            { "title": "Resource Lists", "slug": "concepts/resource-lists", "file": "concepts/resource-lists.mdx", "icon": "grid" },
+            { "title": "Common Patterns", "slug": "concepts/patterns", "file": "concepts/patterns.mdx", "icon": "code" }
+          ]
+        },
+        {
+          "group": "Resources",
+          "pages": [
+            { "title": "Pokémon", "slug": "resources/pokemon", "file": "resources/pokemon.mdx", "icon": "zap" },
+            { "title": "Types", "slug": "resources/types", "file": "resources/types.mdx", "icon": "tag" },
+            { "title": "Moves", "slug": "resources/moves", "file": "resources/moves.mdx", "icon": "sword" },
+            { "title": "Abilities", "slug": "resources/abilities", "file": "resources/abilities.mdx", "icon": "star" },
+            { "title": "Evolution", "slug": "resources/evolution", "file": "resources/evolution.mdx", "icon": "arrow-right" }
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "API Reference",
+      "openapi": "openapi.json"
+    }
+  ]
+}

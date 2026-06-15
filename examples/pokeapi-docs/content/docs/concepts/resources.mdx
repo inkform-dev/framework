@@ -1,0 +1,125 @@
+---
+title: Resources & Endpoints
+description: A map of all PokéAPI resource categories and how the endpoint hierarchy is structured.
+---
+
+# Resources & Endpoints
+
+PokéAPI organises its data into **resource categories**, each with a collection endpoint (list all) and an item endpoint (get one). The URL structure is:
+
+```
+https://pokeapi.co/api/v2/{resource}/
+https://pokeapi.co/api/v2/{resource}/{id or name}/
+```
+
+## Resource categories
+
+PokéAPI v2 has over 50 resource types grouped into these broad categories:
+
+<Tabs>
+  <Tab title="Pokémon">
+    | Resource | Endpoint | Description |
+    |----------|----------|-------------|
+    | Pokémon | `/pokemon/` | Core Pokémon data — stats, moves, sprites |
+    | Pokémon Species | `/pokemon-species/` | Cross-generation species info, flavour text |
+    | Pokémon Forms | `/pokemon-form/` | Alternate forms (Alolan, Galarian, etc.) |
+    | Pokémon Habitats | `/pokemon-habitat/` | Where Pokémon live in the game world |
+    | Pokémon Colors | `/pokemon-color/` | Pokédex color classification |
+    | Pokémon Shapes | `/pokemon-shape/` | Body shape classification |
+  </Tab>
+  <Tab title="Moves & Abilities">
+    | Resource | Endpoint | Description |
+    |----------|----------|-------------|
+    | Moves | `/move/` | All moves — power, accuracy, PP, effect |
+    | Move Categories | `/move-category/` | Physical / Special / Status |
+    | Move Damage Classes | `/move-damage-class/` | Damage class labels |
+    | Abilities | `/ability/` | Ability name, effect, and which Pokémon have it |
+    | Characteristics | `/characteristic/` | Gene-based IV descriptions |
+  </Tab>
+  <Tab title="Types & Evolution">
+    | Resource | Endpoint | Description |
+    |----------|----------|-------------|
+    | Types | `/type/` | Type damage relations (super effective, immune, etc.) |
+    | Evolution Chains | `/evolution-chain/` | Full evolutionary tree |
+    | Evolution Triggers | `/evolution-trigger/` | How evolution is triggered |
+  </Tab>
+  <Tab title="Items & Locations">
+    | Resource | Endpoint | Description |
+    |----------|----------|-------------|
+    | Items | `/item/` | In-game items, effects, and cost |
+    | Item Categories | `/item-category/` | Medical, Poké Balls, etc. |
+    | Locations | `/location/` | In-game locations |
+    | Location Areas | `/location-area/` | Sub-areas and wild encounter tables |
+    | Regions | `/region/` | Game regions (Kanto, Johto, …) |
+  </Tab>
+</Tabs>
+
+## Endpoint pattern
+
+Every resource follows the same two-endpoint pattern:
+
+<Steps>
+  <Step title="List endpoint (collection)">
+    Returns a paginated list of `NamedAPIResource` objects — name + URL pairs.
+
+    ```bash
+    GET https://pokeapi.co/api/v2/pokemon/
+    ```
+
+    ```json
+    {
+      "count": 1302,
+      "next": "https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20",
+      "previous": null,
+      "results": [
+        { "name": "bulbasaur", "url": "https://pokeapi.co/api/v2/pokemon/1/" },
+        { "name": "ivysaur",   "url": "https://pokeapi.co/api/v2/pokemon/2/" }
+      ]
+    }
+    ```
+  </Step>
+
+  <Step title="Item endpoint (single resource)">
+    Returns the full resource object, addressed by name or numeric ID.
+
+    ```bash
+    GET https://pokeapi.co/api/v2/pokemon/bulbasaur
+    GET https://pokeapi.co/api/v2/pokemon/1
+    ```
+
+    Both URLs return the same Bulbasaur resource.
+  </Step>
+</Steps>
+
+## Naming conventions
+
+<CardGroup cols={2}>
+  <Card title="Lowercase, hyphenated" icon="type">
+    All names are lowercase with hyphens: `mr-mime`, `ho-oh`, `porygon-z`.
+    No spaces, no underscores.
+  </Card>
+  <Card title="Stable numeric IDs" icon="hash">
+    National Pokédex IDs are stable. IDs for other resources are also stable
+    but have no specific meaning beyond ordering.
+  </Card>
+</CardGroup>
+
+<Info>
+  The API returns names in English by default. Many resources include a
+  `names` array with translations into Japanese, French, German, Korean,
+  and more — each paired with a `language` reference.
+</Info>
+
+## Internationalization
+
+Pokémon names, move names, and flavour text are available in multiple languages via the `names` and `flavor_text_entries` arrays:
+
+```json
+{
+  "names": [
+    { "name": "Pikachu", "language": { "name": "en", "url": "..." } },
+    { "name": "ピカチュウ", "language": { "name": "ja", "url": "..." } },
+    { "name": "Pikachu", "language": { "name": "fr", "url": "..." } }
+  ]
+}
+```

@@ -1,0 +1,131 @@
+---
+title: Frontmatter
+description: YAML frontmatter in Markdown and MDX — title, description, and custom metadata fields.
+---
+
+# Frontmatter
+
+Frontmatter is a block of YAML metadata at the very top of a Markdown or MDX file, delimited by triple dashes `---`. It is not rendered as prose — it is parsed separately and made available to the rendering system.
+
+## Basic structure
+
+```markdown
+---
+title: My Page Title
+description: A one-sentence summary of this page.
+---
+
+# Page content starts here
+```
+
+The frontmatter block must:
+- Start at the very first line of the file (line 1, character 1)
+- Open with `---`
+- Close with `---`
+- Contain valid YAML between the delimiters
+
+## Required fields
+
+Every page on this site uses two frontmatter fields:
+
+<ParamField body="title" type="string" required>
+  The page title, shown in the browser tab, the `<title>` element, Open Graph tags, and the top of the page. Keep it under 60 characters for SEO.
+</ParamField>
+
+<ParamField body="description" type="string" required>
+  A one-sentence description of the page. Shown in the `<meta name="description">` tag, search engine snippets, and link previews. Target 140–160 characters.
+</ParamField>
+
+## Optional metadata fields
+
+Common additional fields used by documentation tools:
+
+```yaml
+---
+title: Deploying to Production
+description: A step-by-step guide to deploying the app to Vercel.
+icon: rocket
+date: 2024-01-15
+author: Alice Smith
+tags: [deployment, vercel, production]
+draft: false
+---
+```
+
+<Note>
+  Which fields are recognized depends entirely on your rendering framework. Fields the renderer does not understand are silently ignored.
+</Note>
+
+## YAML data types
+
+Frontmatter uses standard YAML value types:
+
+| YAML | Type |
+|---|---|
+| `title: My Page` | String |
+| `count: 42` | Integer |
+| `ratio: 0.5` | Float |
+| `draft: true` | Boolean |
+| `date: 2024-01-15` | Date (ISO 8601) |
+| `tags: [one, two]` | Array (inline) |
+| `aliases: \n  - old-path` | Array (block) |
+
+## Multiline strings
+
+For longer descriptions, use YAML's block scalar syntax:
+
+```yaml
+---
+title: My Page
+description: |
+  This is the first line of a multiline description.
+  This is the second line.
+---
+```
+
+Use `|` to preserve newlines, or `>` to fold them into spaces.
+
+## Quoting strings
+
+Quote strings that contain special YAML characters (`:`  `#`  `{`  `}`  `[`  `]`):
+
+```yaml
+---
+title: "Config: Advanced Options"
+description: "Use the {config} object to override defaults."
+---
+```
+
+<Warning>
+  A colon followed by a space (`: `) in an unquoted value will confuse the YAML parser and produce a build error. Always quote values that contain `: `.
+</Warning>
+
+## Accessing frontmatter in code
+
+In a Next.js + MDX setup, frontmatter is typically extracted during the build step and made available as props or metadata:
+
+```typescript
+// In a Next.js page route that renders MDX
+import { loadDocPage } from '@freewrite-cms/framework/content';
+
+export async function generateMetadata({ params }) {
+  const page = await loadDocPage(params.slug);
+  return {
+    title: page.frontmatter.title,
+    description: page.frontmatter.description,
+  };
+}
+```
+
+## Frontmatter vs. in-page headings
+
+The `title` frontmatter field and the `# h1` heading are distinct:
+
+- **Frontmatter title:** used by the browser tab, SEO meta tags, and the sidebar nav label
+- **Page `# h1`:** the visible heading at the top of the content area
+
+Most documentation tools use the frontmatter title for both — but if you want a longer heading in the page body than what fits in a browser tab title, you can set them independently.
+
+<Tip>
+  A common convention is to make the frontmatter `title` and the `# h1` identical. It keeps things simple and avoids confusing readers who see one in the tab and another on the page.
+</Tip>

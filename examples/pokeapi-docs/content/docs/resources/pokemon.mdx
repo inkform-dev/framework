@@ -1,0 +1,158 @@
+---
+title: Pokémon
+description: The Pokémon resource is the core of PokéAPI — it contains stats, types, moves, sprites, and abilities for every Pokémon.
+---
+
+# Pokémon
+
+The `/pokemon/` endpoint returns the most comprehensive resource in PokéAPI. A single Pokémon object includes base stats, type assignments, learnable moves, held items, sprites, and links to the species resource for flavour text and evolution data.
+
+## Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/pokemon/` | List all Pokémon (paginated) |
+| GET | `/pokemon/{name}` | Get a Pokémon by name |
+| GET | `/pokemon/{id}` | Get a Pokémon by National Pokédex ID |
+
+## Example request
+
+<CodeGroup>
+  ```bash curl
+  curl https://pokeapi.co/api/v2/pokemon/gengar
+  ```
+
+  ```js fetch
+  const res = await fetch('https://pokeapi.co/api/v2/pokemon/gengar');
+  const gengar = await res.json();
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": 94,
+  "name": "gengar",
+  "base_experience": 250,
+  "height": 15,
+  "weight": 405,
+  "is_default": true,
+  "order": 122,
+  "abilities": [
+    {
+      "ability": { "name": "cursed-body", "url": "https://pokeapi.co/api/v2/ability/130/" },
+      "is_hidden": false,
+      "slot": 3
+    }
+  ],
+  "types": [
+    { "slot": 1, "type": { "name": "ghost", "url": "https://pokeapi.co/api/v2/type/8/" } },
+    { "slot": 2, "type": { "name": "poison", "url": "https://pokeapi.co/api/v2/type/4/" } }
+  ],
+  "stats": [
+    { "base_stat": 60, "effort": 0, "stat": { "name": "hp", "url": "..." } },
+    { "base_stat": 65, "effort": 0, "stat": { "name": "attack", "url": "..." } },
+    { "base_stat": 60, "effort": 0, "stat": { "name": "defense", "url": "..." } },
+    { "base_stat": 130, "effort": 3, "stat": { "name": "special-attack", "url": "..." } },
+    { "base_stat": 75, "effort": 0, "stat": { "name": "special-defense", "url": "..." } },
+    { "base_stat": 110, "effort": 0, "stat": { "name": "speed", "url": "..." } }
+  ],
+  "moves": [
+    {
+      "move": { "name": "shadow-ball", "url": "https://pokeapi.co/api/v2/move/247/" },
+      "version_group_details": [
+        {
+          "level_learned_at": 0,
+          "move_learn_method": { "name": "tm", "url": "..." },
+          "version_group": { "name": "sword-shield", "url": "..." }
+        }
+      ]
+    }
+  ],
+  "sprites": {
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png",
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/94.png",
+    "other": {
+      "official-artwork": {
+        "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png"
+      }
+    }
+  },
+  "species": { "name": "gengar", "url": "https://pokeapi.co/api/v2/pokemon-species/94/" }
+}
+```
+
+## Key fields
+
+<ResponseField name="id" type="integer" required>
+  The National Pokédex number. Stable and unique.
+</ResponseField>
+
+<ResponseField name="name" type="string" required>
+  Lowercase hyphenated name. For forms: `pikachu-original-cap`, `deoxys-attack`.
+</ResponseField>
+
+<ResponseField name="base_experience" type="integer">
+  Base XP yield when defeated. Used in experience calculations.
+</ResponseField>
+
+<ResponseField name="height" type="integer" required>
+  Height in decimetres (divide by 10 for metres).
+</ResponseField>
+
+<ResponseField name="weight" type="integer" required>
+  Weight in hectograms (divide by 10 for kilograms).
+</ResponseField>
+
+<ResponseField name="types" type="PokemonType[]" required>
+  Type assignments. `slot` 1 is the primary type, `slot` 2 is the secondary (if any).
+  Each entry has a `type` NamedAPIResource.
+</ResponseField>
+
+<ResponseField name="stats" type="PokemonStat[]" required>
+  Base stats array. Stat names: `hp`, `attack`, `defense`, `special-attack`,
+  `special-defense`, `speed`. `effort` is the EV yield.
+</ResponseField>
+
+<ResponseField name="abilities" type="PokemonAbility[]" required>
+  All abilities. `is_hidden: true` marks the hidden ability. `slot` is 1, 2, or 3.
+</ResponseField>
+
+<ResponseField name="moves" type="PokemonMove[]" required>
+  All learnable moves across all game versions. Each move entry includes
+  `version_group_details` with how and at what level it's learned.
+</ResponseField>
+
+<ResponseField name="sprites" type="PokemonSprites" required>
+  Image URLs. `front_default` is the most widely used.
+  `other['official-artwork'].front_default` is the high-res artwork.
+</ResponseField>
+
+<ResponseField name="species" type="NamedAPIResource" required>
+  Link to the Pokémon Species resource — contains flavour text, evolution chain,
+  egg groups, and cross-generation data.
+</ResponseField>
+
+## Tips
+
+<Accordion title="Getting flavour text (Pokédex entries)">
+  Flavour text is NOT in the `/pokemon/` resource. Fetch the linked `species` URL:
+
+  ```js
+  const p = await fetch('https://pokeapi.co/api/v2/pokemon/gengar').then(r => r.json());
+  const species = await fetch(p.species.url).then(r => r.json());
+  const entry = species.flavor_text_entries.find(e => e.language.name === 'en');
+  ```
+</Accordion>
+
+<Accordion title="Checking type effectiveness">
+  Fetch the type URL from `types[0].type.url` to get `damage_relations` with
+  `double_damage_from`, `half_damage_from`, and `no_damage_from` arrays.
+</Accordion>
+
+<Accordion title="Getting all forms (Alolan, Galarian, etc.)">
+  Regional forms appear as separate Pokémon with hyphenated names:
+  `vulpix-alola`, `meowth-galar`. They have the same species but different
+  stats and types.
+</Accordion>

@@ -1,0 +1,129 @@
+---
+title: Fair Use Policy
+description: PokéAPI is free and open, but it runs on community donations. Caching and sensible request patterns keep it that way.
+---
+
+# Fair Use Policy
+
+PokéAPI is a free, community-funded project. There is no authentication and no hard rate limit, but that openness depends on users behaving responsibly. This page explains what "reasonable use" looks like and how to write code that respects the commons.
+
+<Warning>
+  Aggressive crawling, bulk re-scraping, or ignoring cache headers strains the
+  server for everyone. Repeat offenders may be blocked at the infrastructure level.
+</Warning>
+
+## Rate limits
+
+PokéAPI does not enforce a hard request-per-second limit, but it does enforce **soft limits** via response headers and IP-level throttling at the CDN edge:
+
+| Situation | Behaviour |
+|-----------|-----------|
+| Normal usage (&lt;100 req/min) | 200 OK, full response |
+| Burst (&gt;100 req/min sustained) | Requests may be queued or slowed |
+| Aggressive crawling | 429 Too Many Requests |
+
+<Note>
+  If you need more than a few hundred requests per minute, **self-host** or use the
+  [bulk data export](https://github.com/PokeAPI/api-data) instead of hitting the live API.
+</Note>
+
+## Cache headers
+
+Every response includes:
+
+```
+Cache-Control: public, max-age=86400, s-maxage=86400
+```
+
+That's a 24-hour TTL. **Always respect it.** If you fetch the same resource twice in the same process, cache the first result in memory. If you build a server-side app, use a CDN or a Redis cache in front of PokéAPI.
+
+### Recommended client-side caching
+
+```js
+const cache = new Map();
+
+async function cachedFetch(url) {
+  if (cache.has(url)) return cache.get(url);
+  const res = await fetch(url);
+  const data = await res.json();
+  cache.set(url, data);
+  return data;
+}
+```
+
+## What is acceptable use?
+
+<CardGroup cols={2}>
+  <Card title="Personal projects" icon="heart">
+    Pokédex apps, battle simulators, trivia games — go for it.
+    Cache aggressively and you are fine.
+  </Card>
+  <Card title="Open-source tools" icon="code">
+    Libraries, wrappers, and developer tools that consume the API.
+    Cache data locally and avoid N+1 patterns.
+  </Card>
+  <Card title="Commercial apps" icon="briefcase">
+    Production apps with real users. Use a CDN or Redis cache as a proxy.
+    Consider a self-hosted mirror if traffic is high.
+  </Card>
+  <Card title="Research & data science" icon="chart">
+    Bulk exports are available on GitHub. Use those instead of scraping
+    the live API for historical or statistical analysis.
+  </Card>
+</CardGroup>
+
+## What to avoid
+
+<Accordion title="Hammering endpoints in a loop">
+  Never do this:
+
+  ```js
+  // BAD — fetches 1000+ Pokémon with no delay or caching
+  for (let i = 1; i <= 1010; i++) {
+    await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+  }
+  ```
+
+  Instead, use the [bulk data export](https://github.com/PokeAPI/api-data):
+
+  ```bash
+  git clone https://github.com/PokeAPI/api-data.git
+  ```
+</Accordion>
+
+<Accordion title="Ignoring 429 responses">
+  If you receive a `429 Too Many Requests`, back off with exponential delay:
+
+  ```js
+  async function fetchWithBackoff(url, retries = 3) {
+    for (let i = 0; i < retries; i++) {
+      const res = await fetch(url);
+      if (res.status !== 429) return res.json();
+      await new Promise(r => setTimeout(r, 1000 * 2 ** i));
+    }
+    throw new Error('Too many retries');
+  }
+  ```
+</Accordion>
+
+<Accordion title="Bypassing the CDN cache">
+  Adding `?bust=<random>` or `Cache-Control: no-cache` request headers forces
+  the CDN to bypass the cache and hit origin. This is unnecessary — the data
+  changes infrequently. Don't do it.
+</Accordion>
+
+## Self-hosting
+
+If your project genuinely needs high throughput, self-hosting is straightforward:
+
+```bash
+git clone https://github.com/PokeAPI/pokeapi.git
+cd pokeapi
+docker-compose up
+```
+
+The full dataset is included. You get a local PokéAPI instance with no rate limits and no external dependency.
+
+## Supporting PokéAPI
+
+The API runs on community donations. If PokéAPI has saved you time, consider sponsoring the project on [GitHub Sponsors](https://github.com/sponsors/PokeAPI).

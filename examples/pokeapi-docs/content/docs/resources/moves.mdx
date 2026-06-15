@@ -1,0 +1,149 @@
+---
+title: Moves
+description: The Move resource describes every attack and status move in the Pokémon games — power, accuracy, PP, effect, and more.
+---
+
+# Moves
+
+Moves are the actions Pokémon use in battle. Each move has a type, damage class (Physical, Special, or Status), base power, accuracy, and PP (power points). The `/move/` endpoint exposes all of this, plus effect descriptions, contest metadata, and game-version history.
+
+There are over 900 moves across all generations.
+
+## Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/move/` | List all moves (paginated) |
+| GET | `/move/{name}` | Get a move by name |
+| GET | `/move/{id}` | Get a move by ID |
+
+## Example request
+
+<CodeGroup>
+  ```bash curl
+  curl https://pokeapi.co/api/v2/move/thunderbolt
+  ```
+
+  ```js fetch
+  const res = await fetch('https://pokeapi.co/api/v2/move/thunderbolt');
+  const thunderbolt = await res.json();
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": 85,
+  "name": "thunderbolt",
+  "accuracy": 100,
+  "effect_chance": 10,
+  "pp": 15,
+  "priority": 0,
+  "power": 90,
+  "type": { "name": "electric", "url": "https://pokeapi.co/api/v2/type/13/" },
+  "damage_class": { "name": "special", "url": "https://pokeapi.co/api/v2/move-damage-class/3/" },
+  "effect_entries": [
+    {
+      "effect": "Inflicts regular damage. Has a $effect_chance% chance to paralyze the target.",
+      "short_effect": "Has a $effect_chance% chance to paralyze the target.",
+      "language": { "name": "en", "url": "..." }
+    }
+  ],
+  "flavor_text_entries": [
+    {
+      "flavor_text": "A strong electric blast is loosed at the target. It may also leave the target with paralysis.",
+      "language": { "name": "en", "url": "..." },
+      "version_group": { "name": "sword-shield", "url": "..." }
+    }
+  ],
+  "meta": {
+    "ailment": { "name": "paralysis", "url": "..." },
+    "ailment_chance": 10,
+    "category": { "name": "damage+ailment", "url": "..." },
+    "crit_rate": 0,
+    "drain": 0,
+    "flinch_chance": 0,
+    "healing": 0,
+    "max_hits": null,
+    "max_turns": null,
+    "min_hits": null,
+    "min_turns": null,
+    "stat_chance": 0
+  },
+  "names": [
+    { "name": "Thunderbolt", "language": { "name": "en", "url": "..." } }
+  ]
+}
+```
+
+## Key fields
+
+<ResponseField name="power" type="integer | null" required>
+  Base power of the move. `null` for status moves that deal no damage.
+</ResponseField>
+
+<ResponseField name="accuracy" type="integer | null" required>
+  Percentage chance to hit (1–100). `null` for moves that never miss (Swift, Aerial Ace).
+</ResponseField>
+
+<ResponseField name="pp" type="integer" required>
+  Base PP (power points) — the number of times the move can be used before
+  needing to be restored at a Pokémon Center.
+</ResponseField>
+
+<ResponseField name="priority" type="integer" required>
+  Turn order modifier. +1 moves (Quick Attack) go before 0. -6 moves (Trick Room effects)
+  go last. Most moves are 0.
+</ResponseField>
+
+<ResponseField name="type" type="NamedAPIResource" required>
+  The move's type. Determines damage multipliers against defending types.
+</ResponseField>
+
+<ResponseField name="damage_class" type="NamedAPIResource" required>
+  One of `physical`, `special`, or `status`. Physical uses Attack/Defense stats;
+  Special uses Sp.Atk/Sp.Def.
+</ResponseField>
+
+<ResponseField name="effect_entries" type="VerboseEffect[]" required>
+  Human-readable effect description. `$effect_chance` is a template placeholder
+  — substitute with the `effect_chance` field.
+</ResponseField>
+
+<ResponseField name="meta" type="MoveMetaData" required>
+  Structured metadata: ailment, drain, healing, crit rate, hit/turn ranges.
+</ResponseField>
+
+## Damage classes
+
+<Tabs>
+  <Tab title="Physical">
+    Uses the attacker's Attack stat and the defender's Defense stat.
+    Examples: Tackle, Earthquake, Close Combat.
+  </Tab>
+  <Tab title="Special">
+    Uses the attacker's Special Attack stat and the defender's Special Defense stat.
+    Examples: Thunderbolt, Flamethrower, Psychic.
+  </Tab>
+  <Tab title="Status">
+    Deals no direct damage. Applies effects like stat changes, weather, or ailments.
+    Examples: Growl, Thunder Wave, Swords Dance.
+  </Tab>
+</Tabs>
+
+## Rendering the effect description
+
+The `effect` string uses `$effect_chance` as a template token. Replace it before displaying:
+
+```js
+function formatEffect(move) {
+  return move.effect_entries
+    .find(e => e.language.name === 'en')
+    ?.effect
+    .replace(/\$effect_chance/g, move.effect_chance ?? '?');
+}
+
+console.log(formatEffect(thunderbolt));
+// → "Inflicts regular damage. Has a 10% chance to paralyze the target."
+```

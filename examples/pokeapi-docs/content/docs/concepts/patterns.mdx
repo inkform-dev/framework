@@ -1,0 +1,159 @@
+---
+title: Common Patterns
+description: Practical patterns for traversing PokéAPI's linked data, resolving evolution chains, and building efficient clients.
+---
+
+# Common Patterns
+
+PokéAPI resources are linked by URL. Once you understand how to traverse those links, you can build rich Pokémon data pipelines without hard-coding anything. This page covers the patterns you'll use most.
+
+## Pattern 1 — Follow a linked resource
+
+Almost every field that references another resource includes both `name` (for display) and `url` (to fetch the full object). You can traverse the graph by following URLs:
+
+```js
+// Fetch a Pokémon, then fetch its primary type
+const pikachu = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu').then(r => r.json());
+
+const primaryTypeUrl = pikachu.types[0].type.url;
+const electricType = await fetch(primaryTypeUrl).then(r => r.json());
+
+console.log(electricType.damage_relations.double_damage_from.map(t => t.name));
+// → ["ground"]
+```
+
+<Tip>
+  Cache the results of URL fetches. The same type, ability, or move URL will appear
+  in thousands of Pokémon responses — fetch it once and reuse it.
+</Tip>
+
+## Pattern 2 — Resolve sprites
+
+Sprites are in the `sprites` field and link to static image files hosted on GitHub:
+
+```js
+const pokemon = await fetch('https://pokeapi.co/api/v2/pokemon/charizard').then(r => r.json());
+
+// Official artwork (high quality)
+const artwork = pokemon.sprites.other['official-artwork'].front_default;
+
+// Classic front sprite
+const sprite = pokemon.sprites.front_default;
+
+// Shiny variant
+const shiny = pokemon.sprites.front_shiny;
+```
+
+```json
+{
+  "sprites": {
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/6.png",
+    "other": {
+      "official-artwork": {
+        "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png"
+      }
+    }
+  }
+}
+```
+
+## Pattern 3 — Traverse an evolution chain
+
+Evolution chains use a nested `chain` structure. Each `chain` node is a `ChainLink`:
+
+```js
+async function getEvolutionChain(pokemonName) {
+  // Step 1: get the species to find the evolution chain URL
+  const species = await fetch(
+    `https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`
+  ).then(r => r.json());
+
+  // Step 2: fetch the evolution chain
+  const chain = await fetch(species.evolution_chain.url).then(r => r.json());
+
+  // Step 3: flatten the nested chain into an array
+  function flattenChain(link) {
+    return [
+      link.species.name,
+      ...link.evolves_to.flatMap(flattenChain)
+    ];
+  }
+
+  return flattenChain(chain.chain);
+}
+
+console.log(await getEvolutionChain('charmander'));
+// → ["charmander", "charmeleon", "charizard"]
+```
+
+## Pattern 4 — Get all moves a Pokémon can learn
+
+The `moves` array on a Pokémon lists every move it can learn, including which game version and at what level:
+
+```js
+const bulbasaur = await fetch('https://pokeapi.co/api/v2/pokemon/bulbasaur').then(r => r.json());
+
+// Filter to level-up moves in Red/Blue
+const levelUpMoves = bulbasaur.moves
+  .filter(m =>
+    m.version_group_details.some(
+      d => d.move_learn_method.name === 'level-up' &&
+           d.version_group.name === 'red-blue'
+    )
+  )
+  .map(m => ({
+    name: m.move.name,
+    level: m.version_group_details.find(
+      d => d.version_group.name === 'red-blue'
+    ).level_learned_at
+  }))
+  .sort((a, b) => a.level - b.level);
+
+console.log(levelUpMoves);
+// → [{ name: "tackle", level: 0 }, { name: "growl", level: 0 }, ...]
+```
+
+## Pattern 5 — Batch fetching with Promise.all
+
+When you need data for multiple Pokémon, use `Promise.all` to fetch in parallel rather than sequentially:
+
+```js
+async function fetchTeam(names) {
+  return Promise.all(
+    names.map(name =>
+      fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then(r => r.json())
+    )
+  );
+}
+
+const team = await fetchTeam(['pikachu', 'charizard', 'blastoise', 'venusaur']);
+const stats = team.map(p => ({
+  name: p.name,
+  hp: p.stats.find(s => s.stat.name === 'hp').base_stat
+}));
+```
+
+<Warning>
+  Don't fire hundreds of parallel requests at once — this is the "hammering" the
+  Fair Use policy warns about. For large batches, limit concurrency with a semaphore
+  or process items in chunks of 10–20.
+</Warning>
+
+## Pattern 6 — Flavour text in a specific language
+
+Use `flavor_text_entries` to get the Pokédex entry for a specific game and language:
+
+```js
+const species = await fetch('https://pokeapi.co/api/v2/pokemon-species/pikachu').then(r => r.json());
+
+const entry = species.flavor_text_entries.find(
+  e => e.language.name === 'en' && e.version.name === 'firered'
+);
+
+// Clean up the text (PokéAPI includes form feeds and soft hyphens)
+const text = entry.flavor_text.replace(/\f/g, ' ').replace(/­/g, '');
+console.log(text);
+// → "It keeps its tail raised to monitor its surroundings. If you grab its tail,
+//    it will try to bite you."
+```

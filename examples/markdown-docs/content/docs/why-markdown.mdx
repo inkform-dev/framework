@@ -1,0 +1,106 @@
+---
+title: Why Markdown
+description: Markdown vs. rich-text editors and raw HTML — why plain text wins for documentation.
+---
+
+# Why Markdown
+
+Before diving into syntax, it helps to understand why Markdown exists and why it has outlasted dozens of competing formats.
+
+## The problem with rich text
+
+Word processors and WYSIWYG editors store content as opaque binary formats or complex XML. This creates real problems for developers and writers:
+
+<CardGroup cols={2}>
+  <Card title="Hard to version-control" icon="git-branch">
+    Binary formats produce unreadable diffs. You cannot review what changed in a Word document the way you can review a code change.
+  </Card>
+  <Card title="Vendor lock-in" icon="lock">
+    A `.docx` file is only as good as the software that opens it. Formats rot; plain text does not.
+  </Card>
+  <Card title="Slow to write" icon="clock">
+    Reaching for the mouse to click Bold breaks your flow. Markdown keeps your hands on the keyboard.
+  </Card>
+  <Card title="Styling baked in" icon="palette">
+    Rich text mixes content with presentation. Changing the style of a Word doc means editing every paragraph. Markdown separates the two.
+  </Card>
+</CardGroup>
+
+## The problem with raw HTML
+
+HTML is too verbose for prose. Writing a simple list looks like this:
+
+```html
+<ul>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ul>
+```
+
+In Markdown:
+
+```markdown
+- First item
+- Second item
+- Third item
+```
+
+HTML is the right output format. It is a poor input format for human writers.
+
+## What Markdown solves
+
+<Steps>
+  <Step title="Plain text — always readable">
+    A Markdown file is readable as-is, even without rendering. Open it in any text editor, terminal, or email client and the structure is obvious.
+  </Step>
+  <Step title="Version control friendly">
+    Because Markdown is plain text, `git diff` shows you exactly what changed — word by word, line by line. Code review for documentation becomes practical.
+  </Step>
+  <Step title="Portable and future-proof">
+    Plain text files from 1970 are still readable today. Your Markdown content will outlast any CMS or editor you use to write it.
+  </Step>
+  <Step title="Converts to anything">
+    Markdown compiles to HTML, PDF, Word, EPUB, slides, and more. One source, many outputs. Tools like Pandoc, MDX, and Hugo all consume Markdown natively.
+  </Step>
+</Steps>
+
+## Where Markdown is used today
+
+Markdown is ubiquitous in technical work:
+
+| Platform | Where you find it |
+|---|---|
+| GitHub / GitLab | README files, issues, pull requests, wikis |
+| VS Code | Markdown preview built in |
+| Notion | Markdown shortcuts in the editor |
+| Discord / Slack | Subset of Markdown for chat formatting |
+| Hugo / Jekyll / Next.js | Static site generators that render `.md` files |
+| Jupyter Notebooks | Markdown cells between code cells |
+| Stack Overflow | Markdown for questions and answers |
+
+## Markdown vs. alternatives
+
+<Tabs>
+  <Tab title="vs. Rich Text (WYSIWYG)">
+    **Markdown wins when:** content will be version-controlled, maintained by developers, or needs to be output in multiple formats.
+
+    **Rich text wins when:** non-technical authors need to format content visually, or layout precision matters (newsletters, print).
+
+    Most modern documentation tools (this one included) use Markdown as the source and give writers a preview pane — best of both worlds.
+  </Tab>
+  <Tab title="vs. HTML">
+    **Markdown wins when:** writing prose. It is faster, cleaner, and easier to read in source form.
+
+    **HTML wins when:** you need precise control over structure, ARIA attributes, or complex layouts. MDX bridges this gap by letting you drop into JSX components inside Markdown.
+  </Tab>
+  <Tab title="vs. reStructuredText">
+    **Markdown wins on:** tooling ecosystem, GitHub native rendering, and sheer ubiquity. If you are not using Sphinx for Python docs, Markdown is almost always the right choice.
+
+    **reStructuredText wins when:** building Python documentation with Sphinx, where its more powerful cross-reference and directive system shines.
+  </Tab>
+</Tabs>
+
+<Tip>
+  Markdown is not a specification — it is a family of dialects. The [CommonMark](https://commonmark.org) spec standardizes the core. [GitHub-Flavored Markdown (GFM)](https://github.github.com/gfm/) adds tables, task lists, and more. This guide covers both.
+</Tip>

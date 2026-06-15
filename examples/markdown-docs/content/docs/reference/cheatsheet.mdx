@@ -1,0 +1,237 @@
+---
+title: Cheatsheet
+description: A dense reference of every Markdown and GFM syntax element in one page.
+---
+
+# Cheatsheet
+
+Every Markdown syntax element in one place. Bookmark this page.
+
+<Note>
+  Elements marked **[GFM]** require a GitHub-Flavored Markdown renderer. All others are CommonMark and work everywhere.
+</Note>
+
+## Headings
+
+| Markdown | Output |
+|:---|:---|
+| `# Heading 1` | `<h1>Heading 1</h1>` |
+| `## Heading 2` | `<h2>Heading 2</h2>` |
+| `### Heading 3` | `<h3>Heading 3</h3>` |
+| `#### Heading 4` | `<h4>Heading 4</h4>` |
+| `##### Heading 5` | `<h5>Heading 5</h5>` |
+| `###### Heading 6` | `<h6>Heading 6</h6>` |
+
+Alternate (Setext) style — only h1 and h2:
+
+```markdown
+Heading 1
+=========
+
+Heading 2
+---------
+```
+
+## Emphasis
+
+| Markdown | Result | HTML |
+|:---|:---|:---|
+| `**bold**` | **bold** | `<strong>bold</strong>` |
+| `__bold__` | **bold** | `<strong>bold</strong>` |
+| `*italic*` | *italic* | `<em>italic</em>` |
+| `_italic_` | _italic_ | `<em>italic</em>` |
+| `***bold italic***` | ***bold italic*** | `<strong><em>bold italic</em></strong>` |
+| `~~strikethrough~~` | ~~strikethrough~~ | `<del>strikethrough</del>` — **[GFM]** |
+| `` `inline code` `` | `inline code` | `<code>inline code</code>` |
+
+## Lists
+
+### Unordered
+
+```markdown
+- Item
+- Item
+  - Nested item
+```
+
+Use `-`, `*`, or `+` as bullet markers.
+
+### Ordered
+
+```markdown
+1. First
+2. Second
+3. Third
+```
+
+Numbers do not need to be sequential — the renderer counts for you.
+
+### Task list **[GFM]**
+
+```markdown
+- [x] Done
+- [ ] Not done
+```
+
+## Links
+
+| Markdown | Result |
+|:---|:---|
+| `[text](url)` | Inline link |
+| `[text](url "title")` | Link with tooltip title |
+| `[text][ref]` then `[ref]: url` | Reference link |
+| `<https://example.com>` | Autolink (bare URL) |
+| `<email@example.com>` | Email autolink |
+| `https://example.com` | GFM extended autolink — **[GFM]** |
+
+## Images
+
+| Markdown | Description |
+|:---|:---|
+| `![alt](url)` | Inline image |
+| `![alt](url "title")` | Image with title tooltip |
+| `![alt][ref]` + `[ref]: url` | Reference image |
+| `[![alt](img)](url)` | Clickable image (image inside a link) |
+
+## Code
+
+| Markdown | Result |
+|:---|:---|
+| `` `code` `` | Inline code |
+| ```` ``` ```` on its own line | Opens/closes a fenced block |
+| ```` ```js ```` | Fenced block with JavaScript syntax highlighting |
+| Four spaces of indentation | Indented code block (avoid; use fences) |
+
+## Blockquotes
+
+```markdown
+> Single line quote
+
+> Multi-line quote
+> that spans two lines
+
+> Nested quote
+>> with double >>
+```
+
+## Tables **[GFM]**
+
+```markdown
+| Left | Center | Right |
+| :--- | :----: | ----: |
+| 1    |   2    |     3 |
+```
+
+Alignment:
+- `:---` — left
+- `:---:` — center
+- `---:` — right
+
+## Horizontal rules
+
+Any of these produce `<hr>`:
+
+```markdown
+---
+***
+___
+- - -
+* * *
+```
+
+## Footnotes **[GFM]**
+
+```markdown
+Text with a note.[^1]
+
+[^1]: The footnote definition.
+```
+
+## Escaping
+
+Prefix with `\` to show a literal character:
+
+```markdown
+\* not italic \*
+\# not a heading
+\[not a link\]
+```
+
+Escapable characters: `\ ` ` * _ { } [ ] ( ) # + - . !`
+
+## Line breaks
+
+| Technique | Result |
+|:---|:---|
+| Blank line | New paragraph |
+| Two trailing spaces + newline | Hard line break in paragraph |
+| Backslash `\` + newline | Hard line break in paragraph |
+| Single newline | Treated as a space (soft wrap) |
+
+## HTML in Markdown
+
+Raw HTML is accepted in most Markdown renderers (CommonMark allows it; GFM filters some tags):
+
+```markdown
+This is <strong>HTML bold</strong> inline.
+
+<div class="custom">
+  Block-level HTML element.
+</div>
+```
+
+## MDX-specific syntax
+
+| Syntax | Description |
+|:---|:---|
+| `{expression}` | JavaScript expression evaluated at build time |
+| `import X from './x'` | ES module import at top of file |
+| `<ComponentName />` | Self-closing JSX component |
+| `<Component>children</Component>` | Component with children |
+| `{/* comment */}` | MDX comment (not rendered) |
+
+## Frontmatter
+
+```yaml
+---
+title: Page Title
+description: One-sentence summary.
+---
+```
+
+Must appear at the very top of the file before any content.
+
+## Quick comparison: CommonMark vs. GFM
+
+| Feature | CommonMark | GFM |
+|:---|:---:|:---:|
+| Headings | Yes | Yes |
+| Emphasis | Yes | Yes |
+| Lists | Yes | Yes |
+| Fenced code blocks | Yes | Yes |
+| Links & images | Yes | Yes |
+| Blockquotes | Yes | Yes |
+| Horizontal rules | Yes | Yes |
+| Autolinks (`<url>`) | Yes | Yes |
+| Tables | No | Yes |
+| Task lists | No | Yes |
+| Strikethrough | No | Yes |
+| Extended autolinks (bare URLs) | No | Yes |
+| Footnotes | No | Yes |
+
+<Tip>
+  Need a quick test? Paste this into your renderer:
+
+  ```markdown
+  **bold** _italic_ ~~strike~~ `code`
+
+  - [x] task done
+  - [ ] task pending
+
+  | A | B |
+  |---|---|
+  | 1 | 2 |
+  ```
+
+  If all three render correctly (strikethrough, task checkboxes, and the table), you have a full GFM renderer.
+</Tip>

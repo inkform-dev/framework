@@ -1,0 +1,123 @@
+---
+title: Blockquotes
+description: Blockquotes for quoted text, callouts, and nested quotations in Markdown.
+---
+
+# Blockquotes
+
+Blockquotes mark text as quoted from another source. They are rendered with a left border and indented style.
+
+## Basic blockquote
+
+Prefix each line with `>` and a space:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    > The best documentation is written for the reader, not the writer.
+    ```
+  </Tab>
+  <Tab title="Result">
+    > The best documentation is written for the reader, not the writer.
+  </Tab>
+</Tabs>
+
+## Multi-line blockquotes
+
+You can either prefix every line or only the first line of each paragraph:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    > This is the first paragraph of the quote.
+    > It spans multiple lines.
+    >
+    > This is the second paragraph, still inside the blockquote.
+    ```
+  </Tab>
+  <Tab title="Result">
+    > This is the first paragraph of the quote.
+    > It spans multiple lines.
+    >
+    > This is the second paragraph, still inside the blockquote.
+  </Tab>
+</Tabs>
+
+## Nested blockquotes
+
+Prefix with `>>` to nest a quote inside a quote:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    > Alice wrote:
+    >
+    >> The meeting is at noon.
+    >
+    > I'll be there.
+    ```
+  </Tab>
+  <Tab title="Result">
+    > Alice wrote:
+    >
+    >> The meeting is at noon.
+    >
+    > I'll be there.
+  </Tab>
+</Tabs>
+
+## Blockquotes with other elements
+
+Blockquotes can contain headings, lists, code blocks, and other Markdown:
+
+```markdown
+> ## Summary
+>
+> The three key points are:
+>
+> - Plain text is portable
+> - Version control works on plain text
+> - One source, many output formats
+>
+> See the `docs/` directory for full details.
+```
+
+## Attribution
+
+Standard Markdown has no built-in attribution syntax. A common convention is to use an em-dash and the source in a separate paragraph:
+
+```markdown
+> Simplicity is the ultimate sophistication.
+
+— Leonardo da Vinci
+```
+
+Some processors support the `<cite>` element inside the blockquote:
+
+```markdown
+> Simplicity is the ultimate sophistication.
+> <cite>Leonardo da Vinci</cite>
+```
+
+## Using blockquotes for callouts
+
+Before rich callout components existed, many writers used blockquotes for emphasis. Most modern documentation systems (including this one) provide dedicated callout components instead:
+
+<Tabs>
+  <Tab title="Old approach">
+    ```markdown
+    > **Note:** Remember to save your work before closing.
+    ```
+  </Tab>
+  <Tab title="Modern approach (MDX)">
+    ```mdx
+    <Note>
+      Remember to save your work before closing.
+    </Note>
+    ```
+  </Tab>
+</Tabs>
+
+<Tip>
+  Use `<Note>`, `<Warning>`, `<Tip>`, and `<Check>` components in MDX-powered sites for callouts that have distinct visual styles. Reserve `>` blockquotes for actual quoted text.
+</Tip>

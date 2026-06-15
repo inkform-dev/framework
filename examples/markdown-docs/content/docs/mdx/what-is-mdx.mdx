@@ -1,0 +1,120 @@
+---
+title: What is MDX
+description: MDX combines Markdown prose with JSX components — the format powering modern documentation sites.
+---
+
+# What is MDX
+
+MDX is Markdown with JSX. It lets you write natural Markdown prose and embed React components directly inside the same file. The result is a format that is simultaneously:
+
+- Easy to write — it is still just Markdown
+- Expressive — drop in a component when text is not enough
+- Type-safe — components have typed props
+
+This site is built with MDX. Every callout, tab panel, card group, and step sequence you see is a React component rendered from MDX source.
+
+## A simple MDX file
+
+```mdx
+---
+title: My Page
+description: An example MDX page.
+---
+
+# My Page
+
+This is regular Markdown prose. You can write **bold**, _italic_,
+`inline code`, and [links](#).
+
+<Note>
+  This is a Note component — a React component imported from the design system,
+  used directly inside Markdown.
+</Note>
+
+The prose continues here, below the component.
+```
+
+## How it works
+
+<Steps>
+  <Step title="Write MDX source">
+    Author your content in `.mdx` files using Markdown syntax with JSX components mixed in. The file starts with optional YAML frontmatter.
+  </Step>
+  <Step title="Process with @mdx-js/mdx">
+    A compiler transforms the MDX source into a JavaScript module that exports a React component. Markdown is compiled to `React.createElement` calls; JSX components are used as-is.
+  </Step>
+  <Step title="Render with a component map">
+    When rendering, you pass a `components` object that maps HTML element names (like `h1`, `p`, `code`) and component names (like `Note`, `Card`) to React components. This is how themes restyle all Markdown output.
+  </Step>
+  <Step title="Output HTML">
+    The React component renders to HTML — static at build time in a Next.js app, or dynamically in a browser. The result is a fast, accessible page.
+  </Step>
+</Steps>
+
+## MDX vs. Markdown
+
+| Feature | Markdown | MDX |
+|---|---|---|
+| Write prose | Yes | Yes |
+| Headings, lists, links, code blocks | Yes | Yes |
+| Embed React components | No | Yes |
+| Import JavaScript/TypeScript | No | Yes |
+| Frontmatter | Via plugins | Via plugins |
+| Expressions (`{1 + 1}`) | No | Yes |
+| Re-usable component props | No | Yes |
+
+## Expressions
+
+MDX supports JavaScript expressions in `{curly braces}`:
+
+```mdx
+The answer is {40 + 2}.
+
+Today is {new Date().toLocaleDateString('en-US', { dateStyle: 'long' })}.
+```
+
+Renders as:
+
+> The answer is 42.
+
+<Tip>
+  Keep expressions simple. Heavy logic belongs in a component or a data-fetching function — not inline in an MDX file. If you find yourself writing complex JavaScript in curly braces, extract it.
+</Tip>
+
+## Imports
+
+You can import components and data at the top of an MDX file:
+
+```mdx
+import { CustomChart } from '../components/custom-chart'
+import { data } from '../data/q3-results.json'
+
+# Q3 Results
+
+<CustomChart data={data} />
+```
+
+<Note>
+  In documentation sites using a component map (like this one), you typically do not need to import common components like `Note`, `Card`, or `Tabs` — they are automatically available in every MDX file via the `mdxComponents` mapping.
+</Note>
+
+## When to use MDX vs. plain Markdown
+
+<Tabs>
+  <Tab title="Use plain Markdown when">
+    - Writing README files or GitHub documentation
+    - Content must be rendered by GitHub, GitLab, or other non-MDX tools
+    - You want maximum portability across renderers
+    - No custom components or interactivity are needed
+  </Tab>
+  <Tab title="Use MDX when">
+    - Building a documentation site with rich UI components
+    - Pages need interactive elements (playgrounds, demos, tabbed content)
+    - You want typed, validated component props instead of raw HTML
+    - Content is rendered by a Next.js, Remix, or Astro app you control
+  </Tab>
+</Tabs>
+
+## The MDX specification
+
+MDX is maintained by the [mdx-js](https://mdxjs.com) project and is not affiliated with GitHub or CommonMark. The current version is MDX 3, which uses the standard ECMAScript module format for imports and expressions.

@@ -1,0 +1,147 @@
+---
+title: Quickstart
+description: Make your first PokéAPI request in under two minutes — no setup, no API key.
+---
+
+# Quickstart
+
+PokéAPI requires zero configuration. There are no API keys to generate, no accounts to create, and no SDKs to install. The fastest path from zero to Pokémon data is a single HTTP request.
+
+## Make your first request
+
+<Steps>
+  <Step title="Pick a Pokémon">
+    PokéAPI accepts both numeric IDs and lowercase hyphenated names. Let's start with Pikachu (ID 25):
+
+    <CodeGroup>
+      ```bash curl
+      curl https://pokeapi.co/api/v2/pokemon/pikachu
+      ```
+
+      ```bash curl (by ID)
+      curl https://pokeapi.co/api/v2/pokemon/25
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Read the response">
+    The response is a large JSON object. Here are the most useful top-level fields:
+
+    ```json
+    {
+      "id": 25,
+      "name": "pikachu",
+      "base_experience": 112,
+      "height": 4,
+      "weight": 60,
+      "types": [
+        {
+          "slot": 1,
+          "type": { "name": "electric", "url": "https://pokeapi.co/api/v2/type/13/" }
+        }
+      ],
+      "stats": [
+        { "base_stat": 35, "effort": 0, "stat": { "name": "hp", "url": "..." } },
+        { "base_stat": 55, "effort": 0, "stat": { "name": "attack", "url": "..." } },
+        { "base_stat": 90, "effort": 2, "stat": { "name": "speed", "url": "..." } }
+      ],
+      "sprites": {
+        "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
+      }
+    }
+    ```
+  </Step>
+
+  <Step title="Follow a link">
+    Most fields that reference other resources include a `url`. You can fetch that URL to get the full resource:
+
+    ```bash
+    curl https://pokeapi.co/api/v2/type/13/
+    ```
+
+    This returns the full Electric type resource, including damage relations to other types.
+  </Step>
+</Steps>
+
+## Using JavaScript (fetch)
+
+PokéAPI uses standard HTTPS — no special client needed. Here is a minimal browser/Node.js example:
+
+```js
+async function getPokemon(nameOrId) {
+  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nameOrId}`);
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+  return res.json();
+}
+
+const pikachu = await getPokemon('pikachu');
+console.log(pikachu.name, pikachu.types.map(t => t.type.name));
+// → "pikachu" ["electric"]
+```
+
+<Tip>
+  All responses include `Cache-Control: public, max-age=86400, s-maxage=86400` headers.
+  Respect the cache — it's what keeps the API free.
+</Tip>
+
+## Using a community wrapper
+
+If you prefer a typed client, community wrappers exist for most languages:
+
+<Tabs>
+  <Tab title="JavaScript / TypeScript">
+    ```bash
+    npm install pokeapi-js-wrapper
+    ```
+
+    ```ts
+    import Pokedex from 'pokeapi-js-wrapper';
+
+    const P = new Pokedex();
+    const pikachu = await P.getPokemonByName('pikachu');
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```bash
+    pip install pokebase
+    ```
+
+    ```python
+    import pokebase as pb
+
+    pikachu = pb.pokemon('pikachu')
+    print(pikachu.name, pikachu.base_experience)
+    ```
+  </Tab>
+  <Tab title="Java">
+    ```xml
+    <dependency>
+      <groupId>com.github.pokeapijava</groupId>
+      <artifactId>pokeapijava</artifactId>
+      <version>2.3.0</version>
+    </dependency>
+    ```
+
+    ```java
+    PokeApi api = new PokeApiClient();
+    Pokemon pikachu = api.getResource(Pokemon.class, "pikachu");
+    ```
+  </Tab>
+</Tabs>
+
+## What's next?
+
+<CardGroup cols={2}>
+  <Card title="Fair Use Policy" icon="shield" href="/fair-use">
+    Understand the rate limits and caching expectations.
+  </Card>
+  <Card title="Resources & Endpoints" icon="layers" href="/concepts/resources">
+    A map of everything the API can return.
+  </Card>
+  <Card title="Pagination" icon="list" href="/concepts/pagination">
+    Listing and paginating large collections.
+  </Card>
+  <Card title="Pokémon Resource" icon="zap" href="/resources/pokemon">
+    The full Pokémon endpoint — every field explained.
+  </Card>
+</CardGroup>

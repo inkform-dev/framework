@@ -1,0 +1,163 @@
+---
+title: Evolution
+description: The Evolution Chain resource maps the full evolutionary tree for a Pokémon species — including branching evolutions and complex trigger conditions.
+---
+
+# Evolution
+
+Evolution chains describe how Pokémon evolve from one form to another. PokéAPI models them as a linked tree: each node (`ChainLink`) has a species reference, optional evolution details (level, item, condition), and an array of what it can evolve into.
+
+## Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/evolution-chain/` | List all evolution chains (paginated) |
+| GET | `/evolution-chain/{id}` | Get a chain by ID |
+| GET | `/evolution-trigger/` | List evolution trigger types |
+| GET | `/evolution-trigger/{name}` | Get trigger details |
+
+<Note>
+  Unlike Pokémon or moves, evolution chains have **no name** — only a numeric ID.
+  To find a Pokémon's chain, fetch the species (`/pokemon-species/{name}/`) and
+  follow its `evolution_chain.url`.
+</Note>
+
+## Finding a chain (two-step)
+
+<Steps>
+  <Step title="Fetch the Pokémon species">
+    ```bash
+    curl https://pokeapi.co/api/v2/pokemon-species/eevee
+    ```
+
+    The response includes:
+
+    ```json
+    {
+      "evolution_chain": {
+        "url": "https://pokeapi.co/api/v2/evolution-chain/67/"
+      }
+    }
+    ```
+  </Step>
+  <Step title="Fetch the evolution chain">
+    ```bash
+    curl https://pokeapi.co/api/v2/evolution-chain/67
+    ```
+  </Step>
+</Steps>
+
+## Example response — Eevee
+
+```json
+{
+  "id": 67,
+  "baby_trigger_item": null,
+  "chain": {
+    "is_baby": false,
+    "species": { "name": "eevee", "url": "https://pokeapi.co/api/v2/pokemon-species/133/" },
+    "evolution_details": [],
+    "evolves_to": [
+      {
+        "is_baby": false,
+        "species": { "name": "vaporeon", "url": "https://pokeapi.co/api/v2/pokemon-species/134/" },
+        "evolution_details": [
+          {
+            "trigger": { "name": "use-item", "url": "..." },
+            "item": { "name": "water-stone", "url": "..." },
+            "gender": null, "held_item": null, "known_move": null,
+            "location": null, "min_affection": null, "min_beauty": null,
+            "min_happiness": null, "min_level": null, "needs_overworld_rain": false,
+            "party_species": null, "party_type": null, "relative_physical_stats": null,
+            "time_of_day": "", "trade_species": null, "turn_upside_down": false
+          }
+        ],
+        "evolves_to": []
+      },
+      {
+        "is_baby": false,
+        "species": { "name": "jolteon", "url": "..." },
+        "evolution_details": [
+          { "trigger": { "name": "use-item" }, "item": { "name": "thunder-stone" } }
+        ],
+        "evolves_to": []
+      },
+      {
+        "is_baby": false,
+        "species": { "name": "espeon", "url": "..." },
+        "evolution_details": [
+          {
+            "trigger": { "name": "level-up" },
+            "min_happiness": 220, "time_of_day": "day"
+          }
+        ],
+        "evolves_to": []
+      }
+    ]
+  }
+}
+```
+
+## ChainLink fields
+
+<ResponseField name="species" type="NamedAPIResource" required>
+  The Pokémon species at this stage of the chain.
+</ResponseField>
+
+<ResponseField name="is_baby" type="boolean" required>
+  Whether this is a baby Pokémon (requires incense to breed for in the egg).
+</ResponseField>
+
+<ResponseField name="evolution_details" type="EvolutionDetail[]" required>
+  The conditions required to reach this stage from the previous one.
+  Empty array for the base species.
+</ResponseField>
+
+<ResponseField name="evolves_to" type="ChainLink[]" required>
+  The next evolution(s). Empty for final forms. Multiple entries = branching evolution.
+</ResponseField>
+
+## Common evolution triggers
+
+| Trigger | When it fires |
+|---------|---------------|
+| `level-up` | Pokémon levels up (often with `min_level`) |
+| `use-item` | Specific item used on Pokémon (Evolution Stone etc.) |
+| `trade` | Pokémon is traded (sometimes while holding an item) |
+| `shed` | Shedninja appears when Nincada evolves with a free party slot |
+| `three-critical-hits` | Clobbopus → Grapploct (Gen VIII) |
+| `spin` | Milcery → Alcremie when spinning with a Sweet held item |
+
+## Flattening a chain to an array
+
+```js
+function flattenChain(link, chain = []) {
+  chain.push({
+    name: link.species.name,
+    trigger: link.evolution_details[0]?.trigger?.name ?? null,
+    minLevel: link.evolution_details[0]?.min_level ?? null,
+    item: link.evolution_details[0]?.item?.name ?? null,
+  });
+  for (const next of link.evolves_to) {
+    flattenChain(next, chain);
+  }
+  return chain;
+}
+
+// Usage
+const res = await fetch('https://pokeapi.co/api/v2/evolution-chain/67').then(r => r.json());
+console.log(flattenChain(res.chain));
+// [
+//   { name: 'eevee',    trigger: null,       minLevel: null, item: null },
+//   { name: 'vaporeon', trigger: 'use-item', minLevel: null, item: 'water-stone' },
+//   { name: 'jolteon',  trigger: 'use-item', minLevel: null, item: 'thunder-stone' },
+//   { name: 'espeon',   trigger: 'level-up', minLevel: null, item: null },
+//   ...
+// ]
+```
+
+<Tip>
+  For branching chains like Eevee, the flat array has multiple entries that all
+  share the same "previous" species. Render them as a tree (not a linear list) for
+  best UX.
+</Tip>

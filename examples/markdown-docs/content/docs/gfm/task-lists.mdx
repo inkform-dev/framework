@@ -1,0 +1,115 @@
+---
+title: Task Lists
+description: Checkboxes and task lists in GitHub-Flavored Markdown — syntax, nesting, and use cases.
+---
+
+# Task Lists
+
+Task lists extend unordered lists with interactive checkboxes. They are one of the most recognizable GFM features, used extensively in GitHub issues, pull requests, and project documentation.
+
+## Basic syntax
+
+A task list item is an unordered list item that starts with `[ ]` (unchecked) or `[x]` (checked):
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    - [x] Write the introduction
+    - [x] Add code examples
+    - [ ] Review with the team
+    - [ ] Publish to production
+    ```
+  </Tab>
+  <Tab title="Result">
+    - [x] Write the introduction
+    - [x] Add code examples
+    - [ ] Review with the team
+    - [ ] Publish to production
+  </Tab>
+</Tabs>
+
+<Note>
+  The space inside unchecked boxes is required: `[ ]` not `[]`. A missing space will not render as a checkbox.
+</Note>
+
+## Nested task lists
+
+Task list items can be nested like regular list items:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    - [x] Backend
+      - [x] Database schema
+      - [x] API endpoints
+      - [ ] Authentication
+    - [ ] Frontend
+      - [ ] Login page
+      - [ ] Dashboard
+    - [ ] Deploy
+    ```
+  </Tab>
+  <Tab title="Result">
+    - [x] Backend
+      - [x] Database schema
+      - [x] API endpoints
+      - [ ] Authentication
+    - [ ] Frontend
+      - [ ] Login page
+      - [ ] Dashboard
+    - [ ] Deploy
+  </Tab>
+</Tabs>
+
+## Mixed content
+
+Task list items can contain inline formatting and links:
+
+```markdown
+- [x] Read the [CommonMark spec](https://commonmark.org)
+- [x] Install **Node.js 20** or later
+- [ ] Configure `NEXT_PUBLIC_SITE_URL` in `.env.local`
+- [ ] ~~Old task that is no longer relevant~~
+```
+
+## Use cases
+
+<CardGroup cols={2}>
+  <Card title="Project tracking">
+    Embed checklists in GitHub issues and pull requests. GitHub counts completed vs. total items and shows progress.
+  </Card>
+  <Card title="Release checklists">
+    Document pre-deploy or release checklists in a `CHECKLIST.md` file. The checked state is version-controlled along with the content.
+  </Card>
+  <Card title="Feature planning">
+    Outline sub-tasks for a feature in the issue description. As work progresses, check off items — the progress is visible in the issue list.
+  </Card>
+  <Card title="Documentation TODOs">
+    Track which sections of a doc are complete while authoring. Convert to standard prose when the list is done.
+  </Card>
+</CardGroup>
+
+## Interactivity on GitHub
+
+On GitHub.com, task list items in issues and pull requests are interactive — you can click the checkbox to toggle its state, and GitHub will commit the change to the underlying Markdown file.
+
+<Tip>
+  On GitHub, you can reference a task list item's progress in the parent issue or PR. If a PR description contains a task list, GitHub shows `2/5 tasks` in the pull request list view.
+</Tip>
+
+## Rendering behavior
+
+Most renderers render task lists as:
+
+```html
+<ul>
+  <li><input type="checkbox" checked disabled> Completed item</li>
+  <li><input type="checkbox" disabled> Pending item</li>
+</ul>
+```
+
+The `disabled` attribute means the checkboxes are not interactive in static HTML — they are display-only. Only platforms like GitHub add click handlers to make them editable.
+
+<Warning>
+  Task lists are a **GFM extension**. They will not render as checkboxes in plain CommonMark renderers or older Markdown tools. The raw text `- [ ]` will appear as a literal bullet point.
+</Warning>

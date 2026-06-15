@@ -1,0 +1,142 @@
+---
+title: Abilities
+description: The Ability resource describes passive effects that Pokémon carry into battle — like Intimidate, Levitate, and Sturdy.
+---
+
+# Abilities
+
+Abilities are passive traits that Pokémon have in battle and sometimes in the overworld. Introduced in Generation III, every Pokémon has 1–2 regular ability slots and an optional hidden ability. The `/ability/` endpoint provides the name, effect descriptions, and which Pokémon have the ability.
+
+There are over 300 abilities across all generations.
+
+## Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/ability/` | List all abilities (paginated) |
+| GET | `/ability/{name}` | Get an ability by name |
+| GET | `/ability/{id}` | Get an ability by ID |
+
+## Example request
+
+<CodeGroup>
+  ```bash curl
+  curl https://pokeapi.co/api/v2/ability/intimidate
+  ```
+
+  ```js fetch
+  const res = await fetch('https://pokeapi.co/api/v2/ability/intimidate');
+  const intimidate = await res.json();
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": 22,
+  "name": "intimidate",
+  "is_main_series": true,
+  "generation": { "name": "generation-iii", "url": "https://pokeapi.co/api/v2/generation/3/" },
+  "names": [
+    { "name": "Intimidate", "language": { "name": "en", "url": "..." } }
+  ],
+  "effect_entries": [
+    {
+      "effect": "Lowers the opposing Pokémon's Attack by one stage when the Pokémon enters battle.",
+      "short_effect": "Lowers the foe's attack by one stage upon entering battle.",
+      "language": { "name": "en", "url": "..." }
+    }
+  ],
+  "flavor_text_entries": [
+    {
+      "flavor_text": "Intimidates the foe to lower its Attack stat.",
+      "language": { "name": "en", "url": "..." },
+      "version_group": { "name": "sword-shield", "url": "..." }
+    }
+  ],
+  "pokemon": [
+    {
+      "is_hidden": false,
+      "slot": 1,
+      "pokemon": { "name": "growlithe", "url": "https://pokeapi.co/api/v2/pokemon/58/" }
+    },
+    {
+      "is_hidden": false,
+      "slot": 1,
+      "pokemon": { "name": "arcanine", "url": "https://pokeapi.co/api/v2/pokemon/59/" }
+    }
+  ]
+}
+```
+
+## Key fields
+
+<ResponseField name="is_main_series" type="boolean" required>
+  Whether the ability appears in the main series games (as opposed to only in
+  side games like Pokémon GO or Mystery Dungeon).
+</ResponseField>
+
+<ResponseField name="generation" type="NamedAPIResource" required>
+  The generation in which this ability was introduced.
+</ResponseField>
+
+<ResponseField name="effect_entries" type="VerboseEffect[]" required>
+  Full effect description and a short version. Look for `language.name === 'en'`.
+</ResponseField>
+
+<ResponseField name="pokemon" type="AbilityPokemon[]" required>
+  All Pokémon that can have this ability. Each entry includes `is_hidden` (true for
+  hidden abilities) and `slot` (1, 2, or 3).
+</ResponseField>
+
+## Ability slots
+
+Each Pokémon entry in `pokemon` has a `slot` field:
+
+<Columns cols={3}>
+  <div>
+    **Slot 1** — Primary ability. All Pokémon of this species can have it.
+  </div>
+  <div>
+    **Slot 2** — Secondary ability. A second option for the species (not all Pokémon have this).
+  </div>
+  <div>
+    **Slot 3** — Hidden ability. Rarely distributed; often stronger than regular abilities.
+  </div>
+</Columns>
+
+## Finding a Pokémon's abilities
+
+You can look at abilities from either direction:
+
+<CodeGroup>
+  ```js From Pokémon
+  // Abilities listed on the Pokémon resource
+  const p = await fetch('https://pokeapi.co/api/v2/pokemon/arcanine').then(r => r.json());
+  p.abilities.forEach(a => {
+    console.log(a.ability.name, a.is_hidden ? '(hidden)' : '');
+  });
+  // → "intimidate"
+  // → "flash-fire"
+  // → "justified" (hidden)
+  ```
+
+  ```js From Ability
+  // Pokémon listed on the Ability resource
+  const a = await fetch('https://pokeapi.co/api/v2/ability/intimidate').then(r => r.json());
+  const hidden = a.pokemon.filter(p => p.is_hidden).map(p => p.pokemon.name);
+  const regular = a.pokemon.filter(p => !p.is_hidden).map(p => p.pokemon.name);
+  ```
+</CodeGroup>
+
+## Notable abilities
+
+| Ability | Effect |
+|---------|--------|
+| `levitate` | Immune to Ground-type moves |
+| `sturdy` | Survives any one-hit KO at full HP |
+| `speed-boost` | Speed increases by 1 stage each turn |
+| `wonder-guard` | Only takes damage from super-effective moves |
+| `drought` | Sets harsh sunlight when entering battle |
+| `rain-dish` | Restores HP in rain each turn |

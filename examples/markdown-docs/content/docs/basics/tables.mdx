@@ -1,0 +1,147 @@
+---
+title: Tables
+description: GFM-style tables in Markdown — syntax, alignment, and best practices.
+---
+
+# Tables
+
+Tables are a GFM (GitHub-Flavored Markdown) extension. They use pipe characters `|` to define columns and hyphens `-` for the header separator row.
+
+## Basic table
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    | Name    | Role      | Language   |
+    | ------- | --------- | ---------- |
+    | Alice   | Engineer  | TypeScript |
+    | Bob     | Designer  | CSS        |
+    | Charlie | Infra     | Bash       |
+    ```
+  </Tab>
+  <Tab title="Result">
+    | Name    | Role      | Language   |
+    | ------- | --------- | ---------- |
+    | Alice   | Engineer  | TypeScript |
+    | Bob     | Designer  | CSS        |
+    | Charlie | Infra     | Bash       |
+  </Tab>
+</Tabs>
+
+The table must have:
+1. A header row
+2. A separator row (at least three hyphens per cell: `---`)
+3. One or more data rows
+
+## Column alignment
+
+Add `:` to the separator row to control alignment:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    | Left-aligned | Centered | Right-aligned |
+    | :----------- | :------: | ------------: |
+    | Text         |  Text    |          Text |
+    | Longer text  |  Short   |             1 |
+    ```
+  </Tab>
+  <Tab title="Result">
+    | Left-aligned | Centered | Right-aligned |
+    | :----------- | :------: | ------------: |
+    | Text         |  Text    |          Text |
+    | Longer text  |  Short   |             1 |
+  </Tab>
+</Tabs>
+
+| Separator | Alignment |
+|---|---|
+| `---` | Default (left in most renderers) |
+| `:---` | Left |
+| `:---:` | Center |
+| `---:` | Right |
+
+## Inline formatting in cells
+
+Table cells can contain inline Markdown — bold, italic, inline code, and links:
+
+```markdown
+| Command           | Description                  |
+| :---------------- | :--------------------------- |
+| `git status`      | Show working tree status     |
+| `git diff`        | Show unstaged changes        |
+| **`git add -p`**  | Stage changes interactively  |
+| `git log --oneline` | One-line commit history    |
+```
+
+## Pipe characters inside cells
+
+To include a literal `|` inside a table cell, escape it with a backslash:
+
+```markdown
+| Syntax     | Example        |
+| ---------- | -------------- |
+| Pipe char  | `a \| b`       |
+```
+
+## Optional outer pipes
+
+The outer pipe characters are optional in GFM, though most style guides recommend including them for alignment:
+
+```markdown
+Name | Role | Language
+-----|------|----------
+Alice | Engineer | TypeScript
+```
+
+<Note>
+  Most linters and formatters (like Prettier) will add the outer pipes and align the columns automatically. The source does not need to be visually aligned — only the separator hyphens matter to the parser.
+</Note>
+
+## Keeping tables readable in source
+
+Very wide tables with long content are hard to read in source. Strategies:
+
+<CardGroup cols={2}>
+  <Card title="Abbreviate cell content">
+    Use short values in cells and explain them in a footnote or following paragraph.
+  </Card>
+  <Card title="Use a list instead">
+    If a table has many columns or complex cell content, a definition list or a series of bullet points may be clearer.
+  </Card>
+</CardGroup>
+
+## Limitations of Markdown tables
+
+<Warning>
+  Standard Markdown tables do not support:
+
+  - Cells spanning multiple columns (colspan) or rows (rowspan)
+  - Multi-line cell content
+  - Nested lists inside cells
+  - Table captions
+
+  For complex tables, use raw HTML inside your Markdown or MDX, or a table component with typed data.
+</Warning>
+
+For complex tabular data in MDX, you can use a React component directly:
+
+```mdx
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Alice</td>
+      <td rowSpan={2}>Engineer</td>
+    </tr>
+    <tr>
+      <td>Bob</td>
+    </tr>
+  </tbody>
+</table>
+```

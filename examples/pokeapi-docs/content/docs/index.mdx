@@ -1,0 +1,90 @@
+---
+title: Introduction
+description: PokéAPI is a free, open RESTful API delivering comprehensive Pokémon data — no API key, no account, no rate-limit surprises for reasonable usage.
+---
+
+# Introduction
+
+**PokéAPI** is the world's most popular open Pokémon data API. It exposes nearly every piece of data from the core Pokémon games — Pokémon species, moves, abilities, types, evolution chains, items, locations, and more — through a clean, consistent REST interface.
+
+<Frame caption="Every Pokémon. Every move. Every ability. One API.">
+  ![PokéAPI hero illustration](/hero.svg)
+</Frame>
+
+## What you get
+
+<CardGroup cols={2}>
+  <Card title="No auth required" icon="unlock">
+    The API is completely open. No sign-up, no API key, no OAuth flow.
+    Fire your first request right now.
+  </Card>
+  <Card title="Free forever" icon="heart">
+    PokéAPI is community-funded and completely free to use for personal
+    and commercial projects.
+  </Card>
+  <Card title="Rich, linked data" icon="link">
+    Resources reference each other by URL. Follow the links to traverse
+    the full Pokémon knowledge graph.
+  </Card>
+  <Card title="Consistent shape" icon="layers">
+    Every collection endpoint returns the same `NamedAPIResourceList`
+    shape. Pagination works identically everywhere.
+  </Card>
+</CardGroup>
+
+## Base URL
+
+All v2 endpoints live under a single base URL:
+
+```
+https://pokeapi.co/api/v2/
+```
+
+<Note>
+  There is no versioning beyond `v2` in URL paths. The API is stable and
+  backward-compatible. The original v1 API was retired in 2018.
+</Note>
+
+## Example — your first request
+
+Fetch Pikachu with a single `GET`:
+
+```bash
+curl https://pokeapi.co/api/v2/pokemon/pikachu
+```
+
+You get a rich JSON object with stats, moves, sprites, types, abilities, and
+much more — all in one response.
+
+## Explore the docs
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Make your first requests with fetch, curl, and a JavaScript client
+    library in under five minutes.
+  </Card>
+  <Card title="Fair Use Policy" icon="shield" href="/fair-use">
+    Learn about the soft rate limits, caching headers, and the community
+    expectations that keep PokéAPI free for everyone.
+  </Card>
+  <Card title="Core Concepts" icon="book" href="/concepts/resources">
+    Understand resources, pagination, and how to traverse linked data.
+  </Card>
+  <Card title="API Reference" icon="terminal" href="/api-reference">
+    Full endpoint reference generated from the OpenAPI spec — parameters,
+    response schemas, and live examples.
+  </Card>
+</CardGroup>
+
+## Community & support
+
+PokéAPI is open-source and maintained by volunteers. If you find a bug or want to contribute:
+
+- **GitHub:** [github.com/PokeAPI/pokeapi](https://github.com/PokeAPI/pokeapi)
+- **Discord:** [discord.gg/pokeapi](https://discord.gg/D5CfFkN)
+- **Data issues:** Open an issue on the [PokeAPI/pokedex](https://github.com/PokeAPI/pokedex) data repository.
+
+<Tip>
+  If you plan to build a production app, read the [Fair Use Policy](/fair-use) and
+  consider self-hosting or mirroring the data — PokéAPI runs on community donations.
+</Tip>

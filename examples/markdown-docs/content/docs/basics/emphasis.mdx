@@ -1,0 +1,179 @@
+---
+title: Emphasis & Text
+description: Bold, italic, strikethrough, inline code, and other inline text formatting in Markdown.
+---
+
+# Emphasis & Text
+
+Inline formatting lets you mark up words and phrases within a paragraph without breaking into a block element.
+
+## Bold
+
+Wrap text with `**double asterisks**` or `__double underscores__` for strong emphasis:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    This is **bold text**.
+
+    This is also __bold text__.
+    ```
+  </Tab>
+  <Tab title="Result">
+    This is **bold text**.
+
+    This is also **bold text**.
+  </Tab>
+</Tabs>
+
+<Tip>
+  Prefer `**asterisks**` over `__underscores__`. Underscores inside words are not treated as emphasis by CommonMark (`foo__bar__baz` does not bold "bar"), which can cause surprises. Asterisks work reliably in all contexts.
+</Tip>
+
+## Italic
+
+Wrap text with `*single asterisks*` or `_single underscores_` for emphasis:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    This is *italic text*.
+
+    This is also _italic text_.
+    ```
+  </Tab>
+  <Tab title="Result">
+    This is *italic text*.
+
+    This is also _italic text_.
+  </Tab>
+</Tabs>
+
+## Bold and italic together
+
+Combine three asterisks for bold-italic:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    This is ***bold and italic*** at the same time.
+    ```
+  </Tab>
+  <Tab title="Result">
+    This is ***bold and italic*** at the same time.
+  </Tab>
+</Tabs>
+
+## Strikethrough
+
+Strike through text with `~~double tildes~~` (GFM extension):
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    ~~This text is struck through.~~
+    ```
+  </Tab>
+  <Tab title="Result">
+    ~~This text is struck through.~~
+  </Tab>
+</Tabs>
+
+<Note>
+  Strikethrough (`~~`) is a **GitHub-Flavored Markdown** extension, not part of core CommonMark. It works in GitHub, GitLab, and most modern renderers including this site.
+</Note>
+
+## Inline code
+
+Wrap text in backticks for `inline code`:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    Run the `npm install` command.
+
+    The variable is `user.email`.
+    ```
+  </Tab>
+  <Tab title="Result">
+    Run the `npm install` command.
+
+    The variable is `user.email`.
+  </Tab>
+</Tabs>
+
+If your code contains a backtick, use double backticks as delimiters:
+
+```markdown
+`` Use `backticks` like this ``
+```
+
+## Escaping characters
+
+To display a literal character that Markdown would otherwise interpret, prefix it with a backslash:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    \*This is not italic\*
+
+    \# This is not a heading
+
+    \[This is not a link\]
+    ```
+  </Tab>
+  <Tab title="Result">
+    \*This is not italic\*
+
+    \# This is not a heading
+
+    \[This is not a link\]
+  </Tab>
+</Tabs>
+
+These characters can all be escaped with `\`:
+
+```
+\ ` * _ { } [ ] ( ) # + - . !
+```
+
+## Line breaks
+
+A single newline in Markdown source is treated as a space — it does **not** create a new paragraph. To create a hard line break within a paragraph, end a line with two or more spaces, or use a backslash at the end:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    First line  
+    Second line (two trailing spaces above)
+
+    First line\
+    Second line (backslash at end)
+    ```
+  </Tab>
+  <Tab title="Result">
+    First line
+    Second line
+
+    First line
+    Second line
+  </Tab>
+</Tabs>
+
+<Warning>
+  Trailing spaces are invisible and easy to accidentally strip. The backslash `\` line-break is more explicit and less fragile. Use it in preference to trailing spaces when you need hard line breaks.
+</Warning>
+
+## Paragraphs
+
+A blank line separates paragraphs. One or more blank lines all produce the same result — a single paragraph break:
+
+```markdown
+First paragraph.
+
+Second paragraph.
+
+
+
+Third paragraph — three blank lines above still just one break.
+```

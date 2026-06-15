@@ -1,0 +1,116 @@
+---
+title: Resource Lists
+description: Understand the NamedAPIResourceList shape returned by every PokéAPI collection endpoint.
+---
+
+# Resource Lists
+
+Every collection endpoint in PokéAPI returns a `NamedAPIResourceList` — a thin wrapper around an array of `NamedAPIResource` objects (name + URL pairs). This consistent shape means the same pagination logic works across all 50+ resource types.
+
+## NamedAPIResource
+
+The most common reference type in the API. It appears anywhere one resource points to another:
+
+```json
+{
+  "name": "electric",
+  "url": "https://pokeapi.co/api/v2/type/13/"
+}
+```
+
+<ResponseField name="name" type="string" required>
+  The resource's canonical lowercase hyphenated name.
+</ResponseField>
+
+<ResponseField name="url" type="string" required>
+  The full URL to fetch the complete resource object.
+</ResponseField>
+
+## APIResource
+
+Some resources are identified only by ID (no name), such as evolution chains. These use `APIResource`:
+
+```json
+{
+  "url": "https://pokeapi.co/api/v2/evolution-chain/1/"
+}
+```
+
+## NamedAPIResourceList
+
+The envelope returned by list endpoints:
+
+```json
+{
+  "count": 18,
+  "next": null,
+  "previous": null,
+  "results": [
+    { "name": "normal",   "url": "https://pokeapi.co/api/v2/type/1/" },
+    { "name": "fighting", "url": "https://pokeapi.co/api/v2/type/2/" },
+    { "name": "flying",   "url": "https://pokeapi.co/api/v2/type/3/" },
+    ...
+  ]
+}
+```
+
+<Note>
+  When `count` is less than or equal to the default page size (20), `next` and
+  `previous` are both `null`. This is common for resource types with few entries
+  (types, egg groups, generations).
+</Note>
+
+## Why shallow lists?
+
+List endpoints return stubs, not full objects. This is intentional:
+
+<Columns cols={2}>
+  <div>
+    **Stubs keep list responses small.** A full list of 1302 Pokémon with all fields
+    would be hundreds of megabytes. Stubs are kilobytes.
+  </div>
+  <div>
+    **You only fetch what you need.** Build an autocomplete with just the names list,
+    then fetch individual Pokémon on demand.
+  </div>
+</Columns>
+
+## Building a name-to-ID lookup
+
+A common pattern is to fetch the full list once and build an in-memory lookup:
+
+```js
+async function buildIndex(resource) {
+  const res = await fetch(
+    `https://pokeapi.co/api/v2/${resource}/?limit=100000`
+  );
+  const { results } = await res.json();
+
+  // Extract ID from the URL: ".../pokemon/25/" → 25
+  return Object.fromEntries(
+    results.map(({ name, url }) => {
+      const id = parseInt(url.split('/').slice(-2, -1)[0], 10);
+      return [name, id];
+    })
+  );
+}
+
+const pokemonIndex = await buildIndex('pokemon');
+console.log(pokemonIndex['pikachu']); // 25
+```
+
+## Language lists
+
+Some resources wrap list entries with a `language` field:
+
+```json
+{
+  "name": "en",
+  "names": [
+    { "name": "English", "language": { "name": "en", "url": "..." } },
+    { "name": "Anglais", "language": { "name": "fr", "url": "..." } }
+  ]
+}
+```
+
+These appear in resource-level `names` arrays and follow the same `NamedAPIResource` pattern.

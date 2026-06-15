@@ -1,0 +1,92 @@
+---
+title: Horizontal Rules
+description: Thematic breaks and horizontal rules in Markdown — when and how to use them.
+---
+
+# Horizontal Rules
+
+A horizontal rule (also called a thematic break) renders as a full-width `<hr>` element — a visual divider between sections.
+
+## Syntax
+
+Use three or more hyphens, asterisks, or underscores on their own line:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    ---
+
+    ***
+
+    ___
+
+    - - -
+
+    * * *
+    ```
+  </Tab>
+  <Tab title="Result">
+    All five syntaxes produce the same output: a horizontal rule.
+
+    ---
+  </Tab>
+</Tabs>
+
+<Note>
+  Spaces between the characters are optional. `- - -` and `---` both work. The key requirement is three or more of the same character, with no other content on that line.
+</Note>
+
+## The `---` collision with Setext headings
+
+The most common confusion with horizontal rules is the **Setext heading** conflict. A line of `---` immediately below a paragraph of text creates an `h2` heading, not a thematic break:
+
+<Tabs>
+  <Tab title="This is a heading">
+    ```markdown
+    My Section
+    ----------
+    ```
+
+    Renders as: `<h2>My Section</h2>`
+  </Tab>
+  <Tab title="This is a horizontal rule">
+    ```markdown
+    My paragraph.
+
+    ---
+    ```
+
+    Renders as a `<p>` followed by an `<hr>`.
+  </Tab>
+</Tabs>
+
+<Warning>
+  Always separate `---` from surrounding text with blank lines to ensure it is interpreted as a horizontal rule and not a Setext heading.
+</Warning>
+
+## When to use horizontal rules
+
+Horizontal rules are a blunt instrument. In most documentation, heading structure provides better visual hierarchy than `<hr>` elements. Appropriate uses:
+
+- Separating distinct sections in a long document that shares a single heading level
+- End-of-document signatures or footers in README files
+- Separating the frontmatter delimiter in some Markdown flavors (some tools use `---` as the YAML frontmatter delimiter)
+
+<Tip>
+  If you find yourself reaching for `---` to break up a wall of text, consider whether the content should be reorganized under more specific headings instead.
+</Tip>
+
+## Frontmatter vs. horizontal rule
+
+Many static site generators and documentation tools use `---` as the frontmatter delimiter:
+
+```markdown
+---
+title: My Page
+description: This is YAML frontmatter, not a horizontal rule.
+---
+
+# Page content starts here
+```
+
+The frontmatter block is recognized only at the very start of the file, before any other content. The closing `---` ends the frontmatter — it does not render as a horizontal rule in the page.

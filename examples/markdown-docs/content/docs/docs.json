@@ -1,0 +1,59 @@
+{
+  "name": "Markdown Guide",
+  "version": "1.0.0",
+  "logo": "/logo.svg",
+  "favicon": "/favicon.svg",
+  "colors": { "primary": "#1a9e5c" },
+  "navbarLinks": [
+    { "name": "CommonMark", "href": "https://commonmark.org" },
+    { "name": "GFM Spec", "href": "https://github.github.com/gfm/" }
+  ],
+  "anchors": [
+    { "name": "GitHub", "href": "https://github.com/commonmark/commonmark-spec", "icon": "github" }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        { "title": "Introduction", "slug": "", "file": "index.mdx", "icon": "book-open" },
+        { "title": "Why Markdown", "slug": "why-markdown", "file": "why-markdown.mdx", "icon": "zap" }
+      ]
+    },
+    {
+      "group": "Basics",
+      "pages": [
+        { "title": "Headings", "slug": "basics/headings", "file": "basics/headings.mdx", "icon": "type" },
+        { "title": "Emphasis & Text", "slug": "basics/emphasis", "file": "basics/emphasis.mdx", "icon": "bold" },
+        { "title": "Lists", "slug": "basics/lists", "file": "basics/lists.mdx", "icon": "list" },
+        { "title": "Links & Images", "slug": "basics/links-images", "file": "basics/links-images.mdx", "icon": "link" },
+        { "title": "Code & Syntax Highlighting", "slug": "basics/code", "file": "basics/code.mdx", "icon": "code" },
+        { "title": "Blockquotes", "slug": "basics/blockquotes", "file": "basics/blockquotes.mdx", "icon": "quote" },
+        { "title": "Tables", "slug": "basics/tables", "file": "basics/tables.mdx", "icon": "table" },
+        { "title": "Horizontal Rules", "slug": "basics/horizontal-rules", "file": "basics/horizontal-rules.mdx", "icon": "minus" }
+      ]
+    },
+    {
+      "group": "Extended (GitHub-Flavored)",
+      "pages": [
+        { "title": "GFM Overview", "slug": "gfm/overview", "file": "gfm/overview.mdx", "icon": "github" },
+        { "title": "Task Lists", "slug": "gfm/task-lists", "file": "gfm/task-lists.mdx", "icon": "check-square" },
+        { "title": "Strikethrough & Autolinks", "slug": "gfm/strikethrough-autolinks", "file": "gfm/strikethrough-autolinks.mdx", "icon": "strikethrough" },
+        { "title": "Footnotes", "slug": "gfm/footnotes", "file": "gfm/footnotes.mdx", "icon": "superscript" }
+      ]
+    },
+    {
+      "group": "MDX",
+      "pages": [
+        { "title": "What is MDX", "slug": "mdx/what-is-mdx", "file": "mdx/what-is-mdx.mdx", "icon": "sparkles" },
+        { "title": "Using Components", "slug": "mdx/using-components", "file": "mdx/using-components.mdx", "icon": "blocks" },
+        { "title": "Frontmatter", "slug": "mdx/frontmatter", "file": "mdx/frontmatter.mdx", "icon": "file-text" }
+      ]
+    },
+    {
+      "group": "Reference",
+      "pages": [
+        { "title": "Cheatsheet", "slug": "reference/cheatsheet", "file": "reference/cheatsheet.mdx", "icon": "table-2" }
+      ]
+    }
+  ]
+}

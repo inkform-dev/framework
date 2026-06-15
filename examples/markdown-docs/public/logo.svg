@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 32" fill="none" role="img" aria-label="Markdown Guide">
+  <!-- Sharp outer bracket — M↓ mark, zero radius, brutalist -->
+  <rect x="2" y="4" width="24" height="24" rx="0" fill="#1a9e5c" opacity="0.12"/>
+  <rect x="2" y="4" width="24" height="24" rx="0" stroke="#1a9e5c" stroke-width="1.5"/>
+  <!-- M letterform — two peaks -->
+  <polyline points="7,22 7,11 14,18 21,11 21,22" stroke="#1a9e5c" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <!-- Down arrow inside box — the Markdown spec logo concept -->
+  <line x1="14" y1="22" x2="14" y2="26" stroke="#1a9e5c" stroke-width="0" fill="none"/>
+  <!-- Wordmark -->
+  <text x="33" y="22" font-family="ui-monospace, 'JetBrains Mono', 'Consolas', monospace" font-size="13" font-weight="700" letter-spacing="0.08em" fill="currentColor">MARKDOWN</text>
+</svg>

@@ -1,0 +1,170 @@
+---
+title: Using Components
+description: The complete component kit available in MDX pages — callouts, cards, steps, tabs, code groups, and more.
+---
+
+# Using Components
+
+This site provides a full component kit for writing rich documentation. Every component is available in every MDX page without importing.
+
+## Callouts
+
+Callouts draw attention to important information. Four semantic variants:
+
+```markdown
+Note: Neutral information the reader should be aware of.
+
+Tip: A helpful suggestion or shortcut.
+
+Warning: Something that requires caution.
+
+Check: A success state or confirmation.
+```
+
+In MDX source, write them as JSX components:
+
+<Note>This is a Note — neutral, informational.</Note>
+<Tip>This is a Tip — a helpful suggestion.</Tip>
+<Warning>This is a Warning — proceed carefully.</Warning>
+<Check>This is a Check — success or confirmation.</Check>
+
+## Cards and CardGroup
+
+Cards link to related pages or highlight features. Wrap in `CardGroup` to create a grid:
+
+```markdown
+CardGroup cols=2
+  Card title="Headings" icon="type" href="/basics/headings"
+    The six heading levels, anchors, and best practices.
+
+  Card title="Code blocks" icon="code" href="/basics/code"
+    Fenced blocks, language IDs, and syntax highlighting.
+```
+
+The `cols` prop accepts `1`, `2`, `3`, or `4`. Default is `2`.
+
+<CardGroup cols={2}>
+  <Card title="Headings" icon="type" href="/basics/headings">
+    The six heading levels, anchors, and best practices.
+  </Card>
+  <Card title="Code blocks" icon="code" href="/basics/code">
+    Fenced blocks, language IDs, and syntax highlighting.
+  </Card>
+</CardGroup>
+
+## Steps
+
+Numbered step-by-step sequences. Each `Step` has a `title` prop:
+
+<Steps>
+  <Step title="Install">Run `npm install` to fetch dependencies.</Step>
+  <Step title="Configure">Copy `.env.example` to `.env.local` and fill in the values.</Step>
+  <Step title="Run">Start the dev server with `npm run dev`.</Step>
+</Steps>
+
+## Tabs
+
+Tabbed content panels — useful for showing the same content in multiple languages or contexts.
+Each `Tab` takes a `title` prop:
+
+<Tabs>
+  <Tab title="npm">
+    ```bash
+    npm install @freewrite-cms/framework
+    ```
+  </Tab>
+  <Tab title="pnpm">
+    ```bash
+    pnpm add @freewrite-cms/framework
+    ```
+  </Tab>
+  <Tab title="yarn">
+    ```bash
+    yarn add @freewrite-cms/framework
+    ```
+  </Tab>
+</Tabs>
+
+## CodeGroup
+
+Side-by-side code files with a language/filename tab bar. The filename is the second word after the language identifier on the opening fence line:
+
+<CodeGroup>
+  ```typescript index.ts
+  export function hello(name: string): string {
+    return `Hello, ${name}!`;
+  }
+  ```
+
+  ```javascript index.js
+  export function hello(name) {
+    return `Hello, ${name}!`;
+  }
+  ```
+</CodeGroup>
+
+## Accordion
+
+Collapsible sections for supplementary details. Use `defaultOpen` to start expanded:
+
+<Accordion title="Click to expand: advanced configuration options">
+  These options are rarely needed. Most users can ignore this section.
+
+  - `debug: true` — enable verbose logging
+  - `timeout: 30000` — request timeout in milliseconds
+</Accordion>
+
+## Frame
+
+A bordered media frame — use for images, videos, and screenshots:
+
+<Frame caption="The Markdown Guide hero image">
+  ![Hero](/hero.svg)
+</Frame>
+
+## Columns
+
+A two-column layout for comparing content side by side. The `cols` prop defaults to `2`:
+
+<Columns cols={2}>
+  <div>
+
+    **Left column**
+
+    Use this for source examples, before states, or option A.
+
+  </div>
+  <div>
+
+    **Right column**
+
+    Use this for rendered output, after states, or option B.
+
+  </div>
+</Columns>
+
+## ParamField and ResponseField
+
+Document parameters and response fields with typed, labeled rows:
+
+<ParamField body="name" type="string" required>
+  The display name of the resource. Must be 3–100 characters.
+</ParamField>
+
+<ParamField body="enabled" type="boolean" default="true">
+  Whether the resource is active. Defaults to `true` on creation.
+</ParamField>
+
+<ResponseField name="id" type="string">
+  The unique identifier of the created resource (UUID v4).
+</ResponseField>
+
+## Component nesting rules
+
+<Warning>
+  MDX components must be properly closed. Unlike HTML, unclosed tags are a syntax error. Every opening tag needs a matching closing tag.
+
+  Also, Markdown inside component tags must be on its own line — not on the same line as the opening tag — to be parsed as Markdown rather than raw text.
+</Warning>
+
+Content placed on the same line as the opening tag is treated as raw text, not parsed Markdown. Put your content on a new line after the opening tag.

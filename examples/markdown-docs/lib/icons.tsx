@@ -1,0 +1,93 @@
+import type { ReactNode } from 'react';
+import {
+  Book,
+  BookOpen,
+  Rocket,
+  Terminal,
+  Type,
+  Code,
+  Image,
+  Blocks,
+  Map,
+  Github,
+  Pencil,
+  Eye,
+  Zap,
+  Palette,
+  CircleDot,
+  FileText,
+  Settings,
+  Globe,
+  Lock,
+  Key,
+  Database,
+  Cloud,
+  Mail,
+  User,
+  Users,
+  Star,
+  Heart,
+  Bell,
+  Search,
+  Home,
+  Layout,
+  Package,
+  Layers,
+  Link,
+  ChevronRight,
+  Play,
+  Download,
+  Upload,
+} from 'lucide-react';
+
+const ICON_MAP: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number }>> = {
+  book: Book,
+  'book-open': BookOpen,
+  rocket: Rocket,
+  terminal: Terminal,
+  type: Type,
+  code: Code,
+  image: Image,
+  blocks: Blocks,
+  map: Map,
+  github: Github,
+  pencil: Pencil,
+  eye: Eye,
+  zap: Zap,
+  palette: Palette,
+  file: FileText,
+  'file-text': FileText,
+  settings: Settings,
+  globe: Globe,
+  lock: Lock,
+  key: Key,
+  database: Database,
+  cloud: Cloud,
+  mail: Mail,
+  user: User,
+  users: Users,
+  star: Star,
+  heart: Heart,
+  bell: Bell,
+  search: Search,
+  home: Home,
+  layout: Layout,
+  package: Package,
+  layers: Layers,
+  link: Link,
+  'chevron-right': ChevronRight,
+  play: Play,
+  download: Download,
+  upload: Upload,
+};
+
+/**
+ * Map a docs.json icon name to a Lucide icon ReactNode.
+ * Returns null for unknown or empty names.
+ */
+export function renderIcon(name?: string): ReactNode {
+  if (!name) return null;
+  const Icon = ICON_MAP[name.toLowerCase()];
+  if (!Icon) return null;
+  return <Icon size={16} strokeWidth={1.75} />;
+}

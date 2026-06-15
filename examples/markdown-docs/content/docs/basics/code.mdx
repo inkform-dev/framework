@@ -1,0 +1,171 @@
+---
+title: Code & Syntax Highlighting
+description: Inline code, fenced code blocks, language identifiers, and syntax highlighting in Markdown.
+---
+
+# Code & Syntax Highlighting
+
+Markdown has first-class support for code — both inline spans and multi-line blocks.
+
+## Inline code
+
+Wrap code in single backticks for inline rendering:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    Run `npm install` to fetch dependencies.
+
+    The function signature is `greet(name: string): string`.
+    ```
+  </Tab>
+  <Tab title="Result">
+    Run `npm install` to fetch dependencies.
+
+    The function signature is `greet(name: string): string`.
+  </Tab>
+</Tabs>
+
+## Fenced code blocks
+
+Use triple backticks (` ``` `) or triple tildes (`~~~`) to create a fenced code block:
+
+<Tabs>
+  <Tab title="Markdown">
+    ````markdown
+    ```
+    This is a plain code block.
+    No language = no syntax highlighting.
+    ```
+    ````
+  </Tab>
+  <Tab title="Result">
+    ```
+    This is a plain code block.
+    No language = no syntax highlighting.
+    ```
+  </Tab>
+</Tabs>
+
+## Language identifiers
+
+Add a language identifier after the opening fence to enable syntax highlighting:
+
+<CodeGroup>
+  ```typescript TypeScript
+  function greet(name: string): string {
+    return `Hello, ${name}!`;
+  }
+
+  const message = greet("world");
+  console.log(message); // Hello, world!
+  ```
+
+  ```python Python
+  def greet(name: str) -> str:
+      return f"Hello, {name}!"
+
+  message = greet("world")
+  print(message)  # Hello, world!
+  ```
+
+  ```bash Bash
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  NAME="${1:-world}"
+  echo "Hello, $NAME!"
+  ```
+
+  ```sql SQL
+  SELECT
+    users.name,
+    COUNT(orders.id) AS order_count
+  FROM users
+  LEFT JOIN orders ON orders.user_id = users.id
+  GROUP BY users.id
+  ORDER BY order_count DESC;
+  ```
+</CodeGroup>
+
+## Common language identifiers
+
+| Language | Identifier |
+|---|---|
+| JavaScript | `javascript` or `js` |
+| TypeScript | `typescript` or `ts` |
+| Python | `python` or `py` |
+| Bash / Shell | `bash` or `sh` |
+| JSON | `json` |
+| YAML | `yaml` or `yml` |
+| SQL | `sql` |
+| HTML | `html` |
+| CSS | `css` |
+| Markdown | `markdown` or `md` |
+| MDX | `mdx` |
+| Rust | `rust` |
+| Go | `go` |
+| Java | `java` |
+
+<Tip>
+  When in doubt, check the list of supported languages for your syntax highlighter. This site uses [rehype-pretty-code](https://rehype-pretty-code.netlify.app), which is backed by [Shiki](https://shiki.matsu.io) — a full list of supported languages is in Shiki's docs.
+</Tip>
+
+## Indented code blocks
+
+An older style uses four-space indentation instead of fences:
+
+```markdown
+Here is some prose.
+
+    This is a code block — four spaces of indentation.
+    This line is also in the code block.
+
+Back to prose.
+```
+
+<Warning>
+  Avoid indented code blocks. They are ambiguous inside lists and cannot carry a language identifier for syntax highlighting. Use fenced blocks (` ``` `) everywhere.
+</Warning>
+
+## File names and titles
+
+Many Markdown processors (including this one) allow a file name or title on the opening fence line:
+
+````markdown
+```javascript app.js
+const express = require('express');
+const app = express();
+app.listen(3000);
+```
+````
+
+The title is displayed as a tab or caption above the code block.
+
+## Highlighting specific lines
+
+Some renderers support line highlighting annotations:
+
+````markdown
+```typescript {1,3-5}
+const a = 1;        // line 1 — highlighted
+const b = 2;
+const c = 3;        // lines 3–5 — highlighted
+const d = 4;        // highlighted
+const e = 5;        // highlighted
+```
+````
+
+The exact syntax depends on your renderer. In rehype-pretty-code, curly braces with line numbers or ranges are used.
+
+## Escaping backticks inside code blocks
+
+To include triple backticks in a fenced block, use four backticks as the fence:
+
+`````markdown
+````markdown
+```javascript
+// This fenced block is shown as source
+```
+````
+`````

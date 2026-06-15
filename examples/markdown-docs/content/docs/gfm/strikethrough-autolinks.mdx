@@ -1,0 +1,111 @@
+---
+title: Strikethrough & Autolinks
+description: Strikethrough text and automatic URL linking in GitHub-Flavored Markdown.
+---
+
+# Strikethrough & Autolinks
+
+Two small but frequently used GFM extensions: strikethrough text and automatic URL linking.
+
+## Strikethrough
+
+Wrap text with `~~double tildes~~` to strike through it:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    The old price was ~~$99/month~~ — now $49/month.
+
+    ~~This feature has been removed.~~
+    ```
+  </Tab>
+  <Tab title="Result">
+    The old price was ~~$99/month~~ — now $49/month.
+
+    ~~This feature has been removed.~~
+  </Tab>
+</Tabs>
+
+### When to use strikethrough
+
+<CardGroup cols={2}>
+  <Card title="Deprecation notices">
+    Mark deprecated API methods or configuration options: ~~`config.legacyMode`~~ — use `config.mode` instead.
+  </Card>
+  <Card title="Price changes">
+    Show old prices alongside new ones in changelogs or pricing pages.
+  </Card>
+  <Card title="Completed TODOs">
+    In plain-text notes, cross out completed items: ~~Write the intro~~ — done.
+  </Card>
+  <Card title="Corrections">
+    Show corrections in a way that preserves the original text: The meeting is ~~Thursday~~ Friday.
+  </Card>
+</CardGroup>
+
+<Note>
+  Strikethrough requires **double tildes** (`~~`). A single tilde on each side (`~subscript~`) is used for subscript in some extended Markdown flavors but not in GFM.
+</Note>
+
+## Autolinks (extended)
+
+GFM automatically makes URLs and email addresses clickable without needing `<angle brackets>` or `[text](url)` syntax:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    Visit https://commonmark.org for the spec.
+
+    Email hello@example.com to get in touch.
+    ```
+  </Tab>
+  <Tab title="Result">
+    Visit https://commonmark.org for the spec.
+
+    Email hello@example.com to get in touch.
+  </Tab>
+</Tabs>
+
+### What GFM auto-links
+
+GFM's extended autolink rules recognize:
+
+| Pattern | Example |
+|---|---|
+| `https://` URLs | `https://example.com/path?q=1#anchor` |
+| `http://` URLs | `http://example.com` |
+| `www.` URLs | `www.example.com` (links to `https://www.example.com`) |
+| Email addresses | `user@example.com` |
+
+### What is NOT auto-linked
+
+GFM does not auto-link:
+
+- Bare domain names without `www.` or a scheme: `example.com` alone does not become a link
+- Paths without a host: `/path/to/page` stays as text
+
+### CommonMark autolinks (angle bracket style)
+
+The base CommonMark spec also supports autolinks, but requires angle brackets:
+
+```markdown
+<https://example.com>
+
+<user@example.com>
+```
+
+These work in all CommonMark-compatible renderers, not just GFM.
+
+<Tip>
+  When writing documentation that may be rendered by non-GFM parsers (such as Pandoc in strict mode or older Jekyll setups), use `<url>` angle-bracket autolinks for compatibility. GFM extended autolinks work only in GFM-aware renderers.
+</Tip>
+
+## Combining both
+
+Strikethrough and autolinks can appear together in prose:
+
+```markdown
+The old endpoint was ~~https://api.example.com/v1~~ — use https://api.example.com/v2 instead.
+```
+
+Result: The old endpoint ~~https://api.example.com/v1~~ — use the v2 endpoint.

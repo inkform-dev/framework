@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none" role="img" aria-label="PokéAPI hero illustration">
+  <!-- Background -->
+  <rect width="800" height="400" fill="#0f172a" rx="12"/>
+
+  <!-- Subtle grid lines -->
+  <g stroke="#1e293b" stroke-width="1" opacity="0.6">
+    <line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="200" y1="0" x2="200" y2="400"/>
+    <line x1="400" y1="0" x2="400" y2="400"/>
+    <line x1="600" y1="0" x2="600" y2="400"/>
+  </g>
+
+  <!-- Large Poké Ball illustration (center) -->
+  <circle cx="400" cy="200" r="140" fill="none" stroke="#dc2626" stroke-width="2" opacity="0.15"/>
+  <circle cx="400" cy="200" r="110" fill="#1e293b"/>
+  <!-- Top half red -->
+  <path d="M290 200 A110 110 0 0 1 510 200 Z" fill="#dc2626"/>
+  <!-- Band -->
+  <rect x="288" y="192" width="224" height="16" fill="#0f172a" rx="2"/>
+  <!-- Center button -->
+  <circle cx="400" cy="200" r="24" fill="#1e293b" stroke="#dc2626" stroke-width="3"/>
+  <circle cx="400" cy="200" r="14" fill="#f1f5f9"/>
+  <circle cx="400" cy="200" r="8" fill="#dc2626"/>
+  <!-- Outer ring glow -->
+  <circle cx="400" cy="200" r="110" fill="none" stroke="#dc2626" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Left floating code block -->
+  <rect x="30" y="120" width="220" height="130" rx="8" fill="#1e293b" stroke="#2d3748" stroke-width="1"/>
+  <text x="50" y="148" font-family="monospace" font-size="11" fill="#64748b">// fetch a pokemon</text>
+  <text x="50" y="168" font-family="monospace" font-size="11" fill="#f1f5f9">fetch(</text>
+  <text x="82" y="186" font-family="monospace" font-size="11" fill="#f87171">'pokeapi.co</text>
+  <text x="82" y="204" font-family="monospace" font-size="11" fill="#f87171"> /api/v2</text>
+  <text x="82" y="222" font-family="monospace" font-size="11" fill="#f87171"> /pokemon/25'</text>
+  <text x="50" y="240" font-family="monospace" font-size="11" fill="#f1f5f9">)</text>
+
+  <!-- Right floating response block -->
+  <rect x="550" y="100" width="220" height="180" rx="8" fill="#1e293b" stroke="#2d3748" stroke-width="1"/>
+  <text x="570" y="128" font-family="monospace" font-size="11" fill="#64748b">// response</text>
+  <text x="570" y="148" font-family="monospace" font-size="11" fill="#f1f5f9">{"{"}</text>
+  <text x="588" y="168" font-family="monospace" font-size="11" fill="#94a3b8">  "id":</text>
+  <text x="640" y="168" font-family="monospace" font-size="11" fill="#86efac"> 25,</text>
+  <text x="588" y="188" font-family="monospace" font-size="11" fill="#94a3b8">  "name":</text>
+  <text x="648" y="188" font-family="monospace" font-size="11" fill="#fde68a"> "pikachu",</text>
+  <text x="588" y="208" font-family="monospace" font-size="11" fill="#94a3b8">  "types":</text>
+  <text x="648" y="208" font-family="monospace" font-size="11" fill="#f1f5f9"> [...],</text>
+  <text x="588" y="228" font-family="monospace" font-size="11" fill="#94a3b8">  "stats":</text>
+  <text x="648" y="228" font-family="monospace" font-size="11" fill="#f1f5f9"> [...],</text>
+  <text x="588" y="248" font-family="monospace" font-size="11" fill="#94a3b8">  "moves":</text>
+  <text x="648" y="248" font-family="monospace" font-size="11" fill="#f1f5f9"> [...]</text>
+  <text x="570" y="268" font-family="monospace" font-size="11" fill="#f1f5f9">{"}"}</text>
+
+  <!-- Bottom label -->
+  <text x="400" y="370" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#94a3b8" text-anchor="middle">Free · Open · No API Key</text>
+
+  <!-- Type badges bottom row -->
+  <rect x="130" y="330" width="70" height="22" rx="4" fill="#dc2626" opacity="0.8"/>
+  <text x="165" y="345" font-family="system-ui" font-size="10" font-weight="600" fill="white" text-anchor="middle">FIRE</text>
+
+  <rect x="210" y="330" width="70" height="22" rx="4" fill="#3b82f6" opacity="0.8"/>
+  <text x="245" y="345" font-family="system-ui" font-size="10" font-weight="600" fill="white" text-anchor="middle">WATER</text>
+
+  <rect x="520" y="330" width="70" height="22" rx="4" fill="#eab308" opacity="0.8"/>
+  <text x="555" y="345" font-family="system-ui" font-size="10" font-weight="600" fill="white" text-anchor="middle">ELECTRIC</text>
+
+  <rect x="600" y="330" width="70" height="22" rx="4" fill="#8b5cf6" opacity="0.8"/>
+  <text x="635" y="345" font-family="system-ui" font-size="10" font-weight="600" fill="white" text-anchor="middle">PSYCHIC</text>
+</svg>

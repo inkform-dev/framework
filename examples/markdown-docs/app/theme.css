@@ -1,0 +1,234 @@
+/*
+ * Mono theme — token overrides for @freewrite-cms/framework.
+ * This file is imported AFTER framework/styles.css so its declarations win.
+ * Only --fw-* tokens and small Mono-specific accents are set here.
+ * The framework's structural CSS is untouched.
+ *
+ * Identity: monospace · brutalist · terminal. Hot red-orange accent.
+ * Sharp corners (radius 0), strong 1.5px borders, hard-offset shadows.
+ */
+
+/* ── Font variables (set by next/font in layout.tsx) ─────────────────────── */
+/* All three font slots use the same monospace family — that IS the Mono look. */
+:root {
+  --fw-font: var(--font-mono, ui-monospace, "JetBrains Mono", "Consolas", monospace);
+  --fw-font-heading: var(--font-mono, ui-monospace, "JetBrains Mono", "Consolas", monospace);
+  --fw-mono: var(--font-mono, ui-monospace, "JetBrains Mono", "Consolas", monospace);
+}
+
+/* ── Light mode (default) ────────────────────────────────────────────────── */
+:root {
+  /* Surfaces — white / paper */
+  --fw-bg: #ffffff;
+  --fw-bg-subtle: #f5f5f5;
+  --fw-fg: #0a0a0a;
+  --fw-muted: #5a5a5a;
+  --fw-border: #d0d0d0;
+  --fw-border-strong: #a0a0a0;
+  --fw-card: #ffffff;
+  --fw-card-hover: #f0f0f0;
+  --fw-code-bg: #f0f0f0;
+  --fw-kbd-bg: #e8e8e8;
+
+  /* Brand — Markdown green */
+  --fw-primary: #1a9e5c;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: rgba(26, 158, 92, 0.08);
+
+  /* Shape — zero radius, brutalist */
+  --fw-radius: 0px;
+  --fw-radius-sm: 0px;
+
+  /* Shadows — hard offset, zero blur */
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.18);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.22);
+  --fw-ring: 0 0 0 2px #1a9e5c;
+
+  /* HTTP method pills — keep legible on white bg */
+  --fw-method-get: #16a34a;
+  --fw-method-post: #1a9e5c;
+  --fw-method-put: #b45309;
+  --fw-method-patch: #7c3aed;
+  --fw-method-delete: #dc2626;
+  --fw-method-head: #0891b2;
+  --fw-method-options: #525252;
+}
+
+/* ── Dark mode ───────────────────────────────────────────────────────────── */
+html.dark {
+  /* True near-black terminal surfaces */
+  --fw-bg: #0a0a0a;
+  --fw-bg-subtle: #0e0e0e;
+  --fw-fg: #e8e8e8;
+  --fw-muted: #7a7a7a;
+  --fw-border: #2a2a2a;
+  --fw-border-strong: #404040;
+  --fw-card: #0e0e0e;
+  --fw-card-hover: #141414;
+  --fw-code-bg: #111111;
+  --fw-kbd-bg: #1a1a1a;
+
+  /* Brand — slightly brighter green for dark terminals */
+  --fw-primary: #22c46e;
+  --fw-primary-fg: #0a0a0a;
+  --fw-primary-subtle: rgba(34, 196, 110, 0.10);
+
+  /* Shadows on near-black */
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.7);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.9);
+  --fw-ring: 0 0 0 2px #22c46e;
+
+  /* HTTP method pills — brighter on dark */
+  --fw-method-get: #34d399;
+  --fw-method-post: #22c46e;
+  --fw-method-put: #fbbf24;
+  --fw-method-patch: #a78bfa;
+  --fw-method-delete: #f87171;
+  --fw-method-head: #22d3ee;
+  --fw-method-options: #737373;
+}
+
+/* ── Mono top-bar accents ────────────────────────────────────────────────── */
+
+/* Tab links */
+.fw-topnav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.fw-topnav-tab {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fw-muted);
+  border-radius: 0;
+  text-decoration: none;
+  transition: color 0.1s, background 0.1s;
+  border: 1.5px solid transparent;
+}
+
+.fw-topnav-tab:hover {
+  color: var(--fw-fg);
+  background: var(--fw-bg-subtle);
+}
+
+.fw-topnav-tab--active {
+  color: var(--fw-fg);
+  border-color: var(--fw-border);
+  background: var(--fw-card);
+}
+
+/* Anchor links */
+.fw-topnav-anchors {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fw-topnav-anchor {
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.1s;
+}
+
+.fw-topnav-anchor:hover {
+  color: var(--fw-fg);
+}
+
+/* Navbar links */
+.fw-topnav-navlink {
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.1s;
+}
+
+.fw-topnav-navlink:hover {
+  color: var(--fw-fg);
+}
+
+/* CTA button — sharp, strong border, hard shadow — uses --fw-primary token */
+.fw-topnav-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fw-primary-fg);
+  background: var(--fw-primary);
+  border-radius: 0;
+  text-decoration: none;
+  border: 1.5px solid var(--fw-primary);
+  box-shadow: var(--fw-shadow);
+  transition: opacity 0.1s, box-shadow 0.1s;
+}
+
+.fw-topnav-cta:hover {
+  opacity: 0.88;
+  box-shadow: var(--fw-shadow-lg);
+}
+
+/* Brand name / logo in top bar */
+.fw-shell-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.fw-shell-brand-logo {
+  height: 24px;
+  width: auto;
+}
+
+.fw-shell-brand-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fw-fg);
+}
+
+/* API operation sidebar method pills */
+.fw-method-get    { color: var(--fw-method-get); }
+.fw-method-post   { color: var(--fw-method-post); }
+.fw-method-put    { color: var(--fw-method-put); }
+.fw-method-patch  { color: var(--fw-method-patch); }
+.fw-method-delete { color: var(--fw-method-delete); }
+.fw-method-head   { color: var(--fw-method-head); }
+.fw-method-options { color: var(--fw-method-options); }
+
+/* ── Mono prose overrides ────────────────────────────────────────────────── */
+/* Headings tracked-out and uppercase for the brutalist terminal look */
+.fw-prose h1,
+.fw-prose h2,
+.fw-prose h3 {
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.fw-prose h1 {
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+}
+
+.fw-prose h2 {
+  letter-spacing: 0.05em;
+}
+
+/* Inline code in prose — same monospace, just highlight the bg */
+.fw-prose code {
+  font-size: 0.875em;
+  background: var(--fw-code-bg);
+  border: 1px solid var(--fw-border);
+  border-radius: 0;
+  padding: 0.1em 0.35em;
+}

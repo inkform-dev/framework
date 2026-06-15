@@ -1,0 +1,127 @@
+---
+title: Types
+description: The Type resource describes damage relations between Pokémon types — what's super effective, resisted, or immune.
+---
+
+# Types
+
+Types are one of the most important concepts in Pokémon battles. Every Pokémon has one or two types, and every move has a type. The `/type/` endpoint gives you the full damage relation table for any type.
+
+There are **18 types** in the current generation: Normal, Fighting, Flying, Poison, Ground, Rock, Bug, Ghost, Steel, Fire, Water, Grass, Electric, Psychic, Ice, Dragon, Dark, and Fairy.
+
+## Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/type/` | List all 18 types |
+| GET | `/type/{name}` | Get a type by name |
+| GET | `/type/{id}` | Get a type by ID |
+
+## Example request
+
+<CodeGroup>
+  ```bash curl
+  curl https://pokeapi.co/api/v2/type/electric
+  ```
+
+  ```js fetch
+  const res = await fetch('https://pokeapi.co/api/v2/type/electric');
+  const electric = await res.json();
+  ```
+</CodeGroup>
+
+## Example response
+
+```json
+{
+  "id": 13,
+  "name": "electric",
+  "damage_relations": {
+    "no_damage_to": [
+      { "name": "ground", "url": "https://pokeapi.co/api/v2/type/5/" }
+    ],
+    "half_damage_to": [
+      { "name": "grass",    "url": "https://pokeapi.co/api/v2/type/12/" },
+      { "name": "electric", "url": "https://pokeapi.co/api/v2/type/13/" },
+      { "name": "dragon",   "url": "https://pokeapi.co/api/v2/type/16/" }
+    ],
+    "double_damage_to": [
+      { "name": "flying", "url": "https://pokeapi.co/api/v2/type/3/" },
+      { "name": "water",  "url": "https://pokeapi.co/api/v2/type/11/" }
+    ],
+    "no_damage_from": [],
+    "half_damage_from": [
+      { "name": "flying",   "url": "https://pokeapi.co/api/v2/type/3/" },
+      { "name": "steel",    "url": "https://pokeapi.co/api/v2/type/9/" },
+      { "name": "electric", "url": "https://pokeapi.co/api/v2/type/13/" }
+    ],
+    "double_damage_from": [
+      { "name": "ground", "url": "https://pokeapi.co/api/v2/type/5/" }
+    ]
+  },
+  "pokemon": [
+    { "pokemon": { "name": "pikachu", "url": "..." }, "slot": 1 },
+    { "pokemon": { "name": "raichu",  "url": "..." }, "slot": 1 }
+  ],
+  "moves": [
+    { "name": "thunder-shock", "url": "..." },
+    { "name": "thunder",       "url": "..." }
+  ]
+}
+```
+
+## Key fields
+
+<ResponseField name="damage_relations" type="TypeRelations" required>
+  The full damage multiplier table. Each of the six sub-arrays contains
+  `NamedAPIResource` entries for types in that relation.
+</ResponseField>
+
+<ResponseField name="pokemon" type="TypePokemon[]" required>
+  All Pokémon that have this type. Each entry includes the Pokémon reference
+  and which `slot` (1 = primary, 2 = secondary) the type occupies.
+</ResponseField>
+
+<ResponseField name="moves" type="NamedAPIResource[]" required>
+  All moves of this type.
+</ResponseField>
+
+## The damage relation table
+
+| Field | Multiplier | Meaning |
+|-------|-----------|---------|
+| `double_damage_to` | 2× | Moves of this type deal double damage TO these types |
+| `half_damage_to` | 0.5× | Moves of this type deal half damage TO these types |
+| `no_damage_to` | 0× | Moves of this type deal no damage TO these types |
+| `double_damage_from` | 2× | This type takes double damage FROM these types |
+| `half_damage_from` | 0.5× | This type takes half damage FROM these types |
+| `no_damage_from` | 0× | This type takes no damage FROM these types |
+
+<Note>
+  For dual-type Pokémon, multiply the two modifiers together. A Water/Flying
+  Pokémon takes 4× damage from Electric (2× for Water, 2× for Flying).
+</Note>
+
+## Building a type effectiveness calculator
+
+```js
+async function getTypeEffectiveness(attackingTypeName, defendingTypeNames) {
+  const res = await fetch(`https://pokeapi.co/api/v2/type/${attackingTypeName}`);
+  const type = await res.json();
+
+  const dr = type.damage_relations;
+  let multiplier = 1;
+
+  for (const defType of defendingTypeNames) {
+    if (dr.no_damage_to.some(t => t.name === defType))     multiplier *= 0;
+    else if (dr.double_damage_to.some(t => t.name === defType)) multiplier *= 2;
+    else if (dr.half_damage_to.some(t => t.name === defType))   multiplier *= 0.5;
+  }
+
+  return multiplier;
+}
+
+// Thunderbolt (Electric) vs Gyarados (Water/Flying)
+const result = await getTypeEffectiveness('electric', ['water', 'flying']);
+console.log(result); // 4 (super effective x2!)
+```

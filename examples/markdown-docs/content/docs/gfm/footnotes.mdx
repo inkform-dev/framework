@@ -1,0 +1,106 @@
+---
+title: Footnotes
+description: Footnote references and definitions in GitHub-Flavored Markdown.
+---
+
+# Footnotes
+
+Footnotes let you add supplementary information without interrupting the flow of the main text. A small superscript marker in the prose links to a definition that appears at the bottom of the document.
+
+## Basic syntax
+
+A footnote has two parts: the **inline marker** and the **definition**:
+
+<Tabs>
+  <Tab title="Markdown">
+    ```markdown
+    Markdown was created by John Gruber[^1] in 2004 with Aaron Swartz.[^2]
+
+    [^1]: John Gruber writes at [Daring Fireball](https://daringfireball.net).
+    [^2]: Aaron Swartz co-created RSS and contributed to the internet archive before his death in 2013.
+    ```
+  </Tab>
+  <Tab title="Result">
+    Markdown was created by John Gruber[^gruber] in 2004 with Aaron Swartz.
+
+    The superscript `[1]` and `[2]` markers link to the footnote definitions collected at the bottom of the rendered page.
+  </Tab>
+</Tabs>
+
+<Note>
+  Footnote labels can be any string of characters — numbers, words, or phrases. The label is only used to match the marker to its definition; the rendered output uses sequential numbers regardless of what you write.
+</Note>
+
+## Inline vs. block footnotes
+
+The definition text can be a single line or multiple paragraphs. For multi-paragraph footnotes, indent continuation content by four spaces:
+
+```markdown
+Here is a claim.[^long]
+
+[^long]: This is the first paragraph of the footnote.
+
+    This is the second paragraph. It is indented by four spaces to indicate
+    it belongs to the same footnote.
+
+    - Even lists work
+    - Inside footnotes
+```
+
+## Named footnote labels
+
+Using descriptive labels instead of numbers makes Markdown source easier to navigate:
+
+```markdown
+The CommonMark spec[^commonmark] standardizes core Markdown behavior.
+The GFM spec[^gfm] extends it with tables, task lists, and more.
+
+[^commonmark]: https://spec.commonmark.org
+[^gfm]: https://github.github.com/gfm/
+```
+
+## Where footnote definitions go
+
+Footnote definitions can appear anywhere in the document — beginning, middle, or end. Convention is to put them at the bottom, near the content they annotate. The rendered output always collects them in a `<section>` at the very end of the page.
+
+<Tip>
+  Placing footnote definitions immediately below the paragraph that references them is useful when editing, since the definition is close to the context. The rendered output still places them at the bottom.
+</Tip>
+
+## Use cases
+
+<CardGroup cols={2}>
+  <Card title="Citations">
+    Reference academic papers, books, or articles without cluttering the prose.
+  </Card>
+  <Card title="Clarifications">
+    Add caveats or edge-case details that would interrupt the main explanation.
+  </Card>
+  <Card title="Legal disclaimers">
+    Attach terms, attributions, or license notes at the bottom of a document.
+  </Card>
+  <Card title="Terminology definitions">
+    Define technical terms without digressing in the middle of a sentence.
+  </Card>
+</CardGroup>
+
+## Browser rendering
+
+Rendered footnotes produce:
+- Superscript `<a>` links in the prose: `<sup><a href="#fn-1" id="fnref-1">1</a></sup>`
+- A `<section>` at the end with an `<ol>` of definitions
+- Back-links from each definition back to the prose reference (the `↩` arrow)
+
+## Footnotes vs. alternatives
+
+<Accordion title="When NOT to use footnotes">
+  Footnotes work well for academic or long-form writing. In documentation, they can be disruptive — the reader has to scroll to the bottom and back. Consider these alternatives:
+
+  - **Inline parenthetical:** `(See the [RFC 3986](https://tools.ietf.org/html/rfc3986) spec for URL encoding rules.)` keeps context local.
+  - **Callout components:** `<Note>` or `<Tip>` make the supplementary information visible inline without the scroll penalty.
+  - **Expandable sections:** `<Accordion>` hides the extra detail until the reader asks for it, without breaking reading flow.
+</Accordion>
+
+<Warning>
+  Footnotes are a **GFM extension** — they are not in the CommonMark base spec. They are supported by GitHub, GitLab, Pandoc with `--from=gfm`, and most modern documentation tools. They will not render as footnotes in plain CommonMark parsers.
+</Warning>
