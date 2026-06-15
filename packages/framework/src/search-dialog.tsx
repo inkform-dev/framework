@@ -74,16 +74,29 @@ export function SearchDialog({ index, placeholder = 'Search…' }: { index: Sear
               {results.length === 0 ? (
                 <li className="fw-search-empty">No results for “{q}”</li>
               ) : (
-                results.map((r, i) => (
-                  <li key={r.url}>
-                    <a href={r.url} data-active={i === active} onMouseEnter={() => setActive(i)}>
-                      <span className="fw-search-result-title">{r.title}</span>
-                      <span className="fw-search-result-slug">
-                        {r.section} · {r.url}
-                      </span>
-                    </a>
-                  </li>
-                ))
+                results.map((r, i) => {
+                  const method = r.section === 'api' ? r.excerpt.split(' ')[0] : null;
+                  return (
+                    <li key={r.url}>
+                      <a href={r.url} data-active={i === active} onMouseEnter={() => setActive(i)}>
+                        <span className="fw-search-result-title">
+                          {method ? (
+                            <span
+                              className={`fw-method-pill fw-method-${method.toLowerCase()} fw-search-method`}
+                              aria-hidden
+                            >
+                              {method}
+                            </span>
+                          ) : null}
+                          {r.title}
+                        </span>
+                        <span className="fw-search-result-slug">
+                          {r.section === 'api' ? r.excerpt : `${r.section} · ${r.url}`}
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })
               )}
             </ul>
           </div>

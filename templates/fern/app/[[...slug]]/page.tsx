@@ -5,8 +5,10 @@ import { ApiReferenceView } from '@freewrite-cms/framework/api-reference';
 import {
   docNeighbours,
   buildSearchIndex,
+  docTabs,
+  parseOpenApi,
 } from '@freewrite-cms/framework';
-import { loadDocsConfig, extractHeadings } from '@freewrite-cms/framework/content';
+import { loadDocsConfig, extractHeadings, loadOpenApiSpec } from '@freewrite-cms/framework/content';
 import { siteMdxComponents } from '@/mdx-components';
 import { buildTopBar } from '@/components/top-bar';
 import { renderIcon } from '@/lib/icons';
@@ -53,10 +55,14 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   const { config } = route;
   const apiBase = apiBasePath(config) ?? '';
 
-  // Build search index once per render (build time = static)
+  // Build search index once per render (build time = static). Include OpenAPI
+  // operations so the API Reference tab is searchable from Cmd+K.
+  const apiTab = docTabs(config).find((t) => t.openapi);
+  const apiSpec = apiTab?.openapi ? loadOpenApiSpec(apiTab.openapi) : null;
   const searchIndex = buildSearchIndex({
     docs: { config },
     basePaths: { docs: '' },
+    api: apiSpec && apiBase ? { model: parseOpenApi(apiSpec.raw, apiSpec.format), basePath: '/' + apiBase } : undefined,
   });
 
   // ── Doc page ───────────────────────────────────────────────────────────────
