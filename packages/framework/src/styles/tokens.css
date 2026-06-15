@@ -1,0 +1,87 @@
+/* Design tokens — the contract every theme overrides. Light values in :root,
+   dark values under html.dark. THEMES restyle by redefining these variables. */
+
+:root {
+  /* surfaces & text */
+  --fw-bg: #ffffff;
+  --fw-bg-subtle: #f8fafc;
+  --fw-fg: #1e293b;
+  --fw-muted: #64748b;
+  --fw-border: #e6eaf0;
+  --fw-border-strong: #cbd5e1;
+  --fw-card: #ffffff;
+  --fw-card-hover: #f8fafc;
+  --fw-code-bg: #f4f6f9;
+  --fw-kbd-bg: #eef1f5;
+
+  /* brand */
+  --fw-primary: #2563eb;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: #2563eb14;
+
+  /* shape & type */
+  --fw-radius: 10px;
+  --fw-radius-sm: 6px;
+  --fw-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fw-font-heading: var(--fw-font);
+  --fw-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* layout metrics */
+  --fw-sidebar-w: 17rem;
+  --fw-toc-w: 15rem;
+  --fw-content-w: 46rem;
+  --fw-header-h: 4rem;
+  --fw-gutter: 2.5rem;
+
+  /* http method pills */
+  --fw-method-get: #16a34a;
+  --fw-method-post: #2563eb;
+  --fw-method-put: #d97706;
+  --fw-method-patch: #7c3aed;
+  --fw-method-delete: #dc2626;
+  --fw-method-head: #0891b2;
+  --fw-method-options: #64748b;
+
+  /* misc */
+  --fw-love: #ec4899;
+  --fw-like: #3b82f6;
+  --fw-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+  --fw-shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.12);
+  --fw-ring: 0 0 0 3px color-mix(in srgb, var(--fw-primary) 28%, transparent);
+}
+
+html.dark {
+  --fw-bg: #0b0f17;
+  --fw-bg-subtle: #11161f;
+  --fw-fg: #e6eaf2;
+  --fw-muted: #93a1b5;
+  --fw-border: #1e2733;
+  --fw-border-strong: #334155;
+  --fw-card: #11161f;
+  --fw-card-hover: #161d28;
+  --fw-code-bg: #0f141d;
+  --fw-kbd-bg: #1e2733;
+
+  --fw-primary: #5b8cff;
+  --fw-primary-fg: #0b0f17;
+  --fw-primary-subtle: #5b8cff1f;
+
+  --fw-method-get: #34d399;
+  --fw-method-post: #60a5fa;
+  --fw-method-put: #fbbf24;
+  --fw-method-patch: #a78bfa;
+  --fw-method-delete: #f87171;
+  --fw-method-head: #22d3ee;
+  --fw-method-options: #94a3b8;
+
+  --fw-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --fw-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* minimal reset scoped to framework regions */
+.fw-prose *,
+.fw-shell *,
+.fw-apiref *,
+.fw-askai * {
+  box-sizing: border-box;
+}

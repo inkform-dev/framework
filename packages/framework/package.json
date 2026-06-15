@@ -1,0 +1,59 @@
+{
+  "name": "@freewrite-cms/framework",
+  "version": "0.2.0",
+  "description": "Standalone Next.js + MDX framework for documentation, API reference (OpenAPI), blog, and changelog sites. The rendering engine behind the freewrite-cms docs themes — usable on its own.",
+  "license": "MIT",
+  "author": "Charan",
+  "type": "module",
+  "private": false,
+  "publishConfig": { "access": "public" },
+  "repository": { "type": "git", "url": "git+https://github.com/freewrite-cms/framework.git", "directory": "packages/framework" },
+  "homepage": "https://github.com/freewrite-cms/framework#readme",
+  "bugs": { "url": "https://github.com/freewrite-cms/framework/issues" },
+  "keywords": ["mdx", "nextjs", "docs", "documentation", "openapi", "api-reference", "changelog", "blog", "static-site"],
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css",
+    "./content": "./src/content.ts",
+    "./nav": "./src/nav.ts",
+    "./openapi": "./src/openapi.ts",
+    "./mdx": "./src/mdx.tsx",
+    "./components": "./src/components.tsx",
+    "./docs-shell": "./src/docs-shell.tsx",
+    "./api-reference": "./src/api-reference.tsx",
+    "./search": "./src/search.ts",
+    "./search-dialog": "./src/search-dialog.tsx",
+    "./ask-ai": "./src/ask-ai.tsx",
+    "./theme-toggle": "./src/theme-toggle.tsx",
+    "./subscribe-form": "./src/subscribe-form.tsx",
+    "./analytics-script": "./src/analytics-script.tsx",
+    "./reactions": "./src/reactions.tsx",
+    "./comments": "./src/comments.tsx"
+  },
+  "files": ["src"],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "next": ">=16",
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "dependencies": {
+    "fuse.js": "^7.0.0",
+    "gray-matter": "^4.0.3",
+    "next-mdx-remote": "^5.0.0",
+    "rehype-pretty-code": "^0.14.1",
+    "rehype-slug": "^6.0.0",
+    "remark-directive": "^3.0.0",
+    "remark-gfm": "^4.0.1",
+    "shiki": "^1.24.0",
+    "unist-util-visit": "^5.0.0",
+    "yaml": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "typescript": "^5"
+  }
+}

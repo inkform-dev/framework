@@ -1,0 +1,13 @@
+/* @freewrite-cms/framework — standalone styles, no Tailwind required.
+   Structural CSS keyed off --fw-* design tokens. A THEME overrides the tokens
+   (in tokens.css) to change colors/fonts/radius/density without touching this.
+
+   Dark mode: tokens flip under `html.dark` (the <ThemeToggle> adds that class;
+   `themeInitScript` sets it before paint based on localStorage / system pref). */
+
+@import './styles/tokens.css';
+@import './styles/prose.css';
+@import './styles/components.css';
+@import './styles/layout.css';
+@import './styles/api.css';
+@import './styles/widgets.css';

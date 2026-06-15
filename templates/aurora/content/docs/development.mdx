@@ -1,0 +1,60 @@
+---
+title: Development
+description: Preview your docs locally before you ship.
+---
+
+# Development
+
+Learn how to run your docs locally and preview every change before it goes live.
+
+<Info>
+  **Prerequisite:** Node.js 20 or newer.
+</Info>
+
+## Run the dev server
+
+```bash
+npm install
+npm run dev
+```
+
+Your site is now available at [http://localhost:3000](http://localhost:3000).
+Edits to MDX and `docs.json` hot-reload.
+
+## Custom ports
+
+The dev server uses port `3000` by default. Pass `-p` to change it:
+
+```bash
+npm run dev -- -p 3333
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Port already in use">
+    Another process is using the port. Stop it, or start the dev server on a
+    different port with `npm run dev -- -p 3333`.
+  </Accordion>
+  <Accordion title="A page 404s">
+    Make sure the page's `file` exists under `content/docs` and its `slug` is
+    listed in `docs.json`. Slugs are case-sensitive.
+  </Accordion>
+  <Accordion title="The API Reference tab is empty">
+    Confirm `docs.json` has a tab with an `openapi` field pointing at a valid
+    spec file (JSON or YAML) inside `content/docs`.
+  </Accordion>
+</AccordionGroup>
+
+## Editor tips
+
+<Tabs>
+  <Tab title="VS Code">
+    Install the **MDX** extension for syntax highlighting and component
+    autocomplete in `.mdx` files.
+  </Tab>
+  <Tab title="Neovim">
+    Use a Treesitter MDX/Markdown parser for highlighting, and an LSP-aware
+    Markdown plugin for link checking.
+  </Tab>
+</Tabs>

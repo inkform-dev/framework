@@ -1,0 +1,528 @@
+/* ─────────────────────────────────────────────────────────────
+   layout.css — shell grid, sidebar, toc, pagination, breadcrumbs
+   Uses only --fw-* tokens. No inline colors.
+───────────────────────────────────────────────────────────── */
+
+/* ── Root layout grid ───────────────────────────────────────── */
+
+.fw-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--fw-bg);
+  color: var(--fw-fg);
+  font-family: var(--fw-font);
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+
+.fw-shell-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--fw-header-h);
+  background: var(--fw-bg);
+  border-bottom: 1px solid var(--fw-border);
+}
+
+.fw-shell-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+  max-width: calc(var(--fw-sidebar-w) + var(--fw-content-w) + var(--fw-toc-w) + var(--fw-gutter, 2.5rem) * 2);
+  margin: 0 auto;
+  padding: 0 var(--fw-gutter, 2.5rem);
+}
+
+.fw-shell-header-start {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.fw-shell-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.fw-shell-topnav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  overflow: hidden;
+}
+
+.fw-shell-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* ── Body (sidebar + main + toc) ────────────────────────────── */
+
+.fw-shell-body {
+  display: flex;
+  flex: 1;
+  max-width: calc(var(--fw-sidebar-w) + var(--fw-content-w) + var(--fw-toc-w) + var(--fw-gutter, 2.5rem) * 2);
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 var(--fw-gutter, 2.5rem);
+  gap: 0;
+  align-items: flex-start;
+}
+
+/* ── Desktop sidebar ─────────────────────────────────────────── */
+
+.fw-shell-sidebar {
+  width: var(--fw-sidebar-w);
+  flex-shrink: 0;
+  position: sticky;
+  top: var(--fw-header-h);
+  height: calc(100dvh - var(--fw-header-h));
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.5rem 0;
+  padding-right: 1.5rem;
+  border-right: 1px solid var(--fw-border);
+  scrollbar-width: thin;
+  scrollbar-color: var(--fw-border) transparent;
+}
+
+/* ── Main content column ─────────────────────────────────────── */
+
+.fw-shell-main {
+  flex: 1;
+  min-width: 0;
+  padding: 2rem 0;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.fw-shell-content {
+  max-width: var(--fw-content-w);
+  margin: 0 auto;
+}
+
+/* ── TOC rail ────────────────────────────────────────────────── */
+
+.fw-shell-toc {
+  width: var(--fw-toc-w);
+  flex-shrink: 0;
+  position: sticky;
+  top: var(--fw-header-h);
+  height: calc(100dvh - var(--fw-header-h));
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.5rem 0;
+  padding-left: 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--fw-border) transparent;
+}
+
+/* ── Shell modifiers ─────────────────────────────────────────── */
+
+.fw-shell--no-sidebar .fw-shell-sidebar { display: none; }
+.fw-shell--no-sidebar .fw-shell-main { padding-left: 0; }
+.fw-shell--no-toc .fw-shell-toc { display: none; }
+.fw-shell--no-toc .fw-shell-main { padding-right: 0; }
+
+/* ── Footer ──────────────────────────────────────────────────── */
+
+.fw-shell-footer {
+  border-top: 1px solid var(--fw-border);
+  padding: 2rem var(--fw-gutter, 2.5rem);
+  font-size: 0.875rem;
+  color: var(--fw-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SIDEBAR component
+═══════════════════════════════════════════════════════════════ */
+
+.fw-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-size: 0.875rem;
+}
+
+.fw-sidebar-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--fw-border);
+  margin-bottom: 0.5rem;
+}
+
+.fw-sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--fw-border);
+}
+
+.fw-sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--fw-border) transparent;
+}
+
+/* Groups */
+.fw-sidebar-group {
+  margin-bottom: 1.25rem;
+}
+
+.fw-sidebar-group-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--fw-muted);
+}
+
+.fw-sidebar-group-icon {
+  display: inline-flex;
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+/* Items */
+.fw-sidebar-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fw-sidebar-item {
+  margin: 0;
+}
+
+.fw-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--fw-radius-sm);
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.12s, background 0.12s;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.fw-sidebar-link:hover {
+  color: var(--fw-fg);
+  background: var(--fw-card-hover);
+}
+
+.fw-sidebar-item--active .fw-sidebar-link {
+  color: var(--fw-primary);
+  background: var(--fw-primary-subtle, color-mix(in srgb, var(--fw-primary) 10%, transparent));
+  font-weight: 500;
+}
+
+.fw-sidebar-item-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+.fw-sidebar-item-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.fw-sidebar-item-ext {
+  font-size: 0.8em;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* Depth indents */
+.fw-sidebar-depth-1 .fw-sidebar-link { padding-left: 1.25rem; }
+.fw-sidebar-depth-2 .fw-sidebar-link { padding-left: 2rem; }
+.fw-sidebar-depth-3 .fw-sidebar-link { padding-left: 2.75rem; }
+
+/* ═══════════════════════════════════════════════════════════════
+   TOC component
+═══════════════════════════════════════════════════════════════ */
+
+.fw-toc {
+  font-size: 0.8125rem;
+}
+
+.fw-toc-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--fw-muted);
+  margin: 0 0 0.6rem;
+  padding: 0;
+}
+
+.fw-toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 1.5px solid var(--fw-border);
+}
+
+.fw-toc-item {
+  margin: 0;
+}
+
+.fw-toc-link {
+  display: block;
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  line-height: 1.4;
+  border-left: 1.5px solid transparent;
+  margin-left: -1.5px;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.fw-toc-link:hover {
+  color: var(--fw-fg);
+}
+
+.fw-toc-link[data-active='true'] {
+  color: var(--fw-primary);
+  border-left-color: var(--fw-primary);
+  font-weight: 500;
+}
+
+/* Depth indents in TOC */
+.fw-toc-depth-2 .fw-toc-link { padding-left: 0.75rem; }
+.fw-toc-depth-3 .fw-toc-link { padding-left: 1.5rem; }
+.fw-toc-depth-4 .fw-toc-link { padding-left: 2.25rem; }
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGINATION
+═══════════════════════════════════════════════════════════════ */
+
+.fw-pagination {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--fw-border);
+}
+
+.fw-pagination-spacer {
+  flex: 1;
+}
+
+.fw-pagination-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--fw-card);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--fw-shadow);
+  transition: background 0.12s, box-shadow 0.12s, border-color 0.12s;
+}
+
+.fw-pagination-card:hover {
+  background: var(--fw-card-hover);
+  border-color: var(--fw-border-strong);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+}
+
+.fw-pagination-next {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.fw-pagination-dir {
+  font-size: 0.75rem;
+  color: var(--fw-muted);
+  font-weight: 500;
+}
+
+.fw-pagination-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--fw-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BREADCRUMBS
+═══════════════════════════════════════════════════════════════ */
+
+.fw-breadcrumbs {
+  margin-bottom: 0.75rem;
+}
+
+.fw-breadcrumbs-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8125rem;
+  color: var(--fw-muted);
+}
+
+.fw-breadcrumbs-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.fw-breadcrumbs-link {
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.12s;
+}
+
+.fw-breadcrumbs-link:hover {
+  color: var(--fw-fg);
+}
+
+.fw-breadcrumbs-sep {
+  color: var(--fw-border-strong);
+  user-select: none;
+}
+
+.fw-breadcrumbs-current {
+  color: var(--fw-fg);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE DRAWER + HAMBURGER
+═══════════════════════════════════════════════════════════════ */
+
+/* Hamburger: hidden on desktop, visible on mobile */
+.fw-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fw-fg);
+  border-radius: var(--fw-radius-sm);
+}
+
+.fw-hamburger:hover {
+  background: var(--fw-card-hover);
+}
+
+.fw-hamburger-bar {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+/* Backdrop */
+.fw-sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+  background: rgba(11, 15, 23, 0.45);
+}
+
+/* Drawer */
+.fw-sidebar-drawer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 30;
+  width: var(--fw-sidebar-w);
+  max-width: 85vw;
+  background: var(--fw-bg);
+  border-right: 1px solid var(--fw-border);
+  padding: var(--fw-header-h) 1rem 1.5rem;
+  overflow-y: auto;
+  transform: translateX(-110%);
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--fw-shadow-lg);
+}
+
+/* ── Responsive breakpoints ─────────────────────────────────── */
+
+/* Below 60rem: switch to mobile drawer */
+@media (max-width: 60rem) {
+  .fw-shell-body {
+    padding: 0;
+  }
+
+  /* Hide desktop sidebar */
+  .fw-shell-sidebar {
+    display: none;
+  }
+
+  /* Show hamburger */
+  .fw-hamburger {
+    display: flex;
+  }
+
+  /* Show drawer + backdrop when open */
+  .fw-sidebar-backdrop {
+    display: block;
+  }
+
+  .fw-sidebar-drawer {
+    display: block;
+  }
+
+  .fw-sidebar-drawer--open {
+    transform: translateX(0);
+  }
+
+  .fw-shell-main {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Below 80rem: hide TOC rail */
+@media (max-width: 80rem) {
+  .fw-shell-toc {
+    display: none;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 40rem) {
+  .fw-shell-header-inner {
+    padding: 0 1rem;
+  }
+
+  .fw-pagination {
+    flex-direction: column;
+  }
+}
