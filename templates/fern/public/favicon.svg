@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Fern favicon">
+  <rect width="32" height="32" rx="8" fill="#0b0f0d"/>
+  <!-- Fern leaf mark on dark bg -->
+  <!-- Leaf body fill -->
+  <path d="M16 29 C14 23 9 18 10 11 C11 6 16 4 16 4 C16 4 21 6 22 11 C23 18 18 23 16 29Z" fill="#16a34a" opacity="0.2"/>
+  <!-- Central stem -->
+  <line x1="16" y1="29" x2="16" y2="5" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Left fronds -->
+  <path d="M16 22 Q10 19 9 15" stroke="#34d399" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+  <path d="M16 17 Q11 14 10 11" stroke="#34d399" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.75"/>
+  <path d="M16 13 Q13 10 13 8" stroke="#34d399" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5"/>
+  <!-- Right fronds -->
+  <path d="M16 20 Q22 17 23 13" stroke="#86efac" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.8"/>
+  <path d="M16 15 Q21 12 21 9" stroke="#86efac" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.55"/>
+</svg>

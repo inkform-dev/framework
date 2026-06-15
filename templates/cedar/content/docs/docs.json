@@ -1,0 +1,45 @@
+{
+  "name": "Cedar",
+  "version": "1.0.0",
+  "logo": "/logo.svg",
+  "favicon": "/favicon.svg",
+  "colors": { "primary": "#ea580c" },
+  "navbarLinks": [
+    { "name": "Support", "href": "mailto:support@example.com" },
+    { "name": "Blog", "href": "/blog" }
+  ],
+  "anchors": [
+    { "name": "Documentation", "href": "/", "icon": "book" },
+    { "name": "GitHub", "href": "https://github.com/freewrite-cms/framework", "icon": "github" }
+  ],
+  "cta": { "label": "Dashboard", "href": "https://example.com/dashboard" },
+  "tabs": [
+    {
+      "tab": "Guides",
+      "navigation": [
+        {
+          "group": "Get Started",
+          "pages": [
+            { "title": "Introduction", "slug": "", "file": "index.mdx", "icon": "book-open" },
+            { "title": "Quickstart", "slug": "quickstart", "file": "quickstart.mdx", "icon": "rocket" },
+            { "title": "Development", "slug": "development", "file": "development.mdx", "icon": "terminal" }
+          ]
+        },
+        {
+          "group": "Essentials",
+          "pages": [
+            { "title": "Markdown Syntax", "slug": "essentials/markdown", "file": "essentials/markdown.mdx", "icon": "type" },
+            { "title": "Code Blocks", "slug": "essentials/code-blocks", "file": "essentials/code-blocks.mdx", "icon": "code" },
+            { "title": "Images & Embeds", "slug": "essentials/images", "file": "essentials/images.mdx", "icon": "image" },
+            { "title": "Components", "slug": "essentials/components", "file": "essentials/components.mdx", "icon": "blocks" },
+            { "title": "Navigation", "slug": "essentials/navigation", "file": "essentials/navigation.mdx", "icon": "map" }
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "API Reference",
+      "openapi": "openapi.json"
+    }
+  ]
+}

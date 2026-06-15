@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 32" fill="none" role="img" aria-label="Cedar">
+  <!-- Maple leaf mark: a stylised five-point leaf in burnt orange -->
+  <g transform="translate(3, 2)">
+    <!-- stem -->
+    <line x1="13" y1="28" x2="13" y2="22" stroke="#ea580c" stroke-width="1.8" stroke-linecap="round"/>
+    <!-- main leaf body -->
+    <path d="M13 22 C9 18 3 17 4 11 C5 6 9 4 13 8 C17 4 21 6 22 11 C23 17 17 18 13 22 Z" fill="#ea580c"/>
+    <!-- inner highlight vein -->
+    <path d="M13 8 L13 22" stroke="#fb923c" stroke-width="1" stroke-linecap="round" opacity="0.55"/>
+    <!-- small side notch hints -->
+    <path d="M7 14 C8 11 10 10 13 8" stroke="#fb923c" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.4"/>
+    <path d="M19 14 C18 11 16 10 13 8" stroke="#fb923c" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.4"/>
+  </g>
+  <!-- Wordmark in serif for editorial feel -->
+  <text x="36" y="21" font-family="Georgia, 'Times New Roman', serif" font-size="15" font-weight="700" letter-spacing="-0.02em" fill="currentColor">Cedar</text>
+</svg>

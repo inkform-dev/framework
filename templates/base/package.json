@@ -1,0 +1,26 @@
+{
+  "name": "@freewrite-cms/theme-base",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Base — the minimal, neutral starting-point documentation theme for @freewrite-cms/framework.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@freewrite-cms/framework": "^0.2.0",
+    "lucide-react": "^0.483.0",
+    "next": "16.2.3",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@freewrite-cms/cli",
+  "version": "0.2.0",
+  "description": "Scaffold a documentation site powered by @freewrite-cms/framework — pick a theme, get a deployable Next.js project.",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "publishConfig": { "access": "public" },
+  "repository": { "type": "git", "url": "git+https://github.com/freewrite-cms/framework.git", "directory": "packages/cli" },
+  "homepage": "https://github.com/freewrite-cms/framework/tree/main/packages/cli#readme",
+  "keywords": ["docs", "documentation", "scaffold", "cli", "create", "nextjs", "mdx", "openapi"],
+  "bin": {
+    "freewrite-docs": "./bin/index.mjs"
+  },
+  "files": ["bin", "src", "README.md"],
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "giget": "^1.2.3",
+    "picocolors": "^1.1.1"
+  }
+}

@@ -1,0 +1,198 @@
+/*
+ * Cedar theme — token overrides for @freewrite-cms/framework.
+ * This file is imported AFTER framework/styles.css so its declarations win.
+ * Only --fw-* tokens and small Cedar-specific accents are set here.
+ * The framework's structural CSS is untouched.
+ */
+
+/* ── Font variables (set by next/font in layout.tsx) ─────────────────────── */
+/* The variables --font-sans, --font-heading, and --font-mono are injected    */
+/* onto <html> by Next.js.                                                    */
+:root {
+  --fw-font: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-font-heading: var(--font-heading, ui-serif, Georgia, "Times New Roman", serif);
+  --fw-mono: var(--font-mono, ui-monospace, "Menlo", "Consolas", monospace);
+}
+
+/* ── Light mode (default) ────────────────────────────────────────────────── */
+:root {
+  /* Surfaces — warm off-white palette */
+  --fw-bg: #fffaf4;
+  --fw-bg-subtle: #fdf4e9;
+  --fw-fg: #2d1f0e;
+  --fw-muted: #7a5c3e;
+  --fw-border: #e8d9c4;
+  --fw-border-strong: #d4b896;
+  --fw-card: #fffaf4;
+  --fw-card-hover: #fdf4e9;
+  --fw-code-bg: #f5ede0;
+  --fw-kbd-bg: #eedcc5;
+
+  /* Brand — burnt orange */
+  --fw-primary: #ea580c;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: rgba(234, 88, 12, 0.09);
+
+  /* Shape — slightly rounder than aurora */
+  --fw-radius: 10px;
+  --fw-radius-sm: 7px;
+
+  /* Shadows — hard offset, warm tint (per ui-guardrails) */
+  --fw-shadow: 2px 2px 0 rgba(45, 31, 14, 0.07);
+  --fw-shadow-lg: 4px 4px 0 rgba(45, 31, 14, 0.10);
+  --fw-ring: 0 0 0 3px rgba(234, 88, 12, 0.26);
+
+  /* HTTP method pills — warm-shifted palette */
+  --fw-method-get: #15803d;
+  --fw-method-post: #2563eb;
+  --fw-method-put: #b45309;
+  --fw-method-patch: #7c3aed;
+  --fw-method-delete: #dc2626;
+  --fw-method-head: #0e7490;
+  --fw-method-options: #6b7280;
+}
+
+/* ── Dark mode ───────────────────────────────────────────────────────────── */
+html.dark {
+  /* Warm near-black surfaces */
+  --fw-bg: #17120e;
+  --fw-bg-subtle: #1c1611;
+  --fw-fg: #f2e8d9;
+  --fw-muted: #a8896a;
+  --fw-border: #2c2219;
+  --fw-border-strong: #3e3025;
+  --fw-card: #1c1611;
+  --fw-card-hover: #231a13;
+  --fw-code-bg: #140f0b;
+  --fw-kbd-bg: #261d15;
+
+  /* Brand — soft ember for dark backgrounds */
+  --fw-primary: #fb923c;
+  --fw-primary-fg: #17120e;
+  --fw-primary-subtle: rgba(251, 146, 60, 0.13);
+
+  /* Shadows on dark */
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.65);
+  --fw-ring: 0 0 0 3px rgba(251, 146, 60, 0.28);
+
+  /* HTTP method pills — warm, readable on dark */
+  --fw-method-get: #34d399;
+  --fw-method-post: #60a5fa;
+  --fw-method-put: #fbbf24;
+  --fw-method-patch: #c084fc;
+  --fw-method-delete: #f87171;
+  --fw-method-head: #22d3ee;
+  --fw-method-options: #9ca3af;
+}
+
+/* ── Cedar top-bar accents ───────────────────────────────────────────────── */
+
+/* Tab links */
+.fw-topnav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.fw-topnav-tab {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fw-muted);
+  border-radius: var(--fw-radius-sm);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+  border: 1px solid transparent;
+}
+
+.fw-topnav-tab:hover {
+  color: var(--fw-fg);
+  background: var(--fw-bg-subtle);
+}
+
+.fw-topnav-tab--active {
+  color: var(--fw-fg);
+  border-color: var(--fw-border);
+  background: var(--fw-card);
+}
+
+/* Anchor links */
+.fw-topnav-anchors {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fw-topnav-anchor {
+  font-size: 0.875rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.fw-topnav-anchor:hover {
+  color: var(--fw-fg);
+}
+
+/* Navbar links */
+.fw-topnav-navlink {
+  font-size: 0.875rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.fw-topnav-navlink:hover {
+  color: var(--fw-fg);
+}
+
+/* CTA button */
+.fw-topnav-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--fw-primary-fg);
+  background: var(--fw-primary);
+  border-radius: var(--fw-radius-sm);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  box-shadow: var(--fw-shadow);
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.fw-topnav-cta:hover {
+  opacity: 0.88;
+  box-shadow: var(--fw-shadow-lg);
+}
+
+/* Brand name / logo in top bar */
+.fw-shell-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.fw-shell-brand-logo {
+  height: 24px;
+  width: auto;
+}
+
+.fw-shell-brand-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fw-fg);
+  letter-spacing: -0.01em;
+}
+
+/* API operation sidebar method pills */
+.fw-method-get    { color: var(--fw-method-get); }
+.fw-method-post   { color: var(--fw-method-post); }
+.fw-method-put    { color: var(--fw-method-put); }
+.fw-method-patch  { color: var(--fw-method-patch); }
+.fw-method-delete { color: var(--fw-method-delete); }
+.fw-method-head   { color: var(--fw-method-head); }
+.fw-method-options { color: var(--fw-method-options); }

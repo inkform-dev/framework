@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" fill="none" role="img" aria-label="Cedar documentation hero">
+  <!-- Warm near-black background -->
+  <rect width="800" height="360" rx="12" fill="#17120e"/>
+  <!-- Subtle warm dot grid -->
+  <defs>
+    <pattern id="cedargrid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="0" cy="0" r="1" fill="#2c2219" opacity="0.8"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="360" fill="url(#cedargrid)"/>
+
+  <!-- Autumn leaf motifs: falling leaves scattered in background (amber/orange palette) -->
+
+  <!-- Large background leaf — top left -->
+  <g transform="translate(90, 55) rotate(-25)" opacity="0.12">
+    <path d="M0 30 C-12 22 -28 20 -26 8 C-24 -2 -14 -4 0 4 C14 -4 24 -2 26 8 C28 20 12 22 0 30Z" fill="#ea580c"/>
+    <line x1="0" y1="4" x2="0" y2="30" stroke="#fb923c" stroke-width="1.2"/>
+  </g>
+
+  <!-- Medium leaf — top right -->
+  <g transform="translate(680, 40) rotate(18)" opacity="0.10">
+    <path d="M0 24 C-9 17 -22 16 -20 6 C-18 -2 -10 -3 0 3 C10 -3 18 -2 20 6 C22 16 9 17 0 24Z" fill="#fb923c"/>
+    <line x1="0" y1="3" x2="0" y2="24" stroke="#fcd9b6" stroke-width="1"/>
+  </g>
+
+  <!-- Small leaf — mid-left -->
+  <g transform="translate(40, 200) rotate(40)" opacity="0.09">
+    <path d="M0 18 C-7 12 -16 11 -15 4 C-13 -1 -7 -2 0 2 C7 -2 13 -1 15 4 C16 11 7 12 0 18Z" fill="#c2410c"/>
+    <line x1="0" y1="2" x2="0" y2="18" stroke="#ea580c" stroke-width="0.8"/>
+  </g>
+
+  <!-- Tiny leaf — bottom right -->
+  <g transform="translate(750, 300) rotate(-10)" opacity="0.08">
+    <path d="M0 14 C-5 9 -12 8 -11 3 C-10 -1 -6 -2 0 2 C6 -2 10 -1 11 3 C12 8 5 9 0 14Z" fill="#fb923c"/>
+    <line x1="0" y1="2" x2="0" y2="14" stroke="#fcd9b6" stroke-width="0.7"/>
+  </g>
+
+  <!-- Docs/editor window mock — right side, warm card -->
+  <rect x="470" y="52" width="296" height="220" rx="10" fill="#1c1611" stroke="#2c2219" stroke-width="1"/>
+  <!-- Window title bar -->
+  <rect x="470" y="52" width="296" height="36" rx="10" fill="#231a13"/>
+  <rect x="470" y="76" width="296" height="12" fill="#231a13"/>
+  <!-- Traffic-light dots -->
+  <circle cx="492" cy="70" r="5" fill="#ef4444" opacity="0.55"/>
+  <circle cx="508" cy="70" r="5" fill="#f59e0b" opacity="0.55"/>
+  <circle cx="524" cy="70" r="5" fill="#22c55e" opacity="0.55"/>
+
+  <!-- Simulated MDX lines -->
+  <!-- Heading line — wider, slightly warm highlight -->
+  <rect x="490" y="102" width="180" height="9" rx="3" fill="#3e3025"/>
+  <rect x="490" y="102" width="5" height="9" rx="2" fill="#ea580c"/>
+
+  <rect x="490" y="120" width="230" height="7" rx="3" fill="#2c2219"/>
+  <rect x="490" y="135" width="200" height="7" rx="3" fill="#2c2219"/>
+  <!-- Orange-tinted code line -->
+  <rect x="490" y="150" width="130" height="7" rx="3" fill="#ea580c" opacity="0.35"/>
+  <rect x="490" y="165" width="210" height="7" rx="3" fill="#2c2219"/>
+  <rect x="490" y="180" width="160" height="7" rx="3" fill="#2c2219"/>
+  <!-- Amber tint line -->
+  <rect x="490" y="195" width="110" height="7" rx="3" fill="#b45309" opacity="0.30"/>
+  <rect x="490" y="210" width="190" height="7" rx="3" fill="#2c2219"/>
+  <rect x="490" y="225" width="140" height="7" rx="3" fill="#2c2219"/>
+  <rect x="490" y="240" width="220" height="7" rx="3" fill="#2c2219"/>
+
+  <!-- Left editorial text block -->
+  <!-- Hero "heading" bar (tall, serif character) -->
+  <rect x="60" y="110" width="300" height="34" rx="5" fill="#231a13"/>
+  <!-- Orange left-edge accent -->
+  <rect x="60" y="110" width="4" height="34" rx="2" fill="#ea580c"/>
+
+  <!-- Sub-text lines -->
+  <rect x="60" y="158" width="360" height="12" rx="3" fill="#2c2219"/>
+  <rect x="60" y="178" width="320" height="12" rx="3" fill="#2c2219"/>
+  <rect x="60" y="198" width="280" height="12" rx="3" fill="#2c2219"/>
+
+  <!-- CTA button mock — burnt orange -->
+  <rect x="60" y="228" width="120" height="34" rx="8" fill="#ea580c"/>
+  <rect x="192" y="228" width="110" height="34" rx="8" fill="#231a13" stroke="#3e3025" stroke-width="1"/>
+
+  <!-- Floating leaf accent near CTA (small, vivid) -->
+  <g transform="translate(430, 260) rotate(-15)" opacity="0.55">
+    <path d="M0 16 C-6 11 -14 10 -13 4 C-12 -1 -6 -2 0 2 C6 -2 12 -1 13 4 C14 10 6 11 0 16Z" fill="#fb923c"/>
+    <line x1="0" y1="2" x2="0" y2="16" stroke="#fcd9b6" stroke-width="0.9"/>
+  </g>
+</svg>

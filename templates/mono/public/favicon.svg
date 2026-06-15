@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Mono favicon">
+  <!-- Sharp square background — no radius, brutalist -->
+  <rect width="32" height="32" fill="#0a0a0a"/>
+  <!-- Bolt mark centered in the square -->
+  <polygon points="19,4 9,17 15,17 12,28 23,15 17,15" fill="#f04e23"/>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" fill="none" role="img" aria-label="Fern documentation hero">
+  <!-- Dark near-black background with green tint -->
+  <rect width="800" height="360" rx="14" fill="#0b0f0d"/>
+  <!-- Subtle green grid -->
+  <defs>
+    <pattern id="fern-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a2d1e" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="360" fill="url(#fern-grid)"/>
+
+  <!-- Large ambient fern leaf decoration (bottom-left, decorative only) -->
+  <g opacity="0.12">
+    <line x1="90" y1="340" x2="90" y2="160" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M90 310 Q60 290 52 260" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <path d="M90 280 Q65 260 58 235" stroke="#34d399" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M90 250 Q70 230 65 210" stroke="#34d399" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+    <path d="M90 220 Q75 205 72 188" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    <path d="M90 305 Q118 285 126 258" stroke="#86efac" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <path d="M90 275 Q115 255 122 232" stroke="#86efac" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M90 245 Q112 228 118 208" stroke="#86efac" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+    <path d="M90 215 Q108 200 113 183" stroke="#86efac" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- Docs window card — right side -->
+  <rect x="460" y="52" width="300" height="220" rx="14" fill="#0f1510" stroke="#1a2d1e" stroke-width="1"/>
+  <!-- Card inner top border accent -->
+  <rect x="460" y="52" width="300" height="4" rx="2" fill="#16a34a" opacity="0.5"/>
+  <!-- Window chrome dots -->
+  <circle cx="480" cy="74" r="5" fill="#1a2d1e"/>
+  <circle cx="496" cy="74" r="5" fill="#1a2d1e"/>
+  <circle cx="512" cy="74" r="5" fill="#16a34a" opacity="0.7"/>
+  <!-- Code lines — green accent on key lines -->
+  <rect x="480" y="96" width="130" height="7" rx="3.5" fill="#1a2d1e"/>
+  <rect x="480" y="111" width="200" height="7" rx="3.5" fill="#1a2d1e"/>
+  <rect x="480" y="126" width="110" height="7" rx="3.5" fill="#16a34a" opacity="0.45"/>
+  <rect x="480" y="141" width="175" height="7" rx="3.5" fill="#1a2d1e"/>
+  <rect x="480" y="156" width="90" height="7" rx="3.5" fill="#1a2d1e"/>
+  <rect x="480" y="171" width="150" height="7" rx="3.5" fill="#34d399" opacity="0.35"/>
+  <rect x="480" y="186" width="190" height="7" rx="3.5" fill="#1a2d1e"/>
+  <rect x="480" y="201" width="120" height="7" rx="3.5" fill="#1a2d1e"/>
+  <rect x="480" y="216" width="85" height="7" rx="3.5" fill="#16a34a" opacity="0.3"/>
+  <rect x="480" y="231" width="155" height="7" rx="3.5" fill="#1a2d1e"/>
+
+  <!-- Left copy block -->
+  <!-- Header bar with green left rule -->
+  <rect x="60" y="118" width="300" height="30" rx="6" fill="#0f1510"/>
+  <rect x="60" y="118" width="4" height="30" rx="2" fill="#16a34a"/>
+  <!-- Body text lines -->
+  <rect x="60" y="162" width="340" height="12" rx="3" fill="#1a2d1e"/>
+  <rect x="60" y="182" width="310" height="12" rx="3" fill="#1a2d1e"/>
+  <rect x="60" y="202" width="280" height="12" rx="3" fill="#1a2d1e"/>
+  <rect x="60" y="222" width="320" height="12" rx="3" fill="#1a2d1e"/>
+  <!-- CTA pill -->
+  <rect x="60" y="252" width="130" height="32" rx="10" fill="#16a34a" opacity="0.9"/>
+  <rect x="202" y="252" width="110" height="32" rx="10" fill="#0f1510" stroke="#1a2d1e" stroke-width="1"/>
+
+  <!-- Small fern sprig mark top-right of card -->
+  <g transform="translate(718, 68)" opacity="0.6">
+    <line x1="0" y1="20" x2="0" y2="4" stroke="#34d399" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M0 16 Q-4 13 -5 10" stroke="#34d399" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+    <path d="M0 13 Q-3 10 -3 8" stroke="#34d399" stroke-width="0.9" stroke-linecap="round" fill="none" opacity="0.7"/>
+    <path d="M0 15 Q4 12 5 9" stroke="#86efac" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M0 12 Q3 9 3 7" stroke="#86efac" stroke-width="0.9" stroke-linecap="round" fill="none" opacity="0.6"/>
+  </g>
+</svg>

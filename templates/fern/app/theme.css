@@ -1,0 +1,179 @@
+/*
+ * Fern theme — token overrides for @freewrite-cms/framework.
+ * This file is imported AFTER framework/styles.css so its declarations win.
+ * Only --fw-* tokens and small Fern-specific accents are set here.
+ * The framework's structural CSS is untouched.
+ */
+
+/* ── Font variables (set by next/font in layout.tsx) ─────────────────────── */
+/* The variables --font-sans and --font-mono are injected onto <html> by Next. */
+:root {
+  --fw-font: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-font-heading: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-mono: var(--font-mono, ui-monospace, "Menlo", "Consolas", monospace);
+}
+
+/* ── Light mode (default) ────────────────────────────────────────────────── */
+:root {
+  /* Surfaces — white with a whisper of green */
+  --fw-bg: #ffffff;
+  --fw-bg-subtle: #f3faf5;
+  --fw-fg: #0d1f14;
+  --fw-muted: #5a7566;
+  --fw-border: #d4ead9;
+  --fw-border-strong: #b5d9bf;
+  --fw-card: #ffffff;
+  --fw-card-hover: #f3faf5;
+  --fw-code-bg: #edf7f0;
+  --fw-kbd-bg: #e6f3ea;
+
+  /* Brand — emerald green */
+  --fw-primary: #16a34a;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: rgba(22, 163, 74, 0.09);
+
+  /* Shape — friendly & rounded */
+  --fw-radius: 14px;
+  --fw-radius-sm: 10px;
+
+  /* Shadows — hard offset, minimal blur (per ui-guardrails) */
+  --fw-shadow: 2px 2px 0 rgba(13, 31, 20, 0.06);
+  --fw-shadow-lg: 4px 4px 0 rgba(13, 31, 20, 0.09);
+  --fw-ring: 0 0 0 3px rgba(22, 163, 74, 0.25);
+}
+
+/* ── Dark mode ───────────────────────────────────────────────────────────── */
+html.dark {
+  /* Near-black with faint green tint */
+  --fw-bg: #0b0f0d;
+  --fw-bg-subtle: #0f1510;
+  --fw-fg: #e2f0e6;
+  --fw-muted: #7aaa89;
+  --fw-border: #1a2d1e;
+  --fw-border-strong: #244d2c;
+  --fw-card: #0f1510;
+  --fw-card-hover: #131d15;
+  --fw-code-bg: #0c120d;
+  --fw-kbd-bg: #182219;
+
+  /* Brand — bright mint green for dark backgrounds */
+  --fw-primary: #34d399;
+  --fw-primary-fg: #0b0f0d;
+  --fw-primary-subtle: rgba(52, 211, 153, 0.12);
+
+  /* Shadows on dark */
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.65);
+  --fw-ring: 0 0 0 3px rgba(52, 211, 153, 0.28);
+}
+
+/* ── Fern top-bar accents ─────────────────────────────────────────────────── */
+
+/* Tab links */
+.fw-topnav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.fw-topnav-tab {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fw-muted);
+  border-radius: var(--fw-radius-sm);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+  border: 1px solid transparent;
+}
+
+.fw-topnav-tab:hover {
+  color: var(--fw-fg);
+  background: var(--fw-bg-subtle);
+}
+
+.fw-topnav-tab--active {
+  color: var(--fw-fg);
+  border-color: var(--fw-border);
+  background: var(--fw-card);
+}
+
+/* Anchor links */
+.fw-topnav-anchors {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fw-topnav-anchor {
+  font-size: 0.875rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.fw-topnav-anchor:hover {
+  color: var(--fw-fg);
+}
+
+/* Navbar links */
+.fw-topnav-navlink {
+  font-size: 0.875rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.fw-topnav-navlink:hover {
+  color: var(--fw-fg);
+}
+
+/* CTA button */
+.fw-topnav-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--fw-primary-fg);
+  background: var(--fw-primary);
+  border-radius: var(--fw-radius-sm);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  box-shadow: var(--fw-shadow);
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.fw-topnav-cta:hover {
+  opacity: 0.88;
+  box-shadow: var(--fw-shadow-lg);
+}
+
+/* Brand name / logo in top bar */
+.fw-shell-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.fw-shell-brand-logo {
+  height: 24px;
+  width: auto;
+}
+
+.fw-shell-brand-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fw-fg);
+  letter-spacing: -0.01em;
+}
+
+/* API operation sidebar method pills */
+.fw-method-get   { color: var(--fw-method-get); }
+.fw-method-post  { color: var(--fw-method-post); }
+.fw-method-put   { color: var(--fw-method-put); }
+.fw-method-patch { color: var(--fw-method-patch); }
+.fw-method-delete { color: var(--fw-method-delete); }
+.fw-method-head  { color: var(--fw-method-head); }
+.fw-method-options { color: var(--fw-method-options); }
