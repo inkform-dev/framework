@@ -54,6 +54,11 @@ export async function Mdx({ source, components }: MdxProps) {
         source={source}
         components={mdxComponents(components)}
         options={{
+          // next-mdx-remote v6 disables MDX `{expression}` evaluation by default
+          // (`blockJS: true`). Authored content rendered here may legitimately use
+          // expressions, so we restore the v5 behaviour by allowing JS while keeping
+          // the v6 RCE guard (`blockDangerousJS: true`, the secure default) in place.
+          blockJS: false,
           mdxOptions: {
             remarkPlugins: [remarkGfm, remarkDirective, remarkCallouts],
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
