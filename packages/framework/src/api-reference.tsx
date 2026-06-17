@@ -128,14 +128,14 @@ function ResponsePanel({ response }: { response: ApiResponse }) {
           <span className="fw-response-ct">{response.contentType}</span>
         ) : null}
       </summary>
-      {response.schema || sample !== undefined ? (
+      {response.schema || sample != null ? (
         <div className="fw-response-body">
           {response.schema?.properties ? (
             <div className="fw-response-fields">
               <BodyFieldRows schema={response.schema} />
             </div>
           ) : null}
-          {sample !== undefined ? (
+          {sample != null ? (
             <pre className="fw-response-sample">
               <code>{JSON.stringify(sample, null, 2)}</code>
             </pre>
@@ -182,12 +182,12 @@ function RightRail({
       </div>
 
       {/* Response sample tabs */}
-      {(successSample !== undefined || errorSample !== undefined) && (
+      {(successSample != null || errorSample != null) && (
         <div className="fw-apiref-sample-block">
           <div className="fw-apiref-sample-header">
             <span className="fw-apiref-sample-lang">Response</span>
           </div>
-          {successResp && successSample !== undefined ? (
+          {successResp && successSample != null ? (
             <div className="fw-apiref-response-sample">
               <div className="fw-apiref-status-badge fw-apiref-status-ok">
                 {successResp.status}
@@ -197,7 +197,7 @@ function RightRail({
               </pre>
             </div>
           ) : null}
-          {errorResp && errorSample !== undefined ? (
+          {errorResp && errorSample != null ? (
             <div className="fw-apiref-response-sample">
               <div className="fw-apiref-status-badge fw-apiref-status-err">
                 {errorResp.status}

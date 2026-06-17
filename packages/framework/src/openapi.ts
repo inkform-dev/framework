@@ -195,9 +195,12 @@ function derefSchema(
   if (!s) return undefined;
 
   if (typeof s.$ref === 'string') {
+    // resolveRef tracks ref cycles itself; pass the CURRENT visited set (do NOT pre-add this
+    // ref) so the first resolution is not immediately rejected by resolveRef's own visited
+    // guard — pre-adding made every $ref schema resolve to undefined.
+    const resolved = resolveRef(root, s.$ref, visited, depth + 1);
     const nextVisited = new Set(visited);
     nextVisited.add(s.$ref);
-    const resolved = resolveRef(root, s.$ref, nextVisited, depth + 1);
     return derefSchema(root, resolved, nextVisited, depth + 1);
   }
 
