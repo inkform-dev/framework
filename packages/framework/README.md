@@ -126,9 +126,9 @@ and scrolls to the first one.
 
 ## Compatibility
 
-`docs.json` is the standard config filename; a `inkform.json` of the same
+`docs.json` is the standard config filename; a `freewrite.json` of the same
 shape is also read for backward compatibility, as is the legacy
-`INKFORM_CONTENT_ROOT` env var.
+`INKFORM_CONTENT_ROOT` env var. `inkform.json` is reserved/unused.
 
 ## License
 

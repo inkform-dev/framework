@@ -260,5 +260,3 @@ actual hex values pulled from each theme's `theme.css` (not eyeballed).
   could fix, and orthogonal to whether the copy/scaffold mechanism itself
   works, which it does.
 
-(See INKFORM_CONTEXT_LEDGER.md's "Template QA pass" entry for the narrative
-account and file-level diff summary.)

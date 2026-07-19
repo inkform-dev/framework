@@ -10,8 +10,9 @@ import type { DocsConfig } from './nav';
  * `<project>/content`; override it with `DOCS_CONTENT_ROOT`.
  *
  * The config file is `docs.json` (the standard). For backward compatibility a
- * `inkform.json` with the same shape is also accepted, and the legacy
+ * `freewrite.json` with the same shape is also accepted, and the legacy
  * `INKFORM_CONTENT_ROOT` env var still works as a content-root override.
+ * `inkform.json` is reserved/unused — do not read or write it here.
  */
 
 export function contentRoot(): string {
@@ -76,6 +77,10 @@ export type BlogPost = {
   series: string | null;
   description: string | null;
   coverImage: string | null;
+  /** Social-share image override (falls back to coverImage if unset) — CMS frontmatter field `ogImage`. */
+  ogImage: string | null;
+  /** Social-share title override (falls back to title if unset) — CMS frontmatter field `ogTitle`. */
+  ogTitle: string | null;
   excerpt: string;
   readingTime: number;
   content: string;
@@ -93,6 +98,8 @@ function toBlogPost(fileSlug: string, data: Record<string, unknown>, content: st
     series: str(data.series),
     description: str(data.description),
     coverImage: str(data.coverImage),
+    ogImage: str(data.ogImage),
+    ogTitle: str(data.ogTitle),
     excerpt: plainExcerpt(content),
     readingTime: readingTimeMinutes(content),
     content,
@@ -180,10 +187,10 @@ export function loadChangelogEntries(dir = 'changelog', includeDrafts = false): 
 // ── docs ──────────────────────────────────────────────────────────────────
 
 export function loadDocsConfig(dir = 'docs'): DocsConfig | null {
-  // `docs.json` is the standard; `inkform.json` is accepted for back-compat.
+  // `docs.json` is the standard; `freewrite.json` is accepted for back-compat.
   const raw =
     readFileSafe(path.join(contentRoot(), dir, 'docs.json')) ??
-    readFileSafe(path.join(contentRoot(), dir, 'inkform.json'));
+    readFileSafe(path.join(contentRoot(), dir, 'freewrite.json'));
   if (!raw) return null;
   try {
     return JSON.parse(raw) as DocsConfig;

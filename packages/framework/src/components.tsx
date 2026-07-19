@@ -24,9 +24,11 @@ export { ApiLink } from './api-link';
  * with plain `fw-*` CSS classes (see styles.css) so the framework is standalone
  * — no Tailwind required in the consuming site.
  *
- * Unknown components (user-authored widgets in /widgets/ the framework doesn't
- * know) render via a visible Fallback instead of crashing the build — see
- * `mdxComponents()`.
+ * User-authored widgets live at widgets/<Name>.tsx in the consuming project
+ * and are registered in that project's widgets/index.ts, which mdx-components.tsx
+ * passes into `mdxComponents(extra)` below. Any capitalized component the MDX
+ * references but isn't registered there renders via a visible Fallback
+ * instead of crashing the build.
  */
 
 /* ---------------------------------------------------------------------------

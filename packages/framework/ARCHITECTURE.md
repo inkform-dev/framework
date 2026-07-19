@@ -27,7 +27,8 @@ content/
 ```
 
 Override the content root with `DOCS_CONTENT_ROOT`. `docs.json` is the standard
-config file; `inkform.json` of the same shape is also accepted.
+config file; `freewrite.json` of the same shape is also accepted for backward
+compatibility. `inkform.json` is reserved/unused.
 
 ### `docs.json` shape (`DocsConfig`, from `@inkform/framework/nav`)
 
