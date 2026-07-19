@@ -1,16 +1,34 @@
 {
   "name": "@inkform/framework",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Standalone Next.js + MDX framework for documentation, API reference (OpenAPI), blog, and changelog sites. The rendering engine behind the inkform docs themes — usable on its own.",
   "license": "MIT",
   "author": "Charan",
   "type": "module",
   "private": false,
-  "publishConfig": { "access": "public" },
-  "repository": { "type": "git", "url": "git+https://github.com/inkform-dev/framework.git", "directory": "packages/framework" },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inkform-dev/framework.git",
+    "directory": "packages/framework"
+  },
   "homepage": "https://github.com/inkform-dev/framework#readme",
-  "bugs": { "url": "https://github.com/inkform-dev/framework/issues" },
-  "keywords": ["mdx", "nextjs", "docs", "documentation", "openapi", "api-reference", "changelog", "blog", "static-site"],
+  "bugs": {
+    "url": "https://github.com/inkform-dev/framework/issues"
+  },
+  "keywords": [
+    "mdx",
+    "nextjs",
+    "docs",
+    "documentation",
+    "openapi",
+    "api-reference",
+    "changelog",
+    "blog",
+    "static-site"
+  ],
   "main": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
@@ -31,7 +49,9 @@
     "./reactions": "./src/reactions.tsx",
     "./comments": "./src/comments.tsx"
   },
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "scripts": {
     "typecheck": "tsc --noEmit"
   },

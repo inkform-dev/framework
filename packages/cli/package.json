@@ -1,19 +1,40 @@
 {
   "name": "@inkform/cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Scaffold a documentation site powered by @inkform/framework — pick a theme, get a deployable Next.js project.",
   "license": "MIT",
   "type": "module",
   "private": false,
-  "publishConfig": { "access": "public" },
-  "repository": { "type": "git", "url": "git+https://github.com/inkform-dev/framework.git", "directory": "packages/cli" },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inkform-dev/framework.git",
+    "directory": "packages/cli"
+  },
   "homepage": "https://github.com/inkform-dev/framework/tree/main/packages/cli#readme",
-  "keywords": ["docs", "documentation", "scaffold", "cli", "create", "nextjs", "mdx", "openapi"],
+  "keywords": [
+    "docs",
+    "documentation",
+    "scaffold",
+    "cli",
+    "create",
+    "nextjs",
+    "mdx",
+    "openapi"
+  ],
   "bin": {
     "inkform-docs": "./bin/index.mjs"
   },
-  "files": ["bin", "src", "README.md"],
-  "engines": { "node": ">=20" },
+  "files": [
+    "bin",
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@clack/prompts": "^0.9.1",
     "giget": "^1.2.3",
