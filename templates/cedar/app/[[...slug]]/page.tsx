@@ -1,14 +1,9 @@
 import { notFound } from 'next/navigation';
-import { Mdx } from '@freewrite-cms/framework/mdx';
-import { DocsShell, Sidebar, TocList, Pagination } from '@freewrite-cms/framework/docs-shell';
-import { ApiReferenceView } from '@freewrite-cms/framework/api-reference';
-import {
-  docNeighbours,
-  buildSearchIndex,
-  docTabs,
-  parseOpenApi,
-} from '@freewrite-cms/framework';
-import { loadDocsConfig, extractHeadings, loadOpenApiSpec } from '@freewrite-cms/framework/content';
+import { Mdx } from '@inkform/framework/mdx';
+import { DocsShell, Sidebar, TocList, Pagination } from '@inkform/framework/docs-shell';
+import { ApiReferenceView } from '@inkform/framework/api-reference';
+import { docNeighbours } from '@inkform/framework';
+import { loadDocsConfig, extractHeadings } from '@inkform/framework/content';
 import { siteMdxComponents } from '@/mdx-components';
 import { buildTopBar } from '@/components/top-bar';
 import { renderIcon } from '@/lib/icons';
@@ -55,23 +50,13 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   const { config } = route;
   const apiBase = apiBasePath(config) ?? '';
 
-  // Build search index once per render (build time = static). Include OpenAPI
-  // operations so the API Reference tab is searchable from Cmd+K.
-  const apiTab = docTabs(config).find((t) => t.openapi);
-  const apiSpec = apiTab?.openapi ? loadOpenApiSpec(apiTab.openapi) : null;
-  const searchIndex = buildSearchIndex({
-    docs: { config },
-    basePaths: { docs: '' },
-    api: apiSpec && apiBase ? { model: parseOpenApi(apiSpec.raw, apiSpec.format), basePath: '/' + apiBase } : undefined,
-  });
-
   // ── Doc page ───────────────────────────────────────────────────────────────
   if (route.kind === 'doc') {
     const { ref, page, tab } = route;
     const headings = extractHeadings(page.content);
     const { prev, next } = docNeighbours(config, ref.slug);
     const sidebar = sidebarForDoc(config, tab, ref.slug, renderIcon);
-    const topBar = buildTopBar(config, tab.tab, searchIndex);
+    const topBar = buildTopBar(config, tab.tab);
 
     return (
       <DocsShell
@@ -97,7 +82,7 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
     const firstOp = model.operations[0];
     const activeOpId = firstOp?.operationId ?? null;
     const sidebar = sidebarForApi(model, apiBase, activeOpId);
-    const topBar = buildTopBar(config, tab.tab, searchIndex);
+    const topBar = buildTopBar(config, tab.tab);
 
     return (
       <DocsShell
@@ -126,7 +111,7 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   // ── API operation ──────────────────────────────────────────────────────────
   const { operation, model, tab } = route;
   const sidebar = sidebarForApi(model, apiBase, operation.operationId);
-  const topBar = buildTopBar(config, tab.tab, searchIndex);
+  const topBar = buildTopBar(config, tab.tab);
 
   return (
     <DocsShell

@@ -126,19 +126,23 @@
   line-height: 1.3;
 }
 
-/* Small method pill shown next to API-operation search results */
-.fw-search-method {
-  font-size: 0.55rem;
-  min-width: 2.6rem;
-  padding-top: 0.1em;
-  padding-bottom: 0.1em;
-  flex-shrink: 0;
+.fw-search-result-excerpt {
+  font-size: 0.8125rem;
+  color: var(--fw-muted);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.fw-search-result-slug {
-  font-size: 0.75rem;
-  color: var(--fw-muted);
-  font-family: var(--fw-mono);
+/* Pagefind's own excerpt wraps matches in bare <mark> tags — style them to
+   match the theme instead of the browser default yellow. */
+.fw-search-result-excerpt mark {
+  background: color-mix(in srgb, var(--fw-primary) 28%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 0.1em;
 }
 
 .fw-search-empty {
@@ -146,6 +150,18 @@
   text-align: center;
   color: var(--fw-muted);
   font-size: 0.875rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGEFIND HIGHLIGHT (destination-page term highlighting)
+═══════════════════════════════════════════════════════════════ */
+
+.fw-search-highlight {
+  background: color-mix(in srgb, var(--fw-primary) 35%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--fw-primary) 45%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 0.05em;
 }
 
 /* ═══════════════════════════════════════════════════════════════

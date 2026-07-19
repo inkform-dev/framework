@@ -1,17 +1,18 @@
 {
-  "name": "@freewrite-cms/theme-mono",
+  "name": "@inkform/theme-mono",
   "version": "0.2.0",
   "private": true,
-  "description": "Mono — a monospace brutalist documentation theme for @freewrite-cms/framework.",
+  "description": "Mono — a monospace brutalist documentation theme for @inkform/framework.",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@freewrite-cms/framework": "^0.2.0",
+    "@inkform/framework": "^0.2.0",
     "lucide-react": "^0.483.0",
     "next": "16.2.3",
     "react": "19.2.1",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "pagefind": "^1.5.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "typescript": "^5"

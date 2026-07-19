@@ -1,15 +1,15 @@
-# @freewrite-cms/framework
+# @inkform/framework
 
 The standalone Next.js + MDX rendering engine for **documentation, API
 reference, blog, and changelog** sites. It's the core that powers the
-[freewrite-cms docs themes](https://github.com/freewrite-cms/framework) (Aurora,
-Fern, Cedar, Mono) and the [`freewrite-docs` CLI](https://github.com/freewrite-cms/framework/tree/main/packages/cli)
+[inkform docs themes](https://github.com/inkform-dev/framework) (Aurora,
+Fern, Cedar, Mono) and the [`inkform-docs` CLI](https://github.com/inkform-dev/framework/tree/main/packages/cli)
 — but it has **no backend, no database, and no product lock-in**. Point it at a
 folder of MDX files and a `docs.json`, and you have a docs site you can deploy
 anywhere Next.js runs (Vercel, AWS Amplify, a Node server, a container).
 
 > Most people don't install this directly — they run
-> `npx @freewrite-cms/cli init my-docs`, pick a theme, and get a ready-to-deploy
+> `npx @inkform/cli init my-docs`, pick a theme, and get a ready-to-deploy
 > project. This package is for building your own theme or wiring the engine into
 > an existing Next.js app.
 
@@ -28,21 +28,23 @@ anywhere Next.js runs (Vercel, AWS Amplify, a Node server, a container).
 - **A themeable layout shell** — `<DocsShell>`, `<Sidebar>`, `<TocList>`,
   `<Pagination>`, driven entirely by CSS variables so a theme is mostly tokens
   (`./docs-shell`).
-- **Client-side search** (Cmd-K, fuse.js) and a **feature-flagged Ask-AI widget**
-  (`./search-dialog`, `./ask-ai`).
+- **Static, client-side search** (Cmd-K, [Pagefind](https://pagefind.app)) with
+  `?q=` URL sync and destination-page term highlighting, and a
+  **feature-flagged Ask-AI widget** (`./search-dialog`, `./pagefind-highlight`,
+  `./ask-ai`) — see "Search (Pagefind)" below for the required postbuild step.
 - **Standalone CSS** (`./styles.css`) — no Tailwind required in the host app.
 
 ## Install
 
 ```bash
-npm install @freewrite-cms/framework
+npm install @inkform/framework
 ```
 
 The package ships TypeScript source, so let Next.js transpile it:
 
 ```ts
 // next.config.ts
-const nextConfig = { transpilePackages: ['@freewrite-cms/framework'] };
+const nextConfig = { transpilePackages: ['@inkform/framework'] };
 export default nextConfig;
 ```
 
@@ -50,10 +52,10 @@ export default nextConfig;
 
 ```tsx
 // app/docs/[[...slug]]/page.tsx
-import { loadDocsConfig, loadDocPage } from '@freewrite-cms/framework/content';
-import { findDocPage } from '@freewrite-cms/framework/nav';
-import { Mdx } from '@freewrite-cms/framework/mdx';
-import '@freewrite-cms/framework/styles.css';
+import { loadDocsConfig, loadDocPage } from '@inkform/framework/content';
+import { findDocPage } from '@inkform/framework/nav';
+import { Mdx } from '@inkform/framework/mdx';
+import '@inkform/framework/styles.css';
 
 export default async function Page({ params }: { params: Promise<{ slug?: string[] }> }) {
   const config = loadDocsConfig();
@@ -71,25 +73,62 @@ Content lives under `content/{docs,blog,changelog}` (override the root with
 
 | Export | What |
 | --- | --- |
-| `.` | nav model, search index builder, slug redirects, OpenAPI types/helpers, `FRAMEWORK_VERSION` |
+| `.` | nav model, slug redirects, OpenAPI types/helpers, `FRAMEWORK_VERSION` |
 | `./content` | filesystem loaders: `loadDocsConfig`, `loadDocPage`, `loadBlogPosts`, `loadOpenApiSpec`, `extractHeadings` |
 | `./nav` | `DocsConfig`, `docTabs`, `listDocPages`, `docNeighbours` |
 | `./openapi` | `parseOpenApi`, `normalizeOperations`, `operationNavGroups`, `curlExample`, `sampleFromSchema` |
 | `./mdx` | `<Mdx>` |
 | `./components` | the MDX component kit + `mdxComponents()` |
-| `./docs-shell` | `<DocsShell>`, `<Sidebar>`, `<TocList>`, `<Pagination>`, `<Breadcrumbs>` |
+| `./docs-shell` | `<DocsShell>`, `<Sidebar>`, `<TocList>`, `<Pagination>`, `<Breadcrumbs>` — also mounts the Pagefind highlight effect, see below |
 | `./api-reference` | `<ApiReferenceView>`, `<ApiPlayground>` |
-| `./search` · `./search-dialog` | search index + Cmd-K dialog |
+| `./search-dialog` | `<SearchDialog>` — Pagefind-backed Cmd-K palette, `?q=` URL sync |
+| `./pagefind-highlight` | `<PagefindHighlightMount>` — highlights + scrolls to `?q=` terms on the destination page (already mounted by `<DocsShell>`; exposed for hosts with a custom shell) |
 | `./ask-ai` | `<AskAi>` (feature-flagged AI assistant) |
 | `./theme-toggle` | `<ThemeToggle>` |
 | `./styles.css` | base structural CSS + design-token defaults |
+
+## Search (Pagefind)
+
+Search is [Pagefind](https://pagefind.app) — a static, client-side, WASM search
+engine with no server component. It indexes your **built HTML output**, so
+every consuming app needs a postbuild step:
+
+```json
+// package.json
+{
+  "scripts": {
+    "build": "next build",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.0"
+  }
+}
+```
+
+`.next/server/app` is where Next.js writes fully-rendered static HTML for every
+statically-generated route (this works even though these apps are NOT using
+`output: 'export'` — they can't, because of the `/api/ask` route handler — as
+long as every doc/blog/changelog route is covered by `generateStaticParams`).
+Add `public/_pagefind/` to `.gitignore`; the index is a build artifact, not
+source. `<DocsShell>` marks its content region with `data-pagefind-body` so
+only real article content is indexed, not nav/sidebar/header chrome.
+
+`<SearchDialog>` dynamically imports `/_pagefind/pagefind.js` at runtime (not
+an npm dependency of the running app — the file is generated per-build) and
+degrades gracefully — no crash, just an "index unavailable" message — if that
+postbuild step hasn't run yet (e.g. `next dev`, or a consumer who forgot it).
+Clicking a result carries the query to the destination as repeated `?q=`
+params (one per word); `<PagefindHighlightMount>` (mounted inside `<DocsShell>`)
+reads them with Pagefind's own `pagefind-highlight.js`, highlights each match,
+and scrolls to the first one.
 | `./subscribe-form` · `./analytics-script` · `./reactions` · `./comments` | optional, bring-your-own-backend widgets |
 
 ## Compatibility
 
-`docs.json` is the standard config filename; a `freewrite.json` of the same
+`docs.json` is the standard config filename; a `inkform.json` of the same
 shape is also read for backward compatibility, as is the legacy
-`FREEWRITE_CONTENT_ROOT` env var.
+`INKFORM_CONTENT_ROOT` env var.
 
 ## License
 

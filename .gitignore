@@ -9,6 +9,9 @@ out/
 dist/
 build/
 
+# Pagefind search index — a build artifact (postbuild step), not source
+public/_pagefind/
+
 # env
 .env
 .env*.local

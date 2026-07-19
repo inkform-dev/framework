@@ -5,3 +5,4 @@ out
 .vercel
 *.tsbuildinfo
 .DS_Store
+public/_pagefind
