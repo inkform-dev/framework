@@ -1,4 +1,4 @@
-/* components.css — styles for every MDX component in the @freewrite-cms/framework
+/* components.css — styles for every MDX component in the @inkform/framework
    component kit. Uses ONLY --fw-* tokens (plus locally scoped callout hues where
    noted). Flat, modern aesthetic matching Mintlify / Nextra reference quality. */
 
@@ -986,29 +986,12 @@ html.dark {
   border-bottom: 1px solid var(--fw-border);
 }
 
-.fw-apiref-method {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.2em 0.55em;
-  border-radius: var(--fw-radius-sm);
-  font-family: var(--fw-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #fff;
-  flex-shrink: 0;
-}
-
-/* HTTP method colors — use the token values */
-.fw-method-get    { background: var(--fw-method-get); }
-.fw-method-post   { background: var(--fw-method-post); }
-.fw-method-put    { background: var(--fw-method-put); }
-.fw-method-patch  { background: var(--fw-method-patch); }
-.fw-method-delete { background: var(--fw-method-delete); }
-.fw-method-head   { background: var(--fw-method-head); }
-.fw-method-options { background: var(--fw-method-options); }
-.fw-method-trace  { background: var(--fw-method-options); }
+/* .fw-apiref-method + the .fw-method-* background overrides that used to
+   live here were an exact duplicate of .fw-method-pill + its variants in
+   api.css (which loads after this file in styles.css, so it always won the
+   cascade anyway — this was dead weight, not a live conflict). The inline
+   <ApiReference> component (components.tsx) now uses fw-method-pill
+   directly instead of fw-apiref-method. */
 
 .fw-apiref-path {
   font-family: var(--fw-mono);

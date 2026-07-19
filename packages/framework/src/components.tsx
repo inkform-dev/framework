@@ -455,7 +455,7 @@ export function ApiReference({ spec, endpoint }: { spec?: string; endpoint?: str
   return (
     <div className="fw-apiref">
       <div className="fw-apiref-head">
-        <span className={`fw-apiref-method fw-method-${(method ?? 'get').toLowerCase()}`}>{method}</span>
+        <span className={`fw-method-pill fw-method-${(method ?? 'get').toLowerCase()}`}>{method}</span>
         <code className="fw-apiref-path">{rest.join(' ')}</code>
       </div>
       {spec ? <p className="fw-apiref-note">from {spec}</p> : null}

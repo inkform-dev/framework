@@ -452,6 +452,19 @@
   line-height: 1;
 }
 
+/* Icon-only below ~30rem — measured a real 20px horizontal overflow on
+   .fw-shell-actions at a 390px mobile width, caused by this button's label
+   not shrinking or hiding on its own. */
+@media (max-width: 30rem) {
+  .fw-askai-trigger-label {
+    display: none;
+  }
+
+  .fw-askai-trigger {
+    padding: 0.3rem;
+  }
+}
+
 /* Backdrop */
 .fw-askai-backdrop {
   position: fixed;
