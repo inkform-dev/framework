@@ -11,7 +11,8 @@ import type { DocsConfig } from './nav';
  *
  * The config file is `docs.json` (the standard). For backward compatibility a
  * `freewrite.json` with the same shape is also accepted, and the legacy
- * `FREEWRITE_CONTENT_ROOT` env var still works as a content-root override.
+ * `INKFORM_CONTENT_ROOT` env var still works as a content-root override.
+ * `inkform.json` is reserved/unused — do not read or write it here.
  */
 
 export function contentRoot(): string {
@@ -19,7 +20,7 @@ export function contentRoot(): string {
   // whole root with DOCS_CONTENT_ROOT (e.g. to read from the repo root).
   return (
     process.env.DOCS_CONTENT_ROOT ||
-    process.env.FREEWRITE_CONTENT_ROOT ||
+    process.env.INKFORM_CONTENT_ROOT ||
     path.join(process.cwd(), 'content')
   );
 }
@@ -76,6 +77,10 @@ export type BlogPost = {
   series: string | null;
   description: string | null;
   coverImage: string | null;
+  /** Social-share image override (falls back to coverImage if unset) — CMS frontmatter field `ogImage`. */
+  ogImage: string | null;
+  /** Social-share title override (falls back to title if unset) — CMS frontmatter field `ogTitle`. */
+  ogTitle: string | null;
   excerpt: string;
   readingTime: number;
   content: string;
@@ -93,6 +98,8 @@ function toBlogPost(fileSlug: string, data: Record<string, unknown>, content: st
     series: str(data.series),
     description: str(data.description),
     coverImage: str(data.coverImage),
+    ogImage: str(data.ogImage),
+    ogTitle: str(data.ogTitle),
     excerpt: plainExcerpt(content),
     readingTime: readingTimeMinutes(content),
     content,
@@ -196,7 +203,7 @@ export function loadDocsConfig(dir = 'docs'): DocsConfig | null {
  * Read an OpenAPI spec (JSON or YAML) for the API Reference. `file` is resolved
  * relative to `content/<dir>` — typically the `openapi` field of docs.json
  * (e.g. `openapi.json` or `api/openapi.yaml`). Returns the raw text plus the
- * detected format; pass both to `parseOpenApi()` from `@freewrite-cms/framework`.
+ * detected format; pass both to `parseOpenApi()` from `@inkform/framework`.
  */
 export function loadOpenApiSpec(
   file: string,
@@ -207,6 +214,47 @@ export function loadOpenApiSpec(
   if (raw == null) return null;
   const format: 'json' | 'yaml' = /\.ya?ml$/i.test(abs) ? 'yaml' : 'json';
   return { raw, format };
+}
+
+/**
+ * Resolves a `DocsTab.openapi` value (docs.json's spec-source config key) to
+ * whichever shape the Scalar API Reference config expects: a `url` a project
+ * points at a spec it hosts itself (Scalar's own client fetches it — nothing
+ * to read locally), or `content` — the raw text of a local file under
+ * `content/<dir>` (the existing, pre-Scalar behavior). Returns null if the
+ * tab has no `openapi` set, or a local file is configured but missing.
+ */
+export function resolveOpenApiSource(
+  openapi: string | undefined,
+  dir = 'docs',
+): { url: string } | { content: string } | null {
+  if (!openapi) return null;
+  if (/^https?:\/\//i.test(openapi)) return { url: openapi };
+  const spec = loadOpenApiSpec(openapi, dir);
+  return spec ? { content: spec.raw } : null;
+}
+
+/**
+ * Like loadOpenApiSpec, but also handles a URL spec source by fetching it at
+ * build time — used where the actual parsed spec is needed inside the
+ * Next.js build itself (e.g. ApiLink's cross-link validation), unlike
+ * resolveOpenApiSource's `{ url }` shape, which hands the URL to Scalar's own
+ * client-side fetch instead of reading it here.
+ */
+export async function loadOpenApiSpecForBuild(
+  openapi: string,
+  dir = 'docs',
+): Promise<{ raw: string; format: 'json' | 'yaml' } | null> {
+  if (!/^https?:\/\//i.test(openapi)) return loadOpenApiSpec(openapi, dir);
+  try {
+    const res = await fetch(openapi);
+    if (!res.ok) return null;
+    const raw = await res.text();
+    const format: 'json' | 'yaml' = /\.ya?ml$/i.test(openapi) ? 'yaml' : 'json';
+    return { raw, format };
+  } catch {
+    return null;
+  }
 }
 
 export function loadDocPage(file: string, dir = 'docs'): { data: Record<string, unknown>; content: string } | null {

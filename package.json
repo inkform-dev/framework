@@ -1,12 +1,12 @@
 {
-  "name": "freewrite-docs-monorepo",
+  "name": "inkform-docs-monorepo",
   "version": "0.0.0",
   "private": true,
   "description": "Open-source Next.js + MDX framework for documentation, API reference, blog, and changelog sites — with themes, examples, and a scaffolding CLI.",
   "license": "MIT",
   "author": "Charan",
-  "homepage": "https://github.com/freewrite-cms/framework#readme",
-  "repository": { "type": "git", "url": "git+https://github.com/freewrite-cms/framework.git" },
+  "homepage": "https://github.com/inkform-dev/framework#readme",
+  "repository": { "type": "git", "url": "git+https://github.com/inkform-dev/framework.git" },
   "workspaces": [
     "packages/*",
     "templates/*",
@@ -15,7 +15,7 @@
   "scripts": {
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "build:examples": "npm run build --workspace=@freewrite-cms/example-pokeapi --workspace=@freewrite-cms/example-markdown"
+    "build:examples": "npm run build --workspace=@inkform/example-pokeapi --workspace=@inkform/example-markdown"
   },
   "engines": {
     "node": ">=20"

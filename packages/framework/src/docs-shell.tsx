@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { MobileSidebarToggle, TocList as TocListClient } from './shell-client';
 import type { TocHeading as TocHeadingBase } from './shell-client';
+import { PagefindHighlightMount } from './pagefind-highlight-mount';
 
 /* ─────────────────────────────────────────────
    Types
@@ -26,7 +27,7 @@ export interface SidebarGroup {
 
 /* ─────────────────────────────────────────────
    TocList — thin server wrapper around the client component.
-   Callers import it from '@freewrite-cms/framework/docs-shell'.
+   Callers import it from '@inkform/framework/docs-shell'.
 ───────────────────────────────────────────── */
 
 export function TocList(props: { headings: TocHeading[]; title?: string }): ReactNode {
@@ -222,12 +223,14 @@ export function DocsShell({
           <div className="fw-shell-sidebar">{sidebar}</div>
         ) : null}
 
-        {/* Main content */}
-        <main className="fw-shell-main" id="main-content">
+        {/* Main content — data-pagefind-body scopes the Pagefind index to just
+            the article, not nav/sidebar/header chrome. */}
+        <main className="fw-shell-main" id="main-content" data-pagefind-body>
           <div className="fw-shell-content">
             {children}
           </div>
         </main>
+        <PagefindHighlightMount />
 
         {/* Right TOC rail */}
         {!hideToc && toc ? (

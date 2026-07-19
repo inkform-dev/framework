@@ -1,6 +1,6 @@
 # PokéAPI Docs
 
-Community documentation for [PokéAPI](https://pokeapi.co) — the free, open RESTful API for Pokémon data. Built on `@freewrite-cms/framework` with the Aurora theme (recolored to Pokédex red).
+Community documentation for [PokéAPI](https://pokeapi.co) — the free, open RESTful API for Pokémon data. Built on `@inkform/framework` with the Aurora theme (recolored to Pokédex red).
 
 ---
 

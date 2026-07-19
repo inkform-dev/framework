@@ -14,7 +14,7 @@ Start building beautiful documentation in minutes.
     Create a new docs site and pick a theme:
 
     ```bash
-    npx @freewrite-cms/cli@latest init my-docs
+    npx @inkform/cli@latest init my-docs
     cd my-docs
     npm install
     ```
@@ -64,3 +64,13 @@ Then register it in `content/docs/docs.json`:
   The `slug` is the URL path and `file` is the MDX file relative to
   `content/docs`. Nest pages with a `children` array.
 </Tip>
+
+## Cross-linking to the API Reference
+
+If a project has an OpenAPI spec configured, <ApiLink operationId="list-plants">any doc page can link straight to a specific operation</ApiLink> with `<ApiLink operationId="...">`. The link is validated against the spec at build time — a typo or renamed operation fails the build instead of shipping a dead link.
+
+## Custom widgets
+
+Put a component at `widgets/<Name>.tsx`, register it in `widgets/index.ts`, and use it directly in MDX (or from the CMS's widget block) as `<Name />`:
+
+<Counter start={3} />

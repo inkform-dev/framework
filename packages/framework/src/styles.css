@@ -1,4 +1,4 @@
-/* @freewrite-cms/framework — standalone styles, no Tailwind required.
+/* @inkform/framework — standalone styles, no Tailwind required.
    Structural CSS keyed off --fw-* design tokens. A THEME overrides the tokens
    (in tokens.css) to change colors/fonts/radius/density without touching this.
 

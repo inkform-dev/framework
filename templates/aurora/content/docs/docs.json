@@ -10,7 +10,7 @@
   ],
   "anchors": [
     { "name": "Documentation", "href": "/", "icon": "book" },
-    { "name": "GitHub", "href": "https://github.com/freewrite-cms/framework", "icon": "github" }
+    { "name": "GitHub", "href": "https://github.com/inkform-dev/framework", "icon": "github" }
   ],
   "cta": { "label": "Dashboard", "href": "https://example.com/dashboard" },
   "tabs": [

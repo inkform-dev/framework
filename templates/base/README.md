@@ -1,7 +1,7 @@
-# Base — @freewrite-cms/theme-base
+# Base — @inkform/theme-base
 
 Base is the minimal, unopinionated documentation starter built on
-`@freewrite-cms/framework`. Clean neutral surfaces, a restrained blue accent,
+`@inkform/framework`. Clean neutral surfaces, a restrained blue accent,
 and the system font stack — no web-font downloads, no visual opinions in the way.
 The simplest starting point the CLI offers. It supports Guides + API Reference
 tabs out of the box.

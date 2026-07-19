@@ -1,7 +1,7 @@
-# Aurora — @freewrite-cms/theme-aurora
+# Aurora — @inkform/theme-aurora
 
 Aurora is a classic, developer-grade documentation theme built on
-`@freewrite-cms/framework`. Dark-first with a cool blue accent, Inter for prose,
+`@inkform/framework`. Dark-first with a cool blue accent, Inter for prose,
 and JetBrains Mono for code. It supports Guides + API Reference tabs out of the
 box.
 

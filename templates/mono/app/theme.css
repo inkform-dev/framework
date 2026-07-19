@@ -1,5 +1,5 @@
 /*
- * Mono theme — token overrides for @freewrite-cms/framework.
+ * Mono theme — token overrides for @inkform/framework.
  * This file is imported AFTER framework/styles.css so its declarations win.
  * Only --fw-* tokens and small Mono-specific accents are set here.
  * The framework's structural CSS is untouched.
@@ -88,113 +88,42 @@ html.dark {
   --fw-method-options: #737373;
 }
 
-/* ── Mono top-bar accents ────────────────────────────────────────────────── */
-
-/* Tab links */
-.fw-topnav-tabs {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
+/* ── Mono top-bar accents ────────────────────────────────────────────────────
+   Base structure/layout/tokens now come from the shared framework layer
+   (packages/framework/src/styles/layout.css) — only Mono's genuine
+   stylistic deltas (uppercase, tracked letter-spacing, sharp corners, a
+   visible CTA border) are overridden here, on top of that shared base. */
 
 .fw-topnav-tab {
-  padding: 0.375rem 0.75rem;
   font-size: 0.8125rem;
-  font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--fw-muted);
   border-radius: 0;
-  text-decoration: none;
-  transition: color 0.1s, background 0.1s;
   border: 1.5px solid transparent;
+  transition: color 0.1s, background 0.1s;
 }
 
-.fw-topnav-tab:hover {
-  color: var(--fw-fg);
-  background: var(--fw-bg-subtle);
-}
-
-.fw-topnav-tab--active {
-  color: var(--fw-fg);
-  border-color: var(--fw-border);
-  background: var(--fw-card);
-}
-
-/* Anchor links */
-.fw-topnav-anchors {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.fw-topnav-anchor {
-  font-size: 0.8125rem;
-  letter-spacing: 0.02em;
-  color: var(--fw-muted);
-  text-decoration: none;
-  transition: color 0.1s;
-}
-
-.fw-topnav-anchor:hover {
-  color: var(--fw-fg);
-}
-
-/* Navbar links */
+.fw-topnav-anchor,
 .fw-topnav-navlink {
   font-size: 0.8125rem;
   letter-spacing: 0.02em;
-  color: var(--fw-muted);
-  text-decoration: none;
   transition: color 0.1s;
 }
 
-.fw-topnav-navlink:hover {
-  color: var(--fw-fg);
-}
-
-/* CTA button — sharp, strong border, hard shadow */
 .fw-topnav-cta {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.375rem 0.875rem;
   font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--fw-primary-fg);
-  background: var(--fw-primary);
   border-radius: 0;
-  text-decoration: none;
   border: 1.5px solid var(--fw-primary);
-  box-shadow: var(--fw-shadow);
   transition: opacity 0.1s, box-shadow 0.1s;
-}
-
-.fw-topnav-cta:hover {
-  opacity: 0.88;
-  box-shadow: var(--fw-shadow-lg);
-}
-
-/* Brand name / logo in top bar */
-.fw-shell-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-}
-
-.fw-shell-brand-logo {
-  height: 24px;
-  width: auto;
 }
 
 .fw-shell-brand-name {
   font-size: 0.9375rem;
-  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--fw-fg);
 }
 
 
@@ -223,11 +152,4 @@ html.dark {
   border: 1px solid var(--fw-border);
   border-radius: 0;
   padding: 0.1em 0.35em;
-}
-
-/* ── Header: hide secondary top-nav links on mobile (prevents overflow) ── */
-@media (max-width: 60rem) {
-  .fw-topnav-anchors,
-  .fw-topnav-navlink,
-  .fw-topnav-cta { display: none; }
 }

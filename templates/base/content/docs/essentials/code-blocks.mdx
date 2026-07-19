@@ -29,15 +29,15 @@ tabbed block:
 
 <CodeGroup>
 ```bash npm
-npm install @freewrite-cms/framework
+npm install @inkform/framework
 ```
 
 ```bash pnpm
-pnpm add @freewrite-cms/framework
+pnpm add @inkform/framework
 ```
 
 ```bash yarn
-yarn add @freewrite-cms/framework
+yarn add @inkform/framework
 ```
 </CodeGroup>
 
@@ -48,7 +48,7 @@ VS Code uses, so colors match your editor and stay readable in light and dark
 mode.
 
 ```ts server.ts
-import { parseOpenApi } from '@freewrite-cms/framework/openapi';
+import { parseOpenApi } from '@inkform/framework/openapi';
 
 const model = parseOpenApi(rawSpec);
 console.log(model.operations.length, 'endpoints');

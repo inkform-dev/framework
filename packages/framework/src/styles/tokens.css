@@ -18,6 +18,14 @@
   --fw-primary: #2563eb;
   --fw-primary-fg: #ffffff;
   --fw-primary-subtle: #2563eb14;
+  /* Solid-fill CTA background — deliberately darker than --fw-primary itself.
+     --fw-primary-fg is white in light mode; white text on several themes'
+     un-darkened --fw-primary fails WCAG AA (as low as 3.3:1) at the CTA's
+     button-scale font size. An 18% black mix reliably clears 4.5:1 across
+     every theme's light-mode primary (verified: min observed 4.66:1) without
+     changing --fw-primary itself, so links/icons/borders keep each theme's
+     actual brand hue. Dark mode doesn't need this (see html.dark below). */
+  --fw-primary-cta-bg: color-mix(in srgb, var(--fw-primary) 100%, black 18%);
 
   /* shape & type */
   --fw-radius: 10px;
@@ -33,6 +41,22 @@
   --fw-header-h: 4rem;
   --fw-gutter: 2.5rem;
 
+  /* Spacing scale — a formal 4px-based rhythm. Most of the framework's
+     existing spacing was already ad-hoc rem values that happened to cluster
+     around this same rhythm (a de-facto, not enforced, convention); these
+     tokens make that rhythm explicit and give new/shared rules something to
+     reference instead of another one-off value. Not a full retrofit of
+     every existing declaration (out of scope for this pass, and risky to
+     do everywhere at once) — applied to the shell's own primary structural
+     gaps as the reference usage. */
+  --fw-space-1: 0.25rem;  /* 4px */
+  --fw-space-2: 0.5rem;   /* 8px */
+  --fw-space-3: 0.75rem;  /* 12px */
+  --fw-space-4: 1rem;     /* 16px */
+  --fw-space-6: 1.5rem;   /* 24px */
+  --fw-space-8: 2rem;     /* 32px */
+  --fw-space-12: 3rem;    /* 48px */
+
   /* http method pills */
   --fw-method-get: #16a34a;
   --fw-method-post: #2563eb;
@@ -41,6 +65,23 @@
   --fw-method-delete: #dc2626;
   --fw-method-head: #0891b2;
   --fw-method-options: #64748b;
+
+  /* Text-safe variants for the method pills: .fw-method-pill sets the raw
+     --fw-method-* as TEXT color on a light tint of the same color (not a
+     solid fill — see api.css), so the raw saturated hue needs to be dark
+     enough for 4.5:1 against a light tint over --fw-bg. Several of these
+     (get/put/head especially) are too light at full saturation (as low as
+     3.19:1 measured). A 20% black mix reliably clears 4.5:1 for all 7
+     (verified: min 4.73:1) without changing the raw --fw-method-* tokens
+     other call sites (badges, syntax highlighting accents) may still want
+     at full saturation. Dark mode doesn't need this — see html.dark. */
+  --fw-method-get-text: color-mix(in srgb, var(--fw-method-get) 100%, black 20%);
+  --fw-method-post-text: color-mix(in srgb, var(--fw-method-post) 100%, black 20%);
+  --fw-method-put-text: color-mix(in srgb, var(--fw-method-put) 100%, black 20%);
+  --fw-method-patch-text: color-mix(in srgb, var(--fw-method-patch) 100%, black 20%);
+  --fw-method-delete-text: color-mix(in srgb, var(--fw-method-delete) 100%, black 20%);
+  --fw-method-head-text: color-mix(in srgb, var(--fw-method-head) 100%, black 20%);
+  --fw-method-options-text: color-mix(in srgb, var(--fw-method-options) 100%, black 20%);
 
   /* misc */
   --fw-love: #ec4899;
@@ -65,6 +106,9 @@ html.dark {
   --fw-primary: #5b8cff;
   --fw-primary-fg: #0b0f17;
   --fw-primary-subtle: #5b8cff1f;
+  /* Dark mode already passes AA (dark --fw-primary-fg on a bright chip,
+     6-10:1 across themes) — no darkening needed, undo the light-mode mix. */
+  --fw-primary-cta-bg: var(--fw-primary);
 
   --fw-method-get: #34d399;
   --fw-method-post: #60a5fa;
@@ -74,6 +118,16 @@ html.dark {
   --fw-method-head: #22d3ee;
   --fw-method-options: #94a3b8;
 
+  /* Already 7.5-11.5:1 against --fw-bg at full saturation in dark mode —
+     no darkening needed, undo the light-mode mix (see :root above). */
+  --fw-method-get-text: var(--fw-method-get);
+  --fw-method-post-text: var(--fw-method-post);
+  --fw-method-put-text: var(--fw-method-put);
+  --fw-method-patch-text: var(--fw-method-patch);
+  --fw-method-delete-text: var(--fw-method-delete);
+  --fw-method-head-text: var(--fw-method-head);
+  --fw-method-options-text: var(--fw-method-options);
+
   --fw-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   --fw-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
@@ -81,7 +135,13 @@ html.dark {
 /* ── Global reset + base document styling ──────────────────────────────────
    A docs framework owns the page chrome, so it sets the box model and base
    document styles. Without `body { margin: 0 }` the browser's default 8px
-   margin shows as a white border around the shell. */
+   margin shows as a white border around the shell — `body` resets that
+   below. But `body`'s own background isn't enough on its own: `html` paints
+   behind it, and on overscroll/rubber-band bounce (trackpad momentum
+   scroll, mobile pull-past-the-top) the browser reveals whatever is behind
+   the document — white, since `html` had no background of its own. That's
+   the same "white border" bug, just triggered by scroll physics instead of
+   a stray margin. Both halves of the fix live here. */
 *,
 *::before,
 *::after {
@@ -91,6 +151,8 @@ html.dark {
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  background: var(--fw-bg);
+  color-scheme: light dark;
 }
 
 body {

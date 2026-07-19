@@ -1,17 +1,19 @@
 {
-  "name": "@freewrite-cms/theme-fern",
+  "name": "@inkform/theme-fern",
   "version": "0.2.0",
   "private": true,
-  "description": "Fern — a clean, friendly documentation theme with an emerald-green accent for @freewrite-cms/framework.",
+  "description": "Fern — a clean, friendly documentation theme with an emerald-green accent for @inkform/framework.",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@freewrite-cms/framework": "^0.2.0",
+    "@inkform/framework": "^0.2.0",
+    "@scalar/nextjs-api-reference": "^0.11.11",
     "lucide-react": "^0.483.0",
     "next": "16.2.3",
     "react": "19.2.1",
@@ -21,6 +23,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "pagefind": "^1.5.2",
     "typescript": "^5"
   }
 }

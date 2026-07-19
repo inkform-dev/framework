@@ -28,7 +28,7 @@
 .fw-shell-header-inner {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--fw-space-4);
   height: 100%;
   max-width: calc(var(--fw-sidebar-w) + var(--fw-content-w) + var(--fw-toc-w) + var(--fw-gutter, 2.5rem) * 2);
   margin: 0 auto;
@@ -38,7 +38,7 @@
 .fw-shell-header-start {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--fw-space-2);
   flex-shrink: 0;
 }
 
@@ -53,16 +53,146 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  overflow: hidden;
+  gap: var(--fw-space-1);
+  min-width: 0; /* required for the child's overflow-x:auto to actually shrink instead of pushing the header wider */
 }
 
 .fw-shell-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--fw-space-2);
   flex-shrink: 0;
   margin-left: auto;
+}
+
+/* ── Top bar: tabs, anchors, nav links, CTA, brand ─────────────────────────
+   Previously duplicated byte-for-byte across all 5 themes' own theme.css
+   (~90 lines × 5 = ~450 lines of exact duplication, since these rules only
+   ever consumed --fw-* tokens — no reason to differ per theme). Moved here
+   once; Mono is the one theme with genuine stylistic deltas (uppercase,
+   tracked letter-spacing, sharp corners) and overrides a handful of
+   properties in its own theme.css on top of this shared base. */
+
+.fw-topnav-tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--fw-space-1);
+  /* The tab row used to just `overflow: hidden` on its ancestor, silently
+     clipping tabs with no way to reach them — confirmed by measurement at
+     tablet width (~834px). Scrolls instead now, with the scrollbar hidden
+     since this is a nav affordance, not a content area. */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.fw-topnav-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.fw-topnav-tab {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fw-muted);
+  border-radius: var(--fw-radius-sm);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.fw-topnav-tab:hover {
+  color: var(--fw-fg);
+  background: var(--fw-bg-subtle);
+}
+
+.fw-topnav-tab--active {
+  color: var(--fw-fg);
+  border-color: var(--fw-border);
+  background: var(--fw-card);
+}
+
+.fw-topnav-anchors {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fw-topnav-anchor {
+  font-size: 0.875rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.fw-topnav-anchor:hover {
+  color: var(--fw-fg);
+}
+
+.fw-topnav-navlink {
+  font-size: 0.875rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.fw-topnav-navlink:hover {
+  color: var(--fw-fg);
+}
+
+.fw-topnav-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css. White
+     text on the raw --fw-primary fails WCAG AA in light mode for 4 of 5
+     themes (as low as 3.30:1); the CTA-specific token darkens just this
+     background, leaving --fw-primary itself (links, icons, borders)
+     untouched. */
+  color: var(--fw-primary-fg);
+  background: var(--fw-primary-cta-bg);
+  border-radius: var(--fw-radius-sm);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  box-shadow: var(--fw-shadow);
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.fw-topnav-cta:hover {
+  opacity: 0.88;
+  box-shadow: var(--fw-shadow-lg);
+}
+
+.fw-shell-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.fw-shell-brand-logo {
+  height: 24px;
+  width: auto;
+}
+
+.fw-shell-brand-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fw-fg);
+  letter-spacing: -0.01em;
+}
+
+/* Hide secondary top-nav links on mobile (prevents overflow) — the tab row
+   itself now scrolls (above) rather than needing to hide. */
+@media (max-width: 60rem) {
+  .fw-topnav-anchors,
+  .fw-topnav-navlink,
+  .fw-topnav-cta {
+    display: none;
+  }
 }
 
 /* ── Body (sidebar + main + toc) ────────────────────────────── */
@@ -88,8 +218,8 @@
   height: calc(100dvh - var(--fw-header-h));
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1.5rem 0;
-  padding-right: 1.5rem;
+  padding: var(--fw-space-6) 0;
+  padding-right: var(--fw-space-6);
   border-right: 1px solid var(--fw-border);
   scrollbar-width: thin;
   scrollbar-color: var(--fw-border) transparent;
@@ -100,9 +230,9 @@
 .fw-shell-main {
   flex: 1;
   min-width: 0;
-  padding: 2rem 0;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: var(--fw-space-8) 0;
+  padding-left: var(--fw-space-8);
+  padding-right: var(--fw-space-8);
 }
 
 .fw-shell-content {
@@ -120,8 +250,8 @@
   height: calc(100dvh - var(--fw-header-h));
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1.5rem 0;
-  padding-left: 1.5rem;
+  padding: var(--fw-space-6) 0;
+  padding-left: var(--fw-space-6);
   scrollbar-width: thin;
   scrollbar-color: var(--fw-border) transparent;
 }

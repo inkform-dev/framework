@@ -34,6 +34,16 @@ export type DocsTab = {
   navigation?: DocsNavGroup[];
   /** Path to an OpenAPI spec (relative to content/<docsDir>); renders an API tab. */
   openapi?: string;
+  /**
+   * Passed straight through to Scalar's `mcp` config on the API Reference tab.
+   * Scalar's own "Generate MCP" button (rendered in its UI) reads this: unset
+   * uses Scalar's default hosted MCP-generation flow; `url`/`name` point it at
+   * a self-hosted MCP server for this spec instead; `disabled: true` hides the
+   * button. This is the seam for the docs-as-MCP-server differentiator once
+   * inkform generates its own MCP servers from a spec — set `url` to that
+   * server's endpoint then.
+   */
+  mcp?: { name?: string; url?: string; disabled?: boolean };
 };
 
 export type DocsLink = { name: string; href: string; icon?: string };

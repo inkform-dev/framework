@@ -1,5 +1,5 @@
 /**
- * @freewrite-cms/framework — OpenAPI 3.x engine
+ * @inkform/framework — OpenAPI 3.x engine
  *
  * Pure module — no React, no node:fs. Parses an OpenAPI 3.x spec (JSON or YAML)
  * into a normalized OpenApiModel. Resolves local $ref references (guards against
@@ -108,11 +108,6 @@ export interface OpenApiModel {
   operations: ApiOperation[];
 }
 
-export interface ApiNavGroup {
-  group: string;
-  items: { operationId: string; method: HttpMethod; path: string; summary: string }[];
-}
-
 // ── Internal helpers ──────────────────────────────────────────────────────────
 
 const HTTP_METHODS: HttpMethod[] = [
@@ -195,9 +190,12 @@ function derefSchema(
   if (!s) return undefined;
 
   if (typeof s.$ref === 'string') {
+    // resolveRef tracks ref cycles itself; pass the CURRENT visited set (do NOT pre-add this
+    // ref) so the first resolution is not immediately rejected by resolveRef's own visited
+    // guard — pre-adding made every $ref schema resolve to undefined.
+    const resolved = resolveRef(root, s.$ref, visited, depth + 1);
     const nextVisited = new Set(visited);
     nextVisited.add(s.$ref);
-    const resolved = resolveRef(root, s.$ref, nextVisited, depth + 1);
     return derefSchema(root, resolved, nextVisited, depth + 1);
   }
 
@@ -609,208 +607,10 @@ export function findOperation(
   return model.operations.find((op) => op.operationId === operationId) ?? null;
 }
 
-// ── operationNavGroups ────────────────────────────────────────────────────────
-
-/** Group operations by tag, preserving document order. */
-export function operationNavGroups(model: OpenApiModel): ApiNavGroup[] {
-  const groups = new Map<string, ApiNavGroup>();
-
-  // Seed group order from model.tags (which is already in spec/document order)
-  for (const tag of model.tags) {
-    groups.set(tag.name, { group: tag.name, items: [] });
-  }
-
-  for (const op of model.operations) {
-    if (!groups.has(op.tag)) {
-      groups.set(op.tag, { group: op.tag, items: [] });
-    }
-    groups.get(op.tag)!.items.push({
-      operationId: op.operationId,
-      method: op.method,
-      path: op.path,
-      summary: op.summary,
-    });
-  }
-
-  // Remove groups with no items (tag was in spec.tags but unused)
-  return Array.from(groups.values()).filter((g) => g.items.length > 0);
-}
-
-// ── sampleFromSchema ──────────────────────────────────────────────────────────
-
-const MAX_SAMPLE_DEPTH = 6;
-
-/**
- * Synthesize a sample value from a JSON Schema.
- * Honors example/default/first enum, then uses type heuristics.
- */
-export function sampleFromSchema(schema?: JsonSchema, _depth = 0): unknown {
-  if (!schema) return null;
-  if (_depth > MAX_SAMPLE_DEPTH) return null;
-
-  // Honor explicit example
-  if (schema.example !== undefined) return schema.example;
-  // Honor default
-  if (schema.default !== undefined) return schema.default;
-  // Honor enum — use first value
-  if (Array.isArray(schema.enum) && schema.enum.length > 0) return schema.enum[0];
-
-  // allOf — merge properties from all sub-schemas
-  if (Array.isArray(schema.allOf) && schema.allOf.length > 0) {
-    const merged: Record<string, unknown> = {};
-    for (const sub of schema.allOf) {
-      const sample = sampleFromSchema(sub, _depth + 1);
-      if (sample && typeof sample === 'object' && !Array.isArray(sample)) {
-        Object.assign(merged, sample);
-      }
-    }
-    return merged;
-  }
-
-  // oneOf / anyOf — use first sub-schema
-  if (Array.isArray(schema.oneOf) && schema.oneOf.length > 0) {
-    return sampleFromSchema(schema.oneOf[0], _depth + 1);
-  }
-  if (Array.isArray(schema.anyOf) && schema.anyOf.length > 0) {
-    return sampleFromSchema(schema.anyOf[0], _depth + 1);
-  }
-
-  const type = schema.type;
-
-  if (type === 'string') {
-    if (schema.format === 'date-time') return '2024-01-01T00:00:00Z';
-    if (schema.format === 'date') return '2024-01-01';
-    if (schema.format === 'email') return 'user@example.com';
-    if (schema.format === 'uuid') return '00000000-0000-0000-0000-000000000000';
-    if (schema.format === 'uri') return 'https://example.com';
-    return '<string>';
-  }
-
-  if (type === 'integer' || type === 'number') {
-    if (schema.format === 'float' || schema.format === 'double') return 0.0;
-    return 0;
-  }
-
-  if (type === 'boolean') return true;
-
-  if (type === 'null') return null;
-
-  if (type === 'array') {
-    const itemSample = sampleFromSchema(schema.items, _depth + 1);
-    return [itemSample];
-  }
-
-  if (type === 'object' || schema.properties) {
-    const result: Record<string, unknown> = {};
-    if (schema.properties) {
-      for (const [key, propSchema] of Object.entries(schema.properties)) {
-        result[key] = sampleFromSchema(propSchema, _depth + 1);
-      }
-    }
-    return result;
-  }
-
-  // Unknown type — return null
-  return null;
-}
-
-// ── curlExample ───────────────────────────────────────────────────────────────
-
-/**
- * Build a multiline curl example for an operation.
- * Path parameters are substituted as <name> placeholders.
- * Adds Authorization header if security is non-empty.
- * Adds Content-Type + -d for write methods with a body.
- */
-export function curlExample(op: ApiOperation, serverUrl: string): string {
-  const base = serverUrl.replace(/\/$/, '');
-
-  // Substitute path params as <paramName> placeholders
-  const urlPath = op.path.replace(/\{([^}]+)\}/g, (_m, name: string) => `<${name}>`);
-
-  // Build query string from required query params (as examples)
-  const queryParams = op.parameters.filter((p) => p.in === 'query' && p.required);
-  const queryString =
-    queryParams.length > 0
-      ? '?' +
-        queryParams
-          .map((p) => {
-            const val =
-              p.example !== undefined
-                ? String(p.example)
-                : p.schema
-                  ? String(sampleFromSchema(p.schema) ?? `<${p.name}>`)
-                  : `<${p.name}>`;
-            return `${encodeURIComponent(p.name)}=${encodeURIComponent(val)}`;
-          })
-          .join('&')
-      : '';
-
-  const fullUrl = `${base}${urlPath}${queryString}`;
-
-  const lines: string[] = [`curl -X ${op.method.toUpperCase()} '${fullUrl}'`];
-
-  // Authorization header if security present
-  if (op.security.length > 0) {
-    lines.push(`  -H 'Authorization: Bearer <token>'`);
-  }
-
-  // Body for write methods
-  const writeMethods = new Set<HttpMethod>(['post', 'put', 'patch', 'delete']);
-  if (writeMethods.has(op.method) && op.requestBody) {
-    const body = op.requestBody;
-    if (body.contentType) {
-      lines.push(`  -H 'Content-Type: ${body.contentType}'`);
-    }
-    const sample = sampleFromSchema(body.schema);
-    if (sample !== null && sample !== undefined) {
-      const json = JSON.stringify(sample, null, 2);
-      lines.push(`  -d '${json}'`);
-    }
-  }
-
-  return lines.join(' \\\n');
-}
-
-// ── schemaToTypeLabel ─────────────────────────────────────────────────────────
-
-/**
- * Produce a human-readable type label for a JSON Schema.
- * Examples: "string", "integer<int32>", "array<string>", "string | null".
- */
-export function schemaToTypeLabel(schema?: JsonSchema): string {
-  if (!schema) return 'unknown';
-
-  // oneOf / anyOf — union label
-  if (Array.isArray(schema.oneOf) && schema.oneOf.length > 0) {
-    const parts = schema.oneOf.map((s) => schemaToTypeLabel(s));
-    const label = parts.join(' | ');
-    return schema.nullable ? `${label} | null` : label;
-  }
-  if (Array.isArray(schema.anyOf) && schema.anyOf.length > 0) {
-    const parts = schema.anyOf.map((s) => schemaToTypeLabel(s));
-    const label = parts.join(' | ');
-    return schema.nullable ? `${label} | null` : label;
-  }
-
-  // allOf — just show "object" or the merged type
-  if (Array.isArray(schema.allOf) && schema.allOf.length > 0) {
-    const label = 'object';
-    return schema.nullable ? `${label} | null` : label;
-  }
-
-  const type = schema.type ?? 'unknown';
-
-  let label: string;
-
-  if (type === 'array') {
-    const inner = schema.items ? schemaToTypeLabel(schema.items) : 'unknown';
-    label = `array<${inner}>`;
-  } else if (schema.format) {
-    label = `${type}<${schema.format}>`;
-  } else {
-    label = type;
-  }
-
-  return schema.nullable ? `${label} | null` : label;
-}
+// Rendering-only helpers (operationNavGroups, sampleFromSchema, curlExample,
+// schemaToTypeLabel, ApiNavGroup) were removed with the old custom renderer
+// (api-reference.tsx/api-playground-client.tsx) — Scalar now owns rendering
+// entirely. parseOpenApi/findOperation/OpenApiModel/ApiOperation stay: they're
+// the validation layer for cross-linking docs pages to specific operations
+// (confirming a #tag/<tag>/<method>/<path> reference actually exists in the
+// spec before emitting it).

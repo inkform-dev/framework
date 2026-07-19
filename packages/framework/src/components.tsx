@@ -9,9 +9,14 @@ import {
   Accordion,
   AccordionGroup,
 } from './interactive';
+// ApiLink is async (reads + parses the OpenAPI spec at MDX-render time) and
+// touches node:fs/fetch — isolated in its own module for the same reason
+// interactive.tsx is, just the opposite direction (fs-touching, not client-only).
+import { ApiLink } from './api-link';
 
 export { Tabs, Tab, CodeGroup, Accordion, AccordionGroup } from './interactive';
 export type { TabProps, TabsProps, CodeGroupProps, AccordionProps, AccordionGroupProps } from './interactive';
+export { ApiLink } from './api-link';
 
 /**
  * Built-in MDX components — the render targets for the editor's blocks
@@ -19,9 +24,11 @@ export type { TabProps, TabsProps, CodeGroupProps, AccordionProps, AccordionGrou
  * with plain `fw-*` CSS classes (see styles.css) so the framework is standalone
  * — no Tailwind required in the consuming site.
  *
- * Unknown components (user-authored widgets in /widgets/ the framework doesn't
- * know) render via a visible Fallback instead of crashing the build — see
- * `mdxComponents()`.
+ * User-authored widgets live at widgets/<Name>.tsx in the consuming project
+ * and are registered in that project's widgets/index.ts, which mdx-components.tsx
+ * passes into `mdxComponents(extra)` below. Any capitalized component the MDX
+ * references but isn't registered there renders via a visible Fallback
+ * instead of crashing the build.
  */
 
 /* ---------------------------------------------------------------------------
@@ -455,7 +462,7 @@ export function ApiReference({ spec, endpoint }: { spec?: string; endpoint?: str
   return (
     <div className="fw-apiref">
       <div className="fw-apiref-head">
-        <span className={`fw-apiref-method fw-method-${(method ?? 'get').toLowerCase()}`}>{method}</span>
+        <span className={`fw-method-pill fw-method-${(method ?? 'get').toLowerCase()}`}>{method}</span>
         <code className="fw-apiref-path">{rest.join(' ')}</code>
       </div>
       {spec ? <p className="fw-apiref-note">from {spec}</p> : null}
@@ -517,6 +524,7 @@ const BUILTINS: Record<string, React.ComponentType<Record<string, unknown>>> = {
   // API docs
   ParamField: ParamField as React.ComponentType<Record<string, unknown>>,
   ResponseField: ResponseField as unknown as React.ComponentType<Record<string, unknown>>,
+  ApiLink: ApiLink as unknown as React.ComponentType<Record<string, unknown>>,
   // Misc
   Expandable: Expandable as React.ComponentType<Record<string, unknown>>,
   Frame: Frame as React.ComponentType<Record<string, unknown>>,

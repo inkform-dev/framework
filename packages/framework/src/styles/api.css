@@ -7,6 +7,14 @@
    METHOD PILLS
 ═══════════════════════════════════════════════════════════════ */
 
+/* Tinted-background + full-saturation-text — the same pattern already
+   proven elsewhere in this file (.fw-apiref-status-ok/-err below) — rather
+   than white text on a solid fill, which fails WCAG AA badly in dark mode
+   (as low as 1.67:1) and moderately in light mode (as low as 3.19:1) for
+   several methods. --fw-method-*-text is a light-mode-only darkened variant
+   of the raw color (tokens.css) so the text itself clears 4.5:1; the tint
+   background derives from the raw (undarkened) color at 14%, matching the
+   status-badge pattern's proportions exactly. */
 .fw-method-pill {
   display: inline-flex;
   align-items: center;
@@ -18,17 +26,17 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #fff;
   flex-shrink: 0;
 }
 
-.fw-method-get     { background: var(--fw-method-get); }
-.fw-method-post    { background: var(--fw-method-post); }
-.fw-method-put     { background: var(--fw-method-put); }
-.fw-method-patch   { background: var(--fw-method-patch); }
-.fw-method-delete  { background: var(--fw-method-delete); }
-.fw-method-head    { background: var(--fw-method-head); }
-.fw-method-options { background: var(--fw-method-options); }
+.fw-method-get      { color: var(--fw-method-get-text); background: color-mix(in srgb, var(--fw-method-get) 14%, transparent); }
+.fw-method-post     { color: var(--fw-method-post-text); background: color-mix(in srgb, var(--fw-method-post) 14%, transparent); }
+.fw-method-put      { color: var(--fw-method-put-text); background: color-mix(in srgb, var(--fw-method-put) 14%, transparent); }
+.fw-method-patch    { color: var(--fw-method-patch-text); background: color-mix(in srgb, var(--fw-method-patch) 14%, transparent); }
+.fw-method-delete   { color: var(--fw-method-delete-text); background: color-mix(in srgb, var(--fw-method-delete) 14%, transparent); }
+.fw-method-head     { color: var(--fw-method-head-text); background: color-mix(in srgb, var(--fw-method-head) 14%, transparent); }
+.fw-method-options  { color: var(--fw-method-options-text); background: color-mix(in srgb, var(--fw-method-options) 14%, transparent); }
+.fw-method-trace    { color: var(--fw-method-options-text); background: color-mix(in srgb, var(--fw-method-options) 14%, transparent); }
 
 /* Sidebar API method pill — a smaller, fixed-width variant of .fw-method-pill
    used as the icon next to each endpoint in the API Reference sidebar. */
@@ -728,7 +736,10 @@
 
 @media (max-width: 40rem) {
   .fw-playground-panel {
-    width: 100vw;
+    /* Not 100vw: that includes the scrollbar gutter on most desktop
+       browsers, overflowing the actual viewport. The parent overlay is
+       already `position: fixed; inset: 0`, so 100% of it is exactly right. */
+    width: 100%;
     border-left: none;
     border-top: 1px solid var(--fw-border);
   }

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import '@freewrite-cms/framework/styles.css';
+import '@inkform/framework/styles.css';
 import './theme.css';
-import { themeInitScript } from '@freewrite-cms/framework/theme-toggle';
-import { loadDocsConfig } from '@freewrite-cms/framework/content';
+import { themeInitScript } from '@inkform/framework/theme-toggle';
+import { loadDocsConfig } from '@inkform/framework/content';
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = loadDocsConfig();

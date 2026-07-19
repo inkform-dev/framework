@@ -1,13 +1,11 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { AskAi } from '@freewrite-cms/framework/ask-ai';
-import { ThemeToggle } from '@freewrite-cms/framework/theme-toggle';
-import { SearchDialog } from '@freewrite-cms/framework/search-dialog';
-import type { DocsConfig } from '@freewrite-cms/framework';
-import { docTabs } from '@freewrite-cms/framework';
-import { buildSearchIndex } from '@freewrite-cms/framework';
-import { loadDocsConfig } from '@freewrite-cms/framework/content';
-import type { SearchDoc } from '@freewrite-cms/framework';
+import { AskAi } from '@inkform/framework/ask-ai';
+import { ThemeToggle } from '@inkform/framework/theme-toggle';
+import { SearchDialog } from '@inkform/framework/search-dialog';
+import type { DocsConfig } from '@inkform/framework';
+import { docTabs } from '@inkform/framework';
+import { loadDocsConfig } from '@inkform/framework/content';
 import { apiBasePath } from '@/lib/route';
 
 // ── Brand logo ────────────────────────────────────────────────────────────────
@@ -91,7 +89,7 @@ export interface TopBarParts {
  * Server component — client islands (SearchDialog, ThemeToggle, AskAi) are
  * already marked 'use client' in the framework.
  */
-export function buildTopBar(config: DocsConfig, activeTab: string, searchIndex: SearchDoc[]): TopBarParts {
+export function buildTopBar(config: DocsConfig, activeTab: string): TopBarParts {
   const aiEnabled = process.env.NEXT_PUBLIC_DOCS_AI_ENABLED === 'true';
 
   const logo = <Logo config={config} />;
@@ -116,7 +114,7 @@ export function buildTopBar(config: DocsConfig, activeTab: string, searchIndex: 
 
   const topActions = (
     <>
-      <SearchDialog index={searchIndex} />
+      <SearchDialog />
       <ThemeToggle />
       <AskAi enabled={aiEnabled} product={config.name} />
       {config.cta ? (

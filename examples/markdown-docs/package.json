@@ -1,5 +1,5 @@
 {
-  "name": "@freewrite-cms/example-markdown",
+  "name": "@inkform/example-markdown",
   "version": "0.2.0",
   "private": true,
   "description": "Markdown Guide — a complete reference for writing Markdown and MDX, built on the Mono theme.",
@@ -7,11 +7,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@freewrite-cms/framework": "^0.2.0",
+    "@inkform/framework": "^0.2.0",
+    "@scalar/nextjs-api-reference": "^0.11.11",
     "lucide-react": "^0.483.0",
     "next": "16.2.3",
     "react": "19.2.1",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "pagefind": "^1.5.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "typescript": "^5"

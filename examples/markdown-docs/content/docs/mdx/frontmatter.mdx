@@ -106,7 +106,7 @@ In a Next.js + MDX setup, frontmatter is typically extracted during the build st
 
 ```typescript
 // In a Next.js page route that renders MDX
-import { loadDocPage } from '@freewrite-cms/framework/content';
+import { loadDocPage } from '@inkform/framework/content';
 
 export async function generateMetadata({ params }) {
   const page = await loadDocPage(params.slug);
