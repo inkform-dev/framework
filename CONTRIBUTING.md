@@ -1,4 +1,4 @@
-# Contributing to freewrite-docs
+# Contributing to inkform-docs
 
 Thanks for helping out! This is a workspace monorepo for an open-source
 documentation framework.
@@ -6,8 +6,8 @@ documentation framework.
 ## Layout
 
 ```
-packages/framework   @freewrite-cms/framework — the MDX + OpenAPI engine
-packages/cli         @freewrite-cms/cli — the `npx` scaffolder
+packages/framework   @inkform/framework — the MDX + OpenAPI engine
+packages/cli         @inkform/cli — the `npx` scaffolder
 templates/*          the themes (aurora, fern, cedar, mono, base)
 examples/*           full demo sites (pokeapi-docs, markdown-docs)
 ```
@@ -19,8 +19,8 @@ npm install                 # installs every workspace
 npm run typecheck           # typecheck all packages
 
 # run a theme or example:
-npm run dev --workspace=@freewrite-cms/theme-aurora
-npm run dev --workspace=@freewrite-cms/example-pokeapi
+npm run dev --workspace=@inkform/theme-aurora
+npm run dev --workspace=@inkform/example-pokeapi
 ```
 
 Each theme/example is a standalone Next.js 16 app; the framework resolves via the
@@ -41,7 +41,7 @@ workspace link, so changes to `packages/framework` are picked up immediately
 ### Adding a theme
 
 1. Copy an existing theme dir (e.g. `templates/aurora`) to `templates/<name>`.
-2. Give it a unique `package.json` name (`@freewrite-cms/theme-<name>`).
+2. Give it a unique `package.json` name (`@inkform/theme-<name>`).
 3. Restyle `app/theme.css` (tokens), `app/layout.tsx` (fonts), and `public/*.svg`.
    Leave the routing/components alone.
 4. Add it to the CLI's theme list in `packages/cli/src/scaffold.mjs`.

@@ -1,11 +1,11 @@
-# @freewrite-cms/cli
+# @inkform/cli
 
 Scaffold a documentation site powered by
-[`@freewrite-cms/framework`](https://github.com/freewrite-cms/framework) — pick a
+[`@inkform/framework`](https://github.com/inkform-dev/framework) — pick a
 theme, get a deployable Next.js project. Like `npx shadcn`, but for docs.
 
 ```bash
-npx @freewrite-cms/cli@latest init my-docs
+npx @inkform/cli@latest init my-docs
 ```
 
 ## What it does
@@ -23,7 +23,7 @@ npx @freewrite-cms/cli@latest init my-docs
 ## Usage
 
 ```bash
-npx @freewrite-cms/cli@latest init [directory] [options]
+npx @inkform/cli@latest init [directory] [options]
 ```
 
 | Option | Description |
@@ -38,13 +38,13 @@ npx @freewrite-cms/cli@latest init [directory] [options]
 
 ```bash
 # interactive
-npx @freewrite-cms/cli@latest init
+npx @inkform/cli@latest init
 
 # pick everything up front
-npx @freewrite-cms/cli@latest init docs --theme mono
+npx @inkform/cli@latest init docs --theme mono
 
 # generate the API Reference from your spec
-npx @freewrite-cms/cli@latest init api-docs --theme fern --openapi https://example.com/openapi.json
+npx @inkform/cli@latest init api-docs --theme fern --openapi https://example.com/openapi.json
 ```
 
 Then:

@@ -1,8 +1,8 @@
-# Publishing — `@freewrite-cms/framework`
+# Publishing — `@inkform/framework`
 
-This package is published to public npm under the `@freewrite-cms` org
+This package is published to public npm under the `@inkform` org
 (`private: false`, `publishConfig.access: public`, MIT). It ships TypeScript
-source; consumers add `transpilePackages: ['@freewrite-cms/framework']`.
+source; consumers add `transpilePackages: ['@inkform/framework']`.
 
 ## Release
 
@@ -13,7 +13,7 @@ npm version <patch|minor|major>
 npm publish
 ```
 
-The themes and examples depend on `@freewrite-cms/framework: ^0.2.0` and resolve
+The themes and examples depend on `@inkform/framework: ^0.2.0` and resolve
 the local workspace copy during development; published consumers get it from npm.
 
 ## Optional: ship compiled JS
@@ -30,7 +30,7 @@ npm i -D tsup
 
 ## Versioning across the monorepo
 
-For coordinated releases of `@freewrite-cms/framework` + `@freewrite-cms/cli`,
+For coordinated releases of `@inkform/framework` + `@inkform/cli`,
 [Changesets](https://github.com/changesets/changesets) is recommended:
 
 ```bash

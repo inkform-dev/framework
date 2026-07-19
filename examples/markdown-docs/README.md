@@ -1,7 +1,7 @@
-# Mono — @freewrite-cms/theme-mono
+# Mono — @inkform/theme-mono
 
 Mono is a monospace-first, brutalist documentation theme built on
-`@freewrite-cms/framework`. Terminal-dark with a hot red-orange accent,
+`@inkform/framework`. Terminal-dark with a hot red-orange accent,
 JetBrains Mono for every text surface (prose, headings, and code alike), and
 zero-radius sharp edges throughout. It supports Guides + API Reference tabs out
 of the box.

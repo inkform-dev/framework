@@ -1,6 +1,6 @@
 /**
- * freewrite-docs — scaffold a documentation site powered by
- * @freewrite-cms/framework. Pick a theme, get a deployable Next.js project.
+ * inkform-docs — scaffold a documentation site powered by
+ * @inkform/framework. Pick a theme, get a deployable Next.js project.
  *
  * Flow:
  *   1. ask for (or take) a project directory
@@ -16,8 +16,8 @@ import process from 'node:process';
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
 
-const REPO = 'freewrite-cms/framework';
-const TEMPLATE_REF = process.env.FREEWRITE_DOCS_REF || 'main';
+const REPO = 'inkform/framework';
+const TEMPLATE_REF = process.env.INKFORM_DOCS_REF || 'main';
 
 const THEMES = [
   { value: 'aurora', label: 'Aurora', hint: 'classic dark docs (Nextra-style)' },
@@ -44,10 +44,10 @@ function parseArgs(argv) {
 
 function help() {
   console.log(`
-${pc.bold('freewrite-docs')} — scaffold a docs site powered by @freewrite-cms/framework
+${pc.bold('inkform-docs')} — scaffold a docs site powered by @inkform/framework
 
 ${pc.bold('Usage')}
-  npx @freewrite-cms/cli@latest init [directory] [options]
+  npx @inkform/cli@latest init [directory] [options]
 
 ${pc.bold('Options')}
   -t, --theme <name>     ${[...THEME_VALUES].join(' | ')}
@@ -57,7 +57,7 @@ ${pc.bold('Options')}
   -h, --help             show this help
 
 ${pc.bold('Example')}
-  npx @freewrite-cms/cli@latest init my-docs --theme fern
+  npx @inkform/cli@latest init my-docs --theme fern
 `);
 }
 
@@ -186,7 +186,7 @@ export async function run(argv) {
   const positionals = opts._[0] === 'init' ? opts._.slice(1) : opts._;
 
   console.log('');
-  p.intro(pc.bgCyan(pc.black(' freewrite-docs ')));
+  p.intro(pc.bgCyan(pc.black(' inkform-docs ')));
 
   // 1. project directory
   let dirInput = positionals[0];

@@ -1,7 +1,7 @@
-# Cedar — @freewrite-cms/theme-cedar
+# Cedar — @inkform/theme-cedar
 
 Cedar is a warm, editorial documentation theme built on
-`@freewrite-cms/framework`. Autumnal burnt-orange accent, Source Serif 4 for
+`@inkform/framework`. Autumnal burnt-orange accent, Source Serif 4 for
 headings, Inter for prose, and JetBrains Mono for code. It supports Guides +
 API Reference tabs out of the box.
 

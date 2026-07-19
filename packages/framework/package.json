@@ -21,7 +21,7 @@
     "./mdx": "./src/mdx.tsx",
     "./components": "./src/components.tsx",
     "./docs-shell": "./src/docs-shell.tsx",
-    "./api-reference": "./src/api-reference.tsx",
+    "./scalar-theme": "./src/scalar-theme.ts",
     "./search-dialog": "./src/search-dialog.tsx",
     "./pagefind-highlight": "./src/pagefind-highlight-mount.tsx",
     "./ask-ai": "./src/ask-ai.tsx",

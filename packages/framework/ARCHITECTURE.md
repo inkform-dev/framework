@@ -1,4 +1,4 @@
-# @freewrite-cms/framework — architecture & API contract
+# @inkform/framework — architecture & API contract
 
 This is the stable contract that the engine, the themes, the CLI, and the
 examples all build against. If you're writing a theme, this is the file to read.
@@ -27,9 +27,9 @@ content/
 ```
 
 Override the content root with `DOCS_CONTENT_ROOT`. `docs.json` is the standard
-config file; `freewrite.json` of the same shape is also accepted.
+config file; `inkform.json` of the same shape is also accepted.
 
-### `docs.json` shape (`DocsConfig`, from `@freewrite-cms/framework/nav`)
+### `docs.json` shape (`DocsConfig`, from `@inkform/framework/nav`)
 
 ```jsonc
 {
@@ -332,7 +332,7 @@ Dark theme: scope overrides under `html.dark` (the ThemeToggle toggles `dark` on
 
 A theme is a standalone Next.js 16 app that:
 1. Has `content/docs/docs.json` + sample MDX + an `openapi.json` sample.
-2. Imports `@freewrite-cms/framework/styles.css` once, then a `theme.css` that
+2. Imports `@inkform/framework/styles.css` once, then a `theme.css` that
    overrides the `--fw-*` tokens (its identity: colors, font, radius, density).
 3. Routes `/[[...slug]]` (or `/docs/[[...slug]]`): resolve slug → MDX page or API
    operation; render with `<DocsShell>` + `<Sidebar>` + `<TocList>` + `<Mdx>` /
@@ -341,8 +341,8 @@ A theme is a standalone Next.js 16 app that:
    `<AskAi enabled={process.env.NEXT_PUBLIC_DOCS_AI_ENABLED === 'true'} />`.
 5. Ships `/api/ask` (flag-gated stub), `.env.example`, and a README with content +
    Vercel deploy guides.
-6. `transpilePackages: ['@freewrite-cms/framework']` in `next.config.ts`.
-7. Is `"private": true` with a unique workspace name `@freewrite-cms/theme-<name>`.
+6. `transpilePackages: ['@inkform/framework']` in `next.config.ts`.
+7. Is `"private": true` with a unique workspace name `@inkform/theme-<name>`.
 
 Themes differ by `theme.css` tokens + fonts + small layout accents — NOT by
 re-implementing the shell.

@@ -10,7 +10,7 @@
  *            '@inkform/framework/mdx'             — <Mdx />
  *            '@inkform/framework/components'      — Callout, Card, Tabs, Steps, …
  *   layout:  '@inkform/framework/docs-shell'      — <DocsShell />, <Sidebar />, <TocList />
- *            '@inkform/framework/api-reference'    — <ApiReferenceView />, <ApiPlayground />
+ *            '@inkform/framework/scalar-theme'     — buildScalarCustomCss() for the Scalar-rendered API Reference route
  *   client:  '@inkform/framework/search-dialog'    — <SearchDialog /> (Pagefind-backed, see search-dialog.tsx)
  *            '@inkform/framework/ask-ai'           — <AskAi /> (feature-flagged)
  *            '@inkform/framework/theme-toggle'     — <ThemeToggle />

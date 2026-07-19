@@ -1,5 +1,5 @@
 /*
- * Mono theme — token overrides for @freewrite-cms/framework.
+ * Mono theme — token overrides for @inkform/framework.
  * This file is imported AFTER framework/styles.css so its declarations win.
  * Only --fw-* tokens and small Mono-specific accents are set here.
  * The framework's structural CSS is untouched.

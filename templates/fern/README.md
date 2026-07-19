@@ -1,7 +1,7 @@
-# Fern — @freewrite-cms/theme-fern
+# Fern — @inkform/theme-fern
 
 Fern is a clean, friendly documentation theme built on
-`@freewrite-cms/framework`. Light-first with an emerald-green accent, Inter for
+`@inkform/framework`. Light-first with an emerald-green accent, Inter for
 prose, and JetBrains Mono for code. Rounded corners and green-tinted surfaces
 give it a warm, approachable feel. Supports Guides + API Reference tabs out of
 the box.

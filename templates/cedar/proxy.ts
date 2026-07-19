@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { resolveSlugRedirect } from '@freewrite-cms/framework';
+import { resolveSlugRedirect } from '@inkform/framework';
 import slugHistory from './content/docs/slug-history.json';
 
 /** Docs are served at the root, so slug-history redirects use the '/' base. */

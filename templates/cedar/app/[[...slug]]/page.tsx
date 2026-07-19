@@ -1,19 +1,12 @@
 import { notFound } from 'next/navigation';
 import { Mdx } from '@inkform/framework/mdx';
 import { DocsShell, Sidebar, TocList, Pagination } from '@inkform/framework/docs-shell';
-import { ApiReferenceView } from '@inkform/framework/api-reference';
 import { docNeighbours } from '@inkform/framework';
 import { loadDocsConfig, extractHeadings } from '@inkform/framework/content';
 import { siteMdxComponents } from '@/mdx-components';
 import { buildTopBar } from '@/components/top-bar';
 import { renderIcon } from '@/lib/icons';
-import {
-  resolveRoute,
-  listAllRoutes,
-  sidebarForDoc,
-  sidebarForApi,
-  apiBasePath,
-} from '@/lib/route';
+import { resolveRoute, listAllRoutes, sidebarForDoc } from '@/lib/route';
 
 export const dynamicParams = false;
 
@@ -34,10 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
   const { slug } = await params;
   const route = resolveRoute(slug);
   if (!route) return {};
-  if (route.kind === 'doc') return { title: route.ref.title };
-  if (route.kind === 'api') return { title: route.operation.summary };
-  // api-index
-  return { title: route.model.info.title };
+  return { title: route.ref.title };
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -47,70 +37,10 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   const route = resolveRoute(slug);
   if (!route) notFound();
 
-  const { config } = route;
-  const apiBase = apiBasePath(config) ?? '';
-
-  // ── Doc page ───────────────────────────────────────────────────────────────
-  if (route.kind === 'doc') {
-    const { ref, page, tab } = route;
-    const headings = extractHeadings(page.content);
-    const { prev, next } = docNeighbours(config, ref.slug);
-    const sidebar = sidebarForDoc(config, tab, ref.slug, renderIcon);
-    const topBar = buildTopBar(config, tab.tab);
-
-    return (
-      <DocsShell
-        logo={topBar.logo}
-        topNav={topBar.topNav}
-        topActions={topBar.topActions}
-        sidebar={<Sidebar groups={sidebar} />}
-        toc={headings.length > 0 ? <TocList headings={headings} /> : undefined}
-        hideToc={headings.length === 0}
-      >
-        <Mdx source={page.content} components={siteMdxComponents} />
-        <Pagination
-          prev={prev ? { title: prev.title, href: '/' + prev.slug } : null}
-          next={next ? { title: next.title, href: '/' + next.slug } : null}
-        />
-      </DocsShell>
-    );
-  }
-
-  // ── API Index ──────────────────────────────────────────────────────────────
-  if (route.kind === 'api-index') {
-    const { model, tab } = route;
-    const firstOp = model.operations[0];
-    const activeOpId = firstOp?.operationId ?? null;
-    const sidebar = sidebarForApi(model, apiBase, activeOpId);
-    const topBar = buildTopBar(config, tab.tab);
-
-    return (
-      <DocsShell
-        logo={topBar.logo}
-        topNav={topBar.topNav}
-        topActions={topBar.topActions}
-        sidebar={<Sidebar groups={sidebar} />}
-        hideToc
-      >
-        {firstOp ? (
-          <ApiReferenceView
-            operation={firstOp}
-            servers={model.servers}
-          />
-        ) : (
-          <div className="fw-prose">
-            <h1>{model.info.title}</h1>
-            {model.info.description ? <p>{model.info.description}</p> : null}
-            <p>No API operations found in the spec.</p>
-          </div>
-        )}
-      </DocsShell>
-    );
-  }
-
-  // ── API operation ──────────────────────────────────────────────────────────
-  const { operation, model, tab } = route;
-  const sidebar = sidebarForApi(model, apiBase, operation.operationId);
+  const { config, ref, page, tab } = route;
+  const headings = extractHeadings(page.content);
+  const { prev, next } = docNeighbours(config, ref.slug);
+  const sidebar = sidebarForDoc(config, tab, ref.slug, renderIcon);
   const topBar = buildTopBar(config, tab.tab);
 
   return (
@@ -119,11 +49,13 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
       topNav={topBar.topNav}
       topActions={topBar.topActions}
       sidebar={<Sidebar groups={sidebar} />}
-      hideToc
+      toc={headings.length > 0 ? <TocList headings={headings} /> : undefined}
+      hideToc={headings.length === 0}
     >
-      <ApiReferenceView
-        operation={operation}
-        servers={model.servers}
+      <Mdx source={page.content} components={siteMdxComponents} />
+      <Pagination
+        prev={prev ? { title: prev.title, href: '/' + prev.slug } : null}
+        next={next ? { title: next.title, href: '/' + next.slug } : null}
       />
     </DocsShell>
   );

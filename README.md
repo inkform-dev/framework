@@ -1,11 +1,11 @@
 <div align="center">
 
-# freewrite-docs
+# inkform-docs
 
 **Open-source documentation framework for Next.js.** Beautiful docs, API
 reference from OpenAPI, blog, and changelog — from a folder of Markdown.
 
-`npx @freewrite-cms/cli@latest init my-docs`
+`npx @inkform/cli@latest init my-docs`
 
 </div>
 
@@ -15,8 +15,8 @@ This is a monorepo. It contains:
 
 | Package | What it is |
 | --- | --- |
-| [`packages/framework`](./packages/framework) | `@freewrite-cms/framework` — the MDX + OpenAPI rendering engine |
-| [`packages/cli`](./packages/cli) | `@freewrite-cms/cli` — `npx` scaffolder (pick a theme, get a project) |
+| [`packages/framework`](./packages/framework) | `@inkform/framework` — the MDX + OpenAPI rendering engine |
+| [`packages/cli`](./packages/cli) | `@inkform/cli` — `npx` scaffolder (pick a theme, get a project) |
 | [`templates/aurora`](./templates/aurora) | classic dark docs theme |
 | [`templates/fern`](./templates/fern) | clean, friendly green theme with Guides / API tabs |
 | [`templates/cedar`](./templates/cedar) | warm, editorial theme |
@@ -25,7 +25,7 @@ This is a monorepo. It contains:
 | [`examples/pokeapi-docs`](./examples/pokeapi-docs) | a full docs site for the PokéAPI |
 | [`examples/markdown-docs`](./examples/markdown-docs) | a full docs site about Markdown |
 
-## Why freewrite-docs
+## Why inkform-docs
 
 - **Markdown in, polished docs out.** Write MDX, commit it, deploy. No CMS, no
   database, no build service — your repo is the source of truth.
@@ -42,7 +42,7 @@ This is a monorepo. It contains:
 ## Get started
 
 ```bash
-npx @freewrite-cms/cli@latest init my-docs
+npx @inkform/cli@latest init my-docs
 cd my-docs
 npm install
 npm run dev
@@ -59,7 +59,7 @@ To build your own theme or embed the engine in an existing app, see
 ```bash
 npm install          # installs all workspaces
 npm run typecheck    # typecheck every package
-npm run dev --workspace=@freewrite-cms/example-pokeapi   # run an example
+npm run dev --workspace=@inkform/example-pokeapi   # run an example
 ```
 
 ## License

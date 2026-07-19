@@ -9,9 +9,14 @@ import {
   Accordion,
   AccordionGroup,
 } from './interactive';
+// ApiLink is async (reads + parses the OpenAPI spec at MDX-render time) and
+// touches node:fs/fetch — isolated in its own module for the same reason
+// interactive.tsx is, just the opposite direction (fs-touching, not client-only).
+import { ApiLink } from './api-link';
 
 export { Tabs, Tab, CodeGroup, Accordion, AccordionGroup } from './interactive';
 export type { TabProps, TabsProps, CodeGroupProps, AccordionProps, AccordionGroupProps } from './interactive';
+export { ApiLink } from './api-link';
 
 /**
  * Built-in MDX components — the render targets for the editor's blocks
@@ -517,6 +522,7 @@ const BUILTINS: Record<string, React.ComponentType<Record<string, unknown>>> = {
   // API docs
   ParamField: ParamField as React.ComponentType<Record<string, unknown>>,
   ResponseField: ResponseField as unknown as React.ComponentType<Record<string, unknown>>,
+  ApiLink: ApiLink as unknown as React.ComponentType<Record<string, unknown>>,
   // Misc
   Expandable: Expandable as React.ComponentType<Record<string, unknown>>,
   Frame: Frame as React.ComponentType<Record<string, unknown>>,

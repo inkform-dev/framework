@@ -1,4 +1,4 @@
-import { mdxComponents } from '@freewrite-cms/framework/components';
+import { mdxComponents } from '@inkform/framework/components';
 
 /**
  * Site-level MDX component map.
