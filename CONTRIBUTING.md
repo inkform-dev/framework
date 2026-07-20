@@ -17,10 +17,16 @@ examples/*           full demo sites (pokeapi-docs, markdown-docs, inkform-docs)
 ```bash
 npm install                 # installs every workspace
 npm run typecheck           # typecheck all packages
+npm test                    # framework's Vitest unit tests
 
 # run a theme or example:
 npm run dev --workspace=@inkform/theme-aurora
 npm run dev --workspace=@inkform/example-pokeapi
+
+# real-browser e2e smoke test (builds + serves pokeapi-docs, drives it with
+# a real Chromium; the one test that makes a real request talks to the
+# live PokeAPI once, not in a loop):
+npm run test:e2e --workspace=@inkform/example-pokeapi
 ```
 
 Each theme/example is a standalone Next.js 16 app; the framework resolves via the
