@@ -38,7 +38,8 @@
     },
     {
       "tab": "API Reference",
-      "openapi": "openapi.json"
+      "openapi": "openapi.json",
+      "apiReference": { "renderer": "native" }
     }
   ]
 }
