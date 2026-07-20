@@ -1,11 +1,11 @@
 import type { ScalarThemePalette } from '@inkform/framework/scalar-theme';
 
 /**
- * Pokeapi-docs' own light/dark palette, duplicated from app/theme.css's
- * --fw-* values (Scalar renders a separate document that can't read those
- * CSS variables — see scalar-theme.ts). Font names hardcoded to match
- * app/layout.tsx's next/font choices (Inter/JetBrains Mono) — no separate
- * heading font, same as theme.css's --fw-font-heading choice.
+ * Pokeapi-docs' own light/dark palette, duplicated from app/theme.css's --fw-*
+ * values (Scalar renders a separate document that can't read those CSS
+ * variables — see scalar-theme.ts). Font names are hardcoded to match
+ * app/layout.tsx's next/font choices (Inter/Newsreader/JetBrains Mono),
+ * since --font-sans/--font-heading/--font-mono are also out of scope there.
  */
 export const pokeapiScalarTheme: ScalarThemePalette = {
   light: {
@@ -34,5 +34,6 @@ export const pokeapiScalarTheme: ScalarThemePalette = {
   },
   radius: '8px',
   font: 'Inter, ui-sans-serif, system-ui, sans-serif',
+  fontHeading: 'Newsreader, ui-serif, Georgia, "Times New Roman", serif',
   mono: '"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace',
 };

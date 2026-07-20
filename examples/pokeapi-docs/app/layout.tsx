@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Inter, Newsreader, JetBrains_Mono } from 'next/font/google';
 import '@inkform/framework/styles.css';
 import './theme.css';
 import { themeInitScript } from '@inkform/framework/theme-toggle';
@@ -11,6 +11,16 @@ const inter = Inter({
   display: 'swap',
 });
 
+// Two-voice typography: a serif display voice for headings, distinct from
+// the sans body/UI voice above and the mono voice below — matches the fix
+// applied to templates/aurora (this example was scaffolded before that fix).
+const newsreader = Newsreader({
+  subsets: ['latin'],
+  variable: '--font-heading',
+  display: 'swap',
+  weight: ['500', '600', '700'],
+});
+
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
@@ -19,7 +29,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = loadDocsConfig();
-  const name = config?.name ?? 'Aurora Docs';
+  const name = config?.name ?? 'PokéAPI Docs';
   return {
     title: { default: name, template: `%s · ${name}` },
     description: `Documentation for ${name}`,
@@ -29,7 +39,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* No-flash theme init — must run synchronously before first paint */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
