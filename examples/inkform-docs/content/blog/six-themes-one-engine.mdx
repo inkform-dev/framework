@@ -1,0 +1,46 @@
+---
+title: Six Themes, One Engine — What Actually Changes Between Them
+date: 2026-07-05
+author: The Inkform Team
+tags: [design, themes]
+status: published
+description: Aurora, Fern, Cedar, Mono, Base, and now Galley all look nothing alike. Here's exactly what varies between them and what doesn't.
+---
+
+Six themes ship with this framework today, and by design they look nothing
+alike — a dark Nextra-style docs site (Aurora), a brutalist monospace
+terminal (Mono), a warm editorial paper-and-ink identity (Galley, this
+site's own theme). The interesting part isn't that they look different —
+it's exactly how little code that difference actually requires.
+
+## What varies: one CSS file
+
+Every theme's entire visual identity lives in `app/theme.css` — a set of
+`--fw-*` CSS custom properties (surfaces, brand color, radius, shadows, font
+stacks) plus, for themes with a genuinely distinct structural personality
+(Mono's uppercase tracked-out nav, for instance), a small delta of
+theme-specific selectors layered on top of the shared base. Recoloring,
+re-fonting, or fully restyling a site never touches a layout component.
+
+## What doesn't vary: everything else
+
+`app/[[...slug]]/page.tsx`, `app/blog/page.tsx`, `app/changelog/page.tsx`,
+`lib/route.tsx`, `components/top-bar.tsx` — these files are **byte-identical
+across all six themes**. The docs-tree resolution, the blog/changelog data
+loading, the top-bar composition: one implementation, reused six times
+without modification. See [Choosing a Theme](/getting-started/choosing-a-theme)
+for the actual per-theme identity summaries, and
+[Framework API](/reference/framework-api) for the shared engine every one of
+them calls into.
+
+## Building Galley: dogfooding our own design system
+
+Galley — the theme this very site uses — is the one meaningful exception to
+"just recolor an existing theme": it's built from Inkform's own actual design
+tokens (the `inkform-design` skill's authoritative
+`tokens/{colors,effects,typography}.css`), not an approximation. Same
+`--fw-primary`/`--fw-bg`/`--fw-radius` contract every other theme
+implements, populated with the real hex values, the real Newsreader +
+General Sans + JetBrains Mono font stack, and the real warm-paper shadow
+values — proof that the framework's theming contract is genuinely expressive
+enough to reproduce a real, opinionated brand identity, not just a hue swap.

@@ -1,0 +1,81 @@
+---
+title: Blog
+description: Frontmatter, series grouping, and the built-in /blog + /blog/[slug] routes.
+---
+
+# Blog
+
+Blog posts live under `content/blog/` as `.mdx` files. Every shipped theme
+renders `/blog` (a list) and `/blog/[slug]` (a post) automatically the moment
+a post exists — nothing to wire up.
+
+## Frontmatter
+
+```mdx
+---
+title: My First Post
+date: 2026-01-15
+author: Jane Doe
+tags: [release, tutorial]
+status: published
+series: getting-started
+description: A one-line summary shown on the list page and in link previews.
+coverImage: /images/my-first-post.png
+---
+
+Post body, in MDX — the same block set as docs: `<Note>`, `<Card>`, `<Steps>`,
+fenced code with syntax highlighting, and any custom widgets you've
+registered.
+```
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | Yes | Falls back to the filename slug if omitted. |
+| `date` | Recommended | `YYYY-MM-DD`. Drives list ordering (newest first). |
+| `author` | No | Plain string — no author-registry concept yet. |
+| `tags` | No | Array of strings. |
+| `status` | No | `published` (default), `scheduled` (hidden until `date` is reached), or anything else (treated as a draft — hidden). |
+| `series` | No | Groups the post under a named series — see below. |
+| `description` | No | Shown on the list page; falls back to an auto-generated excerpt from the body. |
+| `coverImage` | No | Used by list/detail layouts that support a hero image. |
+
+## Series
+
+Group related posts with `content/blog/series.json`:
+
+```json
+{
+  "series": [
+    {
+      "slug": "getting-started",
+      "title": "Getting Started",
+      "description": "A four-part introduction to the framework.",
+      "posts": ["my-first-post", "second-post", "third-post"]
+    }
+  ]
+}
+```
+
+A post can belong to a series and remain independently accessible at its own
+`/blog/[slug]` URL — series membership doesn't change a post's URL or
+standalone status.
+
+## The built-in routes
+
+Every theme ships `app/blog/page.tsx` (list) and `app/blog/[slug]/page.tsx`
+(detail), both calling the framework's `loadBlogPosts()` /
+`loadBlogPost(slug)` / `loadSeries()` directly — see
+[Reference → Framework API](/reference/framework-api) for their exact
+signatures. The "Blog" link in the top nav only appears once at least one
+published post exists; an empty or missing `content/blog/` keeps the nav
+clean and the `/blog` page itself still renders a "no posts yet" state if
+visited directly.
+
+## Customizing beyond the default
+
+The shipped list/detail pages are a reasonable default, not the only option.
+Since they're plain Next.js pages calling plain functions, swap the JSX for
+your own layout, add fields to the frontmatter parser, or replace the pages
+entirely — nothing about `loadBlogPosts()`/`loadBlogPost()` assumes a
+particular rendering. This is the same pattern the hosted platform's own
+blog uses for its dogfooded `/blog` route.

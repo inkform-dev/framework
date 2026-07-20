@@ -1,0 +1,120 @@
+---
+title: Framework API
+description: The real exports of @inkform/framework, organized by subpath.
+---
+
+# Framework API Reference
+
+`@inkform/framework` is split into subpath exports so you only pull in what
+you use. This page documents the actual exports — read alongside the source
+in `packages/framework/src/` if you need more than a signature.
+
+## `@inkform/framework` (root)
+
+Re-exports everything from `./nav` and `./openapi`, plus:
+
+| Export | Signature | Notes |
+| --- | --- | --- |
+| `resolveSlugRedirect` | `(pathname: string, history: Record<string, string>, basePath: string) => string \| null` | Used in `proxy.ts` to issue 301s from `slug-history.json`. Returns `null` when no redirect applies. |
+| `FRAMEWORK_VERSION` | `string` | The engine's own version constant. |
+
+## `@inkform/framework/content`
+
+Build-time content loaders — all pure filesystem reads, no network calls.
+
+| Export | Notes |
+| --- | --- |
+| `loadDocsConfig(dir?)` | Reads `docs.json` (or legacy `freewrite.json`). Returns `DocsConfig \| null`. |
+| `loadDocPage(file, dir?)` | Reads one doc's frontmatter + MDX body by file path. |
+| `loadBlogPosts(dir?, includeUnpublished?)` | Returns `BlogPost[]`, newest first, filtered to live posts by default. |
+| `loadBlogPost(slug, dir?)` | Returns one `BlogPost \| null`. |
+| `loadSeries(dir?)` | Reads `series.json`, returns `SeriesEntry[]`. |
+| `loadChangelogEntries(dir?, includeDrafts?)` | Returns `ChangelogEntry[]`, newest first. |
+| `loadSlugHistory(dir?)` | Reads `slug-history.json` as `Record<string, string>`. |
+| `loadOpenApiSpec(file, dir?)` / `resolveOpenApiSource(source)` / `loadOpenApiSpecForBuild(...)` | Read an OpenAPI spec from a local file or URL for the API Reference tab. |
+| `extractHeadings(content, minDepth?, maxDepth?)` | Parses MDX headings for the TOC — returns `Heading[]`. |
+| `readingTimeMinutes(content)` | Word-count-based estimate. |
+| `slugify(text)` | Used internally for tab→path derivation (e.g. `apiBasePath()` in each theme's `lib/route.tsx`). |
+| `contentRoot()` | The resolved `content/` directory — override with `DOCS_CONTENT_ROOT`. |
+
+## `@inkform/framework/nav`
+
+Pure functions over a loaded `DocsConfig` — no IO.
+
+| Export | Notes |
+| --- | --- |
+| `docTabs(config)` | Returns `DocsTab[]` — a single implicit tab if `tabs` is unset. |
+| `tabNavigation(config, tabName?)` | Nav groups for one tab. |
+| `listDocPages(config, tabName?)` | Flattened `FlatDocPage[]` in nav order. |
+| `findDocPage(config, slug)` | Resolve one page by slug. |
+| `docNeighbours(config, slug)` | `{ prev, next }` for pagination. |
+
+Types: `DocsConfig`, `DocsNavGroup`, `DocsNavPage`, `DocsTab`, `DocsLink`,
+`FlatDocPage`.
+
+## `@inkform/framework/openapi`
+
+| Export | Notes |
+| --- | --- |
+| `parseOpenApi(raw, format?)` | Parses a JSON or YAML spec string into an `OpenApiModel`. |
+| `findOperation(...)` | Locate a specific operation within a parsed model. |
+
+Types: `OpenApiModel`, `ApiOperation`, `ApiParam`, `ApiBody`, `ApiResponse`,
+`ApiSecurity`, `JsonSchema`, `HttpMethod`, and related info/server types.
+
+## `@inkform/framework/mdx`
+
+| Export | Notes |
+| --- | --- |
+| `Mdx({ source, components? })` | Async server component. Renders an MDX string with GFM, `:::callout` directives, Shiki-highlighted code, heading slugs, and all built-in blocks. Self-wraps output in `.fw-prose`. |
+
+## `@inkform/framework/docs-shell`
+
+| Export | Notes |
+| --- | --- |
+| `DocsShell({ logo, topNav, topActions, sidebar?, toc?, hideSidebar?, hideToc?, children })` | The 3-zone layout every theme's pages render inside. |
+| `Sidebar({ groups, header?, footer? })` | Renders `SidebarGroup[]`. |
+| `TocList({ headings, title? })` | Right-rail table of contents. |
+| `Pagination({ prev?, next? })` | Prev/next doc links. |
+| `Breadcrumbs(...)` | Breadcrumb trail. |
+
+Types: `SidebarItem`, `SidebarGroup`, `TocHeading`, `DocsShellProps`.
+
+## `@inkform/framework/components`
+
+The built-in MDX block library — `Note`, `Tip`, `Info`, `Warning`, `Danger`,
+`Check` (callout variants), `Card`, `CardGroup`, `Columns`, `Steps`/`Step`,
+`Tabs`/`Tab`, `CodeGroup`, `Accordion`/`AccordionGroup`, `ParamField`,
+`ResponseField`, `Expandable`, `Frame`, `Tooltip`, `Embed`, `Hero`,
+`AuthorBio`, `RelatedPosts`, `NewsletterCTA`, and `ApiLink`. Also exports
+`mdxComponents(customWidgets)` — merges your `widgets/index.ts` registry with
+every built-in block into the map `<Mdx components={...} />` expects.
+
+## `@inkform/framework/scalar-theme`
+
+| Export | Notes |
+| --- | --- |
+| `buildScalarCustomCss(palette)` | Turns a `ScalarThemePalette` into CSS Scalar's API Reference UI accepts — see any theme's `lib/scalar-theme-palette.ts` for a worked example. |
+
+## Interactive client components
+
+Each is a self-contained `'use client'` component with no required backend —
+see [Comments, Reactions & Subscribe Forms](/guides/interactive) for the full
+usage guide.
+
+| Subpath | Export |
+| --- | --- |
+| `@inkform/framework/comments` | `Comments({ slug, endpoint?, apiBaseUrl?, user?, signInLabel? })` |
+| `@inkform/framework/reactions` | `Reactions({ slug, endpoint?, apiBaseUrl?, user?, signInLabel? })` |
+| `@inkform/framework/subscribe-form` | `SubscribeForm({ projectId, endpoint?, apiBaseUrl?, source?, ... })` |
+| `@inkform/framework/theme-toggle` | `ThemeToggle()`, plus `themeInitScript` (a no-flash inline script string for `<head>`) |
+| `@inkform/framework/search-dialog` | `SearchDialog()` — the Cmd/Ctrl+K Pagefind search UI |
+| `@inkform/framework/ask-ai` | `AskAi({ enabled, product? })` — renders in both enabled/disabled states |
+| `@inkform/framework/analytics-script` | `AnalyticsScript({ ... })` — first-party, cookie-free page-view tracking |
+| `@inkform/framework/pagefind-highlight` | `PagefindHighlightMount()` — mounted once by `DocsShell` itself; you shouldn't need to use this directly |
+
+## `@inkform/framework/styles.css`
+
+The framework's structural CSS — layout, components, tokens, prose,
+widgets — imported once in every theme's root `layout.tsx`, before that
+theme's own `theme.css` token overrides.

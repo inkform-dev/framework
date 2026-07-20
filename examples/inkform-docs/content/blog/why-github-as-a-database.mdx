@@ -1,0 +1,50 @@
+---
+title: Why GitHub Is the Right Database for Docs, Blogs, and Changelogs
+date: 2026-06-02
+author: The Inkform Team
+tags: [architecture, opinion]
+status: published
+description: A CMS that owns your database is a CMS that owns your migration path. Git-as-database inverts that — here's why we committed to it.
+---
+
+Most content platforms store your writing in their own database and serve it
+through their own API. That's a reasonable default right up until you want
+to leave — at which point "export my content" becomes a support ticket, a
+half-working JSON dump, or a feature that quietly never shipped.
+
+## The inversion
+
+This framework (and the hosted platform built on top of it) inverts that
+default: every changelog entry, blog post, and documentation page is an MDX
+file with frontmatter, committed to a Git repository **you** control. The
+platform's editor — when you use it — is a UI that commits to that repo on
+your behalf. It never becomes the source of truth; your repository always is.
+
+## Why this actually matters, concretely
+
+- **Portability is structural, not promised.** You don't need a "data
+  export" feature, because there was never an export step to begin with —
+  the content already lives in a format (MDX + a JSON nav config) that
+  renders anywhere Next.js runs.
+- **AI tooling already understands your content.** Claude Code, Cursor, and
+  every other AI coding assistant already reliably read and write Git repos.
+  A blog that's just MDX in a repo is something an AI agent can retrieve,
+  summarize, or even help you write — without a bespoke API integration.
+- **Version history is a first-class feature you get for free.** `git log`
+  on a changelog entry's file *is* its edit history. No separate audit-log
+  table to build.
+- **The framework and the platform can genuinely share a format.** Because
+  neither one owns a proprietary database schema, both can read and write
+  the exact same files — which is the whole reason
+  [Framework vs. Platform](/framework-vs-platform) isn't really a fork at
+  all.
+
+## The honest trade-off
+
+Git is asynchronous. Real-time collaborative editing (the Google-Docs-style,
+multiple-cursors-at-once kind) is a genuinely harder problem on top of a
+Git-backed store than on top of a live database — we don't pretend
+otherwise. What you get in exchange is a content layer with no platform risk:
+the worst case if this project disappeared tomorrow is that you keep exactly
+what you already have, in a format every static site generator on earth
+already knows how to render.

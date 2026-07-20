@@ -1,0 +1,64 @@
+---
+title: Comments, Reactions & Subscribe Forms
+description: Configurable-endpoint components for reader interaction — bring your own backend.
+---
+
+# Comments, Reactions & Subscribe Forms
+
+The framework ships three client components for reader interaction on blog
+posts (or any content) — `<Comments>`, `<Reactions>`, and `<SubscribeForm>`.
+None of them assume a backend: framework mode has no database of its own, so
+each one POSTs to an endpoint **you** provide. This is the honest boundary
+between framework mode and platform mode — the hosted platform provides a
+fully-managed backend for all three; the framework gives you the UI and the
+contract, and you wire up the rest.
+
+## Reactions
+
+```tsx
+import { Reactions } from '@inkform/framework/reactions';
+
+<Reactions slug="my-first-post" apiBaseUrl="https://api.example.com" />
+```
+
+Expects a `GET`/`POST` endpoint at `{apiBaseUrl}/api/reactions` (or pass
+`endpoint` directly to point anywhere) returning
+`{ data: { love, like, total } }` for a given `?slug=`. Pass `user` to gate
+reacting behind your own reader auth — `null` renders it read-only.
+
+## Comments
+
+```tsx
+import { Comments } from '@inkform/framework/comments';
+
+<Comments slug="my-first-post" apiBaseUrl="https://api.example.com" />
+```
+
+Expects an endpoint at `{apiBaseUrl}/api/comments` returning
+`{ data: CommentNode[] }`, where `CommentNode` is
+`{ id, body, authorName, createdAt, replies }` — replies nest recursively, so
+threaded comments render out of the box once your backend returns nested
+data. Same `user`/`signInLabel` gating pattern as `<Reactions>`.
+
+## Subscribe form
+
+```tsx
+import { SubscribeForm } from '@inkform/framework/subscribe-form';
+
+<SubscribeForm projectId="my-project" apiBaseUrl="https://api.example.com" />
+```
+
+Posts `{ projectId, email, source }` to
+`{apiBaseUrl}/api/newsletter/subscribe`, expecting `{ error? }` back. Bring
+any newsletter provider — Resend, ConvertKit, Buttondown, or your own
+double-opt-in flow. `source` defaults to `'site'`, useful for tracking which
+page drove a given signup if you render the form in multiple places.
+
+## The common pattern
+
+All three follow the same shape: a `slug`/`projectId` identifying what's
+being interacted with, an `endpoint` (or `apiBaseUrl` shorthand) telling the
+component where to POST/GET, and an optional `user` for gating writes behind
+reader auth. None of them render anything platform-specific — they're plain
+client components you can style with your theme's own tokens and drop
+anywhere in MDX or a page template.

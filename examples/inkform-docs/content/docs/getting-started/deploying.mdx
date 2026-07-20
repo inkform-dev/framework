@@ -1,0 +1,48 @@
+---
+title: Deploying
+description: Own your deployment. Vercel is the primary target; any Next.js host works.
+---
+
+# Deploying
+
+It's a normal Next.js app. Ship it wherever you already ship Next.js.
+
+## Vercel (primary target)
+
+1. Push the project to a GitHub repository.
+2. In the Vercel dashboard, click **Add New → Project** and import the repo.
+3. **Framework preset**: Next.js.
+4. **Root directory**: set to the path of this folder if it's part of a
+   larger monorepo, or leave blank if deploying the directory itself.
+5. Add the environment variable `NEXT_PUBLIC_SITE_URL` (your production URL,
+   e.g. `https://docs.example.com`).
+6. Click **Deploy**.
+
+For a custom domain, go to **Settings → Domains** in your Vercel project and
+add it. Vercel handles SSL automatically.
+
+## AWS Amplify
+
+1. Connect the repo in the Amplify console.
+2. Set the build settings manually if auto-detection picks the wrong preset:
+   - **Build command**: `npm ci && npm run build`
+   - **Output directory**: `.next`
+   - **Framework**: Next.js (SSR)
+3. Add the `NEXT_PUBLIC_SITE_URL` environment variable under **Environment
+   variables**.
+4. Deploy. Amplify Hosting supports Next.js SSR/ISR natively since Gen 2.
+
+## Anywhere else
+
+Any host that runs a standard Next.js production build
+(`next build && next start`, or the equivalent for your platform's adapter)
+works — a container, a VPS, or a path on a site you already run. There's
+nothing Inkform-specific about the deploy step; the framework doesn't require
+a database, a build service, or any external API to render.
+
+## Search indexing
+
+Every theme runs Pagefind as a `postbuild` step
+(`pagefind --site .next/server/app --output-path public/_pagefind`), so
+Cmd/Ctrl+K search works out of the box on the very first production build —
+no separate indexing service, no third-party search SaaS.

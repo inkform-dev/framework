@@ -1,0 +1,57 @@
+---
+title: Changelog
+description: Dated MDX entries rendered on a single, built-in /changelog page.
+---
+
+# Changelog
+
+Changelog entries live under `content/changelog/` as `.mdx` files. Every
+shipped theme renders a single `/changelog` page — dated entries, newest
+first — the moment an entry exists. Unlike blog posts, changelog entries
+don't get individual URLs; they're anchored sections on one page, which
+matches how most people actually read a changelog (scroll, not click
+through).
+
+## Frontmatter
+
+```mdx
+---
+title: v2.0 — Faster search, new API endpoints
+date: 2026-02-10
+version: "2.0"
+tags: [release]
+status: published
+---
+
+- **New:** full-text search now indexes API operations, not just guide pages.
+- **New:** a `/webhooks` endpoint for subscribing to content updates.
+- **Fixed:** the sidebar collapsed incorrectly on tablet widths.
+```
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | Yes | The entry's headline. |
+| `date` | Recommended | `YYYY-MM-DD`. Drives ordering (newest first). |
+| `version` | No | A free-form version tag, rendered as a small badge next to the date. |
+| `tags` | No | Array of strings. |
+| `status` | No | `published` (default), `scheduled` (hidden until `date` is reached), or anything else (treated as a draft — hidden). |
+
+Filename convention: prefix with the date for easy sorting on disk, e.g.
+`2026-02-10-v2-0.mdx` — the filename itself doesn't need to match the slug
+or date field exactly, but keeping them aligned makes the content directory
+easy to scan.
+
+## The built-in route
+
+Every theme ships `app/changelog/page.tsx`, calling the framework's
+`loadChangelogEntries()` directly (see
+[Reference → Framework API](/reference/framework-api)). Same nav behavior as
+blog: the "Changelog" top-nav link only appears once at least one entry
+exists, and the page itself shows a "no entries yet" state if visited
+directly with none.
+
+## Customizing further
+
+`loadChangelogEntries()` returns plain data — swap the shipped page's JSX for
+your own layout (grouped by month, a timeline view, whatever fits your
+product) without touching the loader itself.

@@ -1,0 +1,53 @@
+---
+title: CLI
+description: Full reference for @inkform/cli — every flag and example.
+---
+
+# CLI Reference
+
+`@inkform/cli` scaffolds a documentation site powered by
+`@inkform/framework` — pick a theme, get a deployable Next.js project. Like
+`npx shadcn`, but for docs.
+
+```bash
+npx @inkform/cli@latest init my-docs
+```
+
+## Flags
+
+| Option | Description |
+| --- | --- |
+| `-t, --theme <name>` | `aurora` \| `fern` \| `cedar` \| `mono` \| `base` \| `galley` |
+| `-o, --openapi <src>` | path or URL to an OpenAPI spec for the API Reference |
+| `--from <dir>` | scaffold from a local templates directory (development) |
+| `-y, --yes` | accept defaults, skip optional prompts |
+| `-h, --help` | show help |
+
+## Examples
+
+```bash
+# interactive
+npx @inkform/cli@latest init
+
+# pick everything up front
+npx @inkform/cli@latest init docs --theme mono
+
+# generate the API Reference from your spec
+npx @inkform/cli@latest init api-docs --theme fern --openapi https://example.com/openapi.json
+```
+
+## What `init` actually does
+
+1. Asks where to create your project (or takes a directory argument). If
+   that folder already exists and isn't empty, it moves the current contents
+   into `existing-contents/` and tells you — nothing is silently overwritten.
+2. Asks which theme you want (skipped if `--theme` is passed).
+3. Downloads that theme as a standalone Next.js app — from GitHub by
+   default, or a local templates directory with `--from` (used for framework
+   development, not typical end-user usage).
+4. Optionally wires up your OpenAPI spec so the API Reference tab generates
+   from it.
+5. Prints next steps and points you at the scaffolded project's own README.
+
+See [Quickstart](/getting-started/quickstart) for the walkthrough version of
+this same flow.

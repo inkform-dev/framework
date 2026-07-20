@@ -1,0 +1,51 @@
+---
+title: Getting Started
+description: Three ways to start with the Inkform framework, depending on what you already have.
+---
+
+# Getting Started
+
+There are a few different starting points depending on what you already
+have and what you're building. Pick the one that matches:
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="terminal" href="/getting-started/quickstart">
+    Brand new project. Run one `npx` command, pick a theme, and you have a
+    running site in under five minutes.
+  </Card>
+  <Card title="Choosing a Theme" icon="palette" href="/getting-started/choosing-a-theme">
+    Not sure which of the six themes fits your project? A one-paragraph
+    identity summary of each, plus how to switch later without losing content.
+  </Card>
+  <Card title="Deploying" icon="cloud" href="/getting-started/deploying">
+    Ready to ship. Vercel is the primary target; any Next.js host works.
+  </Card>
+  <Card title="Embedding in an existing app" icon="code" href="/reference/framework-api">
+    Already have a Next.js app and want to add docs/blog/changelog to it
+    directly, rather than a separate scaffolded project? Start at the
+    Framework API reference.
+  </Card>
+</CardGroup>
+
+## The shape of a project
+
+Every scaffolded project (any theme) has the same shape:
+
+```
+my-docs/
+  app/                  # Next.js App Router routes (rendering, not content)
+  content/
+    docs/
+      docs.json          # navigation tree — the config you edit most
+      index.mdx
+      slug-history.json  # old → new slug redirects (auto-generated)
+    blog/                # optional — add .mdx files to activate /blog
+    changelog/           # optional — add .mdx files to activate /changelog
+  widgets/
+    index.ts             # custom component registry
+  app/theme.css           # design tokens — recolor without touching layout
+```
+
+You only ever edit `content/` and `widgets/` day to day. `app/` is the
+rendering engine's wiring — you touch it if you're customizing layout or
+building your own theme, not for day-to-day content work.

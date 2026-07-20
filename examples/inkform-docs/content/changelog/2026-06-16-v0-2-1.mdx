@@ -1,0 +1,18 @@
+---
+title: v0.2.1 — Contrast, mobile header, and search fixes
+date: 2026-06-16
+version: "0.2.1"
+tags: [release]
+status: published
+---
+
+- **Fixed:** a missing `body` margin/background reset showed as a white
+  border around the shell on every theme; `html` now also gets a background,
+  fixing the same issue on overscroll/rubber-band bounce.
+- **Fixed:** HTTP method pills (`GET`/`POST`/etc.) rendered as invisible
+  same-color-text-on-color — themes no longer override the shared
+  `.fw-method-*` background rule.
+- **Fixed:** secondary top-nav links (anchors, navbar links, CTA) now hide
+  below 60rem instead of overflowing the mobile header.
+- **Confirmed:** Cmd/Ctrl+K search (Pagefind) was already wired correctly —
+  no change needed there.

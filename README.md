@@ -22,8 +22,10 @@ This is a monorepo. It contains:
 | [`templates/cedar`](./templates/cedar) | warm, editorial theme |
 | [`templates/mono`](./templates/mono) | monospace / brutalist theme |
 | [`templates/base`](./templates/base) | minimal, unopinionated starter |
+| [`templates/galley`](./templates/galley) | Inkform's own design system — warm paper + ink, one editorial red accent |
 | [`examples/pokeapi-docs`](./examples/pokeapi-docs) | a full docs site for the PokéAPI |
 | [`examples/markdown-docs`](./examples/markdown-docs) | a full docs site about Markdown |
+| [`examples/inkform-docs`](./examples/inkform-docs) | the framework's own docs — dogfooded with the Galley theme |
 
 ## Why inkform-docs
 
@@ -32,7 +34,7 @@ This is a monorepo. It contains:
 - **API reference is OpenAPI-first.** Point `docs.json` at an OpenAPI spec and
   you get a searchable, paginated, "Try it"-enabled API reference automatically.
   Everything else is MDX. (This is the standard — the way Mintlify does it.)
-- **Themes you actually choose between.** Four production themes that look
+- **Themes you actually choose between.** Five production themes that look
   nothing alike, plus a minimal base — all driven by the same engine, so you can
   switch with a token file.
 - **Own your deployment.** It's a normal Next.js app. Ship it to Vercel, AWS

@@ -1,0 +1,30 @@
+---
+title: v0.3.0 — Galley theme, blog + changelog everywhere, real docs for the framework
+date: 2026-07-20
+version: "0.3.0"
+tags: [release]
+status: published
+---
+
+- **New:** the **Galley** theme — Inkform's own design system, built from
+  the `inkform-design` skill's authoritative tokens rather than an
+  approximation. This site uses it.
+- **New:** `/blog` and `/changelog` now ship wired into **every** theme
+  (Aurora, Fern, Cedar, Mono, Base, Galley) — not just the engine's own
+  `loadBlogPosts()`/`loadChangelogEntries()` primitives, real rendered
+  routes with conditional nav links that only appear once content exists.
+- **New:** the framework's own documentation — the site you're reading —
+  covering Getting Started, per-content-type guides, the full Framework API
+  reference, the CLI reference, and a Framework vs. Platform comparison.
+- **Fixed:** every template and example's `package.json` pinned
+  `@inkform/framework@^0.2.0`, a version range that was never actually
+  published (only `0.3.0` exists on the registry) — every fresh `npm install`
+  failed with `ETARGET`. All pins now correctly track `^0.3.0`.
+- **Fixed:** a stale static `"Blog"` navbarLink placeholder in every theme's
+  `docs.json`, left over from before `/blog` was a real route, would have
+  duplicated the new conditional Blog nav link once content existed. Removed
+  in favor of the dynamic, content-aware link.
+- **Fixed:** `examples/pokeapi-docs` and `examples/markdown-docs` had drifted
+  from two rounds of template fixes (contrast, mobile responsiveness, method
+  badges, Newsreader heading font) applied to the shared `templates/*` only —
+  backported, preserving each example's own brand colors.

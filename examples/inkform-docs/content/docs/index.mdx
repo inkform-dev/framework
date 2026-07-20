@@ -1,0 +1,77 @@
+---
+title: Introduction
+description: Inkform is an open-source Next.js + MDX framework for docs, blogs, and changelogs — write Markdown, commit it, and ship a fast, searchable, themeable site.
+---
+
+# Introduction
+
+**`@inkform/framework`** is an open-source Next.js + MDX rendering engine for
+three content types every technical product needs — **documentation**,
+**blogs**, and **changelogs** — from one engine, one file format, and one
+`docs.json` navigation config. Write MDX in your own Git repository, commit
+it, and the framework renders a fast, statically-generated, fully searchable
+site. No CMS, no database, no build service to depend on — your repository
+*is* the source of truth.
+
+<Frame caption="Your docs, your repo, your deploy.">
+  ![Hero](/hero.svg)
+</Frame>
+
+## What you get
+
+<CardGroup cols={2}>
+  <Card title="Docs" icon="book-open" href="/guides/docs">
+    Navigation-tree config (`docs.json`), nested groups, OpenAPI-backed API
+    reference, versioning, and Cmd/Ctrl+K search — all from a folder of MDX.
+  </Card>
+  <Card title="Blog" icon="pencil" href="/guides/blog">
+    Posts with frontmatter, optional series grouping, and built-in `/blog` +
+    `/blog/[slug]` routes that render the moment you add a file.
+  </Card>
+  <Card title="Changelog" icon="map" href="/guides/changelog">
+    Dated MDX entries with an optional version tag, rendered on a single
+    `/changelog` page — no per-entry routing to wire up.
+  </Card>
+  <Card title="Widgets" icon="blocks" href="/guides/widgets">
+    Drop a React component in `/widgets`, register it, and use it as a JSX
+    tag directly inside any MDX file.
+  </Card>
+</CardGroup>
+
+## What's supported today
+
+The framework targets **Next.js** specifically — it's a Next.js App Router
+rendering engine, not a multi-meta-framework abstraction. If your stack is
+Next.js, the framework drops in as a normal dependency; if it isn't, the
+[CLI](/reference/cli) still gets you a complete, standalone Next.js project
+you can deploy anywhere Next.js runs (Vercel, AWS Amplify, a container, or
+under a path on a site you already run).
+
+Six themes ship today, all driven by the same engine and a single
+`theme.css` token file — switch between them without touching layout code:
+
+<CardGroup cols={2}>
+  <Card title="Aurora" icon="palette">Classic dark docs, Nextra-inspired.</Card>
+  <Card title="Fern" icon="palette">Clean and friendly, emerald green.</Card>
+  <Card title="Cedar" icon="palette">Warm and editorial, burnt orange.</Card>
+  <Card title="Mono" icon="palette">Monospace, brutalist, terminal.</Card>
+  <Card title="Base" icon="palette">Minimal and neutral — start simple.</Card>
+  <Card title="Galley" icon="palette">Inkform's own design system — this site.</Card>
+</CardGroup>
+
+## Framework vs. platform
+
+Everything on this site works with **zero platform dependency** — no
+account, no billing, no Inkform-the-company involvement at all. There's also
+a **hosted platform** (Inkform) that adds an AI-native editor, GitHub-App
+auto-drafting, managed newsletters, and a dashboard on top of the exact same
+file format this framework reads. Both modes read and write the same MDX —
+neither is a subset of the other. See
+[Framework vs. Platform](/framework-vs-platform) for the full comparison, or
+jump straight to [the platform's own docs](https://docs.inkform.dev) if
+that's what you're looking for.
+
+<Note>
+  New here? Start with the [Getting Started](/getting-started) guide — you'll
+  have a site running locally in under five minutes.
+</Note>

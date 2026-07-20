@@ -1,0 +1,62 @@
+---
+title: Choosing a Theme
+description: One paragraph per theme, and how to switch later without losing content.
+---
+
+# Choosing a Theme
+
+All six themes are built on the same engine and read the same
+`content/docs.json` + MDX files — switching later means changing a directory,
+not rewriting content. Pick whichever identity fits today.
+
+<CardGroup cols={2}>
+  <Card title="Aurora" icon="palette">
+    Classic dark docs, Nextra-inspired. Cool blue accent, sharp contrast. The
+    default pick if you want something that reads as "developer docs" at a
+    glance.
+  </Card>
+  <Card title="Fern" icon="palette">
+    Clean and friendly, emerald green. Softer than Aurora, still clearly
+    technical — a good fit for developer-tool docs that want to feel
+    approachable rather than terminal-coded.
+  </Card>
+  <Card title="Cedar" icon="palette">
+    Warm and editorial, burnt orange, a genuine serif/sans type pairing.
+    Reads less like a SaaS dashboard and more like a considered publication.
+  </Card>
+  <Card title="Mono" icon="palette">
+    Monospace everywhere, brutalist, sharp corners, zero radius. The
+    strongest identity of the six — commit to it fully or pick something
+    else; it doesn't do "a little bit terminal."
+  </Card>
+  <Card title="Base" icon="palette">
+    Minimal, neutral, no web fonts — pure system stack. The right choice when
+    you want the content to be the only thing anyone notices.
+  </Card>
+  <Card title="Galley" icon="palette">
+    Inkform's own design system (this site). Warm paper + ink, one editorial
+    "Proof" red accent, Newsreader serif for prose beside JetBrains Mono for
+    anything Git touches. Pick this if you want Inkform's own visual identity
+    specifically, not just "an editorial theme."
+  </Card>
+</CardGroup>
+
+## Switching themes later
+
+Content lives in `content/` and `widgets/`, completely independent of which
+theme renders it. To switch:
+
+1. Scaffold a new project with the theme you want:
+   `npx @inkform/cli@latest init my-docs-v2 --theme <new-theme>`.
+2. Copy your existing `content/` and `widgets/` directories over the new
+   project's own (back up the new project's demo content first, or just
+   delete it — you're replacing it).
+3. Reconcile any theme-specific `docs.json` fields you'd customized (`cta`,
+   `anchors`, `navbarLinks` are all theme-agnostic and copy over cleanly;
+   `colors.primary` is currently decorative metadata only, not consumed by
+   any theme yet).
+4. `npm install && npm run dev` in the new project, confirm everything
+   renders, then swap it in for the old one.
+
+There's no lock-in and no migration script needed — the navigation config and
+MDX format are identical across every theme.

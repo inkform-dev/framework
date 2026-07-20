@@ -1,0 +1,56 @@
+{
+  "name": "Inkform Framework",
+  "version": "1.0",
+  "logo": "/logo.svg",
+  "favicon": "/favicon.svg",
+  "colors": { "primary": "#c24e3d" },
+  "navbarLinks": [
+    { "name": "GitHub", "href": "https://github.com/inkform-dev/framework" }
+  ],
+  "anchors": [
+    { "name": "Platform docs", "href": "https://docs.inkform.dev", "icon": "book" }
+  ],
+  "cta": { "label": "Try the platform", "href": "https://inkform.dev" },
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        { "title": "Introduction", "slug": "", "file": "index.mdx", "icon": "book-open" },
+        {
+          "title": "Getting Started",
+          "slug": "getting-started",
+          "file": "getting-started/index.mdx",
+          "icon": "rocket",
+          "children": [
+            { "title": "Quickstart", "slug": "getting-started/quickstart", "file": "getting-started/quickstart.mdx", "icon": "terminal" },
+            { "title": "Choosing a Theme", "slug": "getting-started/choosing-a-theme", "file": "getting-started/choosing-a-theme.mdx", "icon": "palette" },
+            { "title": "Deploying", "slug": "getting-started/deploying", "file": "getting-started/deploying.mdx", "icon": "cloud" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        { "title": "Docs", "slug": "guides/docs", "file": "guides/docs.mdx", "icon": "book-open" },
+        { "title": "Blog", "slug": "guides/blog", "file": "guides/blog.mdx", "icon": "pencil" },
+        { "title": "Changelog", "slug": "guides/changelog", "file": "guides/changelog.mdx", "icon": "map" },
+        { "title": "Widgets", "slug": "guides/widgets", "file": "guides/widgets.mdx", "icon": "blocks" },
+        { "title": "Comments, Reactions & Subscribe Forms", "slug": "guides/interactive", "file": "guides/interactive.mdx", "icon": "heart" }
+      ]
+    },
+    {
+      "group": "Reference",
+      "pages": [
+        { "title": "CLI", "slug": "reference/cli", "file": "reference/cli.mdx", "icon": "terminal" },
+        { "title": "Framework API", "slug": "reference/framework-api", "file": "reference/framework-api.mdx", "icon": "code" }
+      ]
+    },
+    {
+      "group": "Learn More",
+      "pages": [
+        { "title": "Framework vs. Platform", "slug": "framework-vs-platform", "file": "framework-vs-platform.mdx", "icon": "settings" }
+      ]
+    }
+  ]
+}

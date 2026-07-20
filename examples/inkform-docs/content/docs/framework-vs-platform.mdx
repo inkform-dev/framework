@@ -1,0 +1,70 @@
+---
+title: Framework vs. Platform
+description: Same files, two editing surfaces. The framework is fully usable standalone; the platform adds AI, a hosted editor, and managed services.
+---
+
+# Framework vs. Platform
+
+Inkform ships in two modes that read and write the **same files** — neither
+is a stripped-down version of the other.
+
+## The unified model
+
+A user editing a blog post in the hosted platform's web editor and a user
+editing the same file in VS Code are doing the same thing: manipulating MDX
+in a Git repository. Changes from either path show up in the other through
+Git's normal sync. There is no separate "framework format" and "platform
+format" — `docs.json`, `series.json`, and the MDX files themselves are
+identical either way.
+
+## What the framework gives you (this site)
+
+- The full rendering engine — docs, blog, changelog, from one MDX-based
+  format.
+- Six themes, all switchable without rewriting content.
+- Search, an OpenAPI-backed API reference, slug-history redirects,
+  interactive components with a bring-your-own-backend contract.
+- **Zero platform dependency.** No account, no billing, nothing running on
+  Inkform's servers. Deploy anywhere Next.js runs.
+- MIT-licensed, forever free.
+
+## What the platform adds
+
+- **A hosted, AI-native block editor** — no terminal, no local Git required.
+  Drag-and-drop media, widget previews, a slash-command menu.
+- **GitHub-App auto-drafting** — on every PR merge, a webhook opens a draft
+  changelog entry pre-filled from the PR's metadata.
+- **A fully-managed newsletter pipeline** — subscriber management, sending,
+  delivery analytics, all wired to Resend under the hood. Framework mode's
+  `<SubscribeForm>` only gives you the UI contract; the platform gives you
+  the whole backend.
+- **A dashboard** — workspace/project model, analytics, GitHub App
+  installation, all without touching a terminal.
+- **AI content assistance** (drafting, tone matching, SEO generation) —
+  entirely optional, and entirely absent from the framework by design; the
+  framework must work fully without AI, so users who want to write everything
+  themselves face no degraded experience.
+
+## Adopting an existing framework site into the platform
+
+If you've built a site with this framework — following the
+[Quickstart](/getting-started/quickstart) — and later want the hosted
+editor, GitHub-App drafting, or managed newsletters on top of it, the
+platform can detect and adopt your existing repository directly: it
+recognizes the `content/` + `docs.json` structure this framework already
+uses and starts editing those same files. There's no export/import step and
+no re-platforming — see
+[the platform's own docs](https://docs.inkform.dev/getting-started/adopting-an-existing-framework-site)
+for the exact walkthrough.
+
+## Which one should you use?
+
+| If you want... | Use |
+| --- | --- |
+| Full ownership, zero recurring cost, your own deploy pipeline | The framework, standalone |
+| An AI-native editor and managed newsletter without giving up MDX-in-Git | The platform |
+| Both — start free with the framework, add the platform later with zero migration | Either, in either order — they're the same file format |
+
+Neither path locks you in. The framework has no platform coupling to remove
+later, and the platform never becomes the only place your content lives —
+it's committed to your own repository the whole time.

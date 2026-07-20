@@ -1,0 +1,68 @@
+---
+title: Widgets
+description: Custom React components, registered once, usable as a JSX tag in any MDX file.
+---
+
+# Widgets
+
+Widgets are custom React components you write yourself and use directly
+inside MDX — docs, blog posts, or changelog entries. There's no marketplace
+or AI-generation step here; this is the manual, code-first path.
+
+## 1. Write the component
+
+```tsx
+// widgets/PricingCalculator.tsx
+'use client';
+import { useState } from 'react';
+
+export function PricingCalculator({ basePrice = 12 }: { basePrice?: number }) {
+  const [seats, setSeats] = useState(1);
+  return (
+    <div className="fw-card" style={{ padding: '1rem' }}>
+      <input
+        type="number"
+        min={1}
+        value={seats}
+        onChange={(e) => setSeats(Number(e.target.value))}
+      />
+      <p>Total: ${basePrice * seats}/month</p>
+    </div>
+  );
+}
+```
+
+## 2. Register it
+
+```ts
+// widgets/index.ts
+import type { ComponentType } from 'react';
+import { PricingCalculator } from './PricingCalculator';
+
+const widgets: Record<string, ComponentType<any>> = {
+  PricingCalculator,
+};
+
+export default widgets;
+```
+
+The registry key becomes the JSX tag name your content uses.
+
+## 3. Use it in MDX
+
+```mdx
+Here's what a Team plan costs for your headcount:
+
+<PricingCalculator basePrice={29} />
+```
+
+Widgets work identically across docs, blog, and changelog content — the same
+registry, the same `<Mdx>` renderer, everywhere.
+
+## Where this doesn't reach yet
+
+AI-assisted widget generation (describe a component in natural language,
+have it written and previewed for you) and a shared widget marketplace across
+projects are both out of scope for the open-source framework — they're
+platform-only features, deferred there specifically so the framework's
+manual, code-first path stays simple and dependency-free.

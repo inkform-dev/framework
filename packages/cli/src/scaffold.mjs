@@ -25,6 +25,7 @@ const THEMES = [
   { value: 'cedar', label: 'Cedar', hint: 'warm & editorial, burnt orange' },
   { value: 'mono', label: 'Mono', hint: 'monospace / brutalist / terminal' },
   { value: 'base', label: 'Base', hint: 'minimal & neutral (start simple)' },
+  { value: 'galley', label: 'Galley', hint: 'warm paper & ink, one editorial red accent' },
 ];
 const THEME_VALUES = new Set(THEMES.map((t) => t.value));
 

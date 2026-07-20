@@ -13,8 +13,8 @@ npx @inkform/cli@latest init my-docs
 1. Asks where to create your project (or takes a directory argument). If that
    folder already exists and isn't empty, it moves the current contents into
    `existing-contents/` (and tells you), so nothing is overwritten.
-2. Asks which theme you want — **Aurora**, **Fern**, **Cedar**, **Mono**, or
-   **Base**.
+2. Asks which theme you want — **Aurora**, **Fern**, **Cedar**, **Mono**,
+   **Base**, or **Galley**.
 3. Downloads that theme as a standalone Next.js app.
 4. Optionally wires up your **OpenAPI spec** (path or URL) so the API Reference
    is generated from it. API docs are OpenAPI-first; everything else is MDX.
@@ -28,7 +28,7 @@ npx @inkform/cli@latest init [directory] [options]
 
 | Option | Description |
 | --- | --- |
-| `-t, --theme <name>` | `aurora` \| `fern` \| `cedar` \| `mono` \| `base` |
+| `-t, --theme <name>` | `aurora` \| `fern` \| `cedar` \| `mono` \| `base` \| `galley` |
 | `-o, --openapi <src>` | path or URL to an OpenAPI spec for the API Reference |
 | `--from <dir>` | scaffold from a local templates directory (development) |
 | `-y, --yes` | accept defaults, skip optional prompts |

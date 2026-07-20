@@ -1,0 +1,89 @@
+---
+title: Quickstart
+description: Scaffold a new site with the CLI, run it locally, and add your first page.
+---
+
+# Quickstart
+
+## 1. Scaffold a project
+
+```bash
+npx @inkform/cli@latest init my-docs
+```
+
+The CLI:
+
+1. Asks where to create your project (or takes a directory argument). If
+   that folder already exists and isn't empty, it moves the current contents
+   into `existing-contents/` — nothing gets overwritten.
+2. Asks which theme you want — Aurora, Fern, Cedar, Mono, Base, or Galley
+   (see [Choosing a Theme](/getting-started/choosing-a-theme)).
+3. Downloads that theme as a standalone Next.js app.
+4. Optionally wires up your OpenAPI spec (path or URL) so the API Reference
+   tab is generated from it. API docs are OpenAPI-first; everything else is
+   MDX.
+5. Prints next steps and points you at the project's own README.
+
+You can also pick everything up front, non-interactively:
+
+```bash
+npx @inkform/cli@latest init my-docs --theme galley
+npx @inkform/cli@latest init api-docs --theme fern --openapi https://example.com/openapi.json
+```
+
+## 2. Run it
+
+```bash
+cd my-docs
+npm install
+npm run dev
+```
+
+Open <http://localhost:3000>.
+
+<Warning>
+  Pin `@inkform/framework` to `^0.3.0` or later in the scaffolded
+  `package.json` — earlier `^0.2.x` ranges were never actually published and
+  will fail `npm install` with `ETARGET`. The CLI ships the correct pin as of
+  this version; if you're working from an older clone, bump it manually.
+</Warning>
+
+## 3. Add your first page
+
+Every page is an `.mdx` file registered in `content/docs/docs.json`:
+
+```jsonc
+{
+  "name": "My Docs",
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        { "title": "Introduction", "slug": "", "file": "index.mdx" },
+        { "title": "My First Page", "slug": "my-first-page", "file": "my-first-page.mdx" }
+      ]
+    }
+  ]
+}
+```
+
+Create `content/docs/my-first-page.mdx`:
+
+```mdx
+---
+title: My First Page
+---
+
+# My First Page
+
+Hello, world.
+```
+
+Save, and the dev server picks it up immediately. See
+[Docs](/guides/docs) for the full navigation-config reference, or
+[Blog](/guides/blog) and [Changelog](/guides/changelog) if that's what
+you're adding instead.
+
+## 4. Full CLI reference
+
+See [Reference → CLI](/reference/cli) for every flag.

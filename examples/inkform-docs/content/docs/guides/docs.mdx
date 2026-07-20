@@ -1,0 +1,100 @@
+---
+title: Docs
+description: Navigation config, tabs, OpenAPI reference, versioning, search, and slug-history redirects.
+---
+
+# Docs
+
+Documentation pages live under `content/docs/` as `.mdx` files, with the
+navigation tree declared explicitly in `content/docs/docs.json` — this exact
+site is the worked example; its own `docs.json` is a real reference to read
+alongside this page.
+
+## Navigation config
+
+```jsonc
+{
+  "name": "My Docs",
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        { "title": "Introduction", "slug": "", "file": "index.mdx", "icon": "book-open" },
+        {
+          "title": "Advanced",
+          "slug": "advanced",
+          "file": "advanced.mdx",
+          "children": [
+            { "title": "Deep Dive", "slug": "advanced/deep-dive", "file": "advanced/deep-dive.mdx" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+A folder hierarchy on disk doesn't have to match the navigation hierarchy —
+`file` is a path relative to `content/docs/`, `slug` is the URL, and they're
+independent. Move a page to a different group in the sidebar without moving
+its file and without breaking inbound links. Pages can nest arbitrarily deep
+via `children`.
+
+## Tabs
+
+A config with only `navigation` (no `tabs`) is a single implicit tab. Add
+multiple tabs — most commonly "Guides" alongside an OpenAPI-backed "API
+Reference" — with the `tabs` array instead:
+
+```jsonc
+{
+  "name": "My Docs",
+  "tabs": [
+    { "tab": "Guides", "navigation": [ /* ...groups... */ ] },
+    { "tab": "API Reference", "openapi": "openapi.json" }
+  ]
+}
+```
+
+## OpenAPI-backed API reference
+
+Point a tab's `openapi` field at a spec file (JSON or YAML, relative to
+`content/docs/`) or a URL, and the framework generates a searchable, paginated,
+"Try it"-enabled API reference automatically — rendered by
+[Scalar](https://github.com/scalar/scalar) at its own route
+(`app/api-reference/route.ts`), themed to match the rest of the site via
+`lib/scalar-theme-palette.ts`. Everything else on the site is MDX; API
+reference is the one part that's OpenAPI-first rather than hand-written.
+
+## Versioning
+
+`docs.json` supports a `versioning` block for projects with multiple doc
+versions tied to Git branches or tags — check a specific theme's `docs.json`
+for the exact shape if your project needs this; not every starter enables it
+by default.
+
+## Search
+
+Cmd/Ctrl+K search works out of the box via
+[Pagefind](https://pagefind.app/), indexed at build time
+(`postbuild: pagefind --site .next/server/app --output-path public/_pagefind`).
+No third-party search service, no API keys, no separate indexing step to
+remember.
+
+## Slug-history redirects
+
+When a page's slug changes, record the mapping in
+`content/docs/slug-history.json` so old links still resolve instead of
+404ing:
+
+```json
+{
+  "old-page-slug": "new-page-slug",
+  "guides/old-name": "guides/new-name"
+}
+```
+
+This is read by `proxy.ts` via `resolveSlugRedirect()` (exported from
+`@inkform/framework`) and issues a real 301 redirect — see
+[Reference → Framework API](/reference/framework-api) for the exact
+signature.
