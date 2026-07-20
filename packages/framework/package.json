@@ -41,6 +41,7 @@
     "./openapi-render": "./src/openapi-render/index.ts",
     "./mcp": "./src/mcp/index.ts",
     "./ai": "./src/ai/index.ts",
+    "./llms-txt": "./src/llms-txt.ts",
     "./mdx": "./src/mdx.tsx",
     "./components": "./src/components.tsx",
     "./docs-shell": "./src/docs-shell.tsx",
