@@ -8,8 +8,8 @@ documentation framework.
 ```
 packages/framework   @inkform/framework — the MDX + OpenAPI engine
 packages/cli         @inkform/cli — the `npx` scaffolder
-templates/*          the themes (aurora, fern, cedar, mono, base)
-examples/*           full demo sites (pokeapi-docs, markdown-docs)
+templates/*          the themes (aurora, fern, cedar, mono, base, galley)
+examples/*           full demo sites (pokeapi-docs, markdown-docs, inkform-docs)
 ```
 
 ## Develop
