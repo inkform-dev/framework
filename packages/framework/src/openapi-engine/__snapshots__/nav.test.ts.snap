@@ -1,0 +1,139 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`buildNavTree > matches a snapshot for the real pokeapi-docs spec 1`] = `
+{
+  "models": [
+    {
+      "description": "A reference to another API resource by name and URL.",
+      "kind": "model",
+      "name": "NamedAPIResource",
+    },
+    {
+      "description": "A paginated list of resource name/URL stubs.",
+      "kind": "model",
+      "name": "NamedAPIResourceList",
+    },
+    {
+      "kind": "model",
+      "name": "PokemonType",
+    },
+    {
+      "kind": "model",
+      "name": "PokemonStat",
+    },
+    {
+      "kind": "model",
+      "name": "PokemonAbility",
+    },
+    {
+      "kind": "model",
+      "name": "PokemonSprites",
+    },
+    {
+      "description": "A Pokémon with its base stats, types, moves, abilities, and sprites.",
+      "kind": "model",
+      "name": "Pokemon",
+    },
+    {
+      "description": "Damage multiplier relations for a type.",
+      "kind": "model",
+      "name": "TypeRelations",
+    },
+    {
+      "description": "A Pokémon type with its full damage relation table.",
+      "kind": "model",
+      "name": "Type",
+    },
+    {
+      "kind": "model",
+      "name": "VerboseEffect",
+    },
+    {
+      "description": "A passive Pokémon ability.",
+      "kind": "model",
+      "name": "Ability",
+    },
+    {
+      "description": "A Pokémon move with type, damage class, power, accuracy, and effects.",
+      "kind": "model",
+      "name": "Move",
+    },
+    {
+      "description": "PokéAPI returns a plain text 'Not Found' string for 404 responses.",
+      "kind": "model",
+      "name": "NotFound",
+    },
+  ],
+  "tagGroups": [
+    {
+      "description": "Core Pokémon data — stats, moves, sprites, abilities, and types.",
+      "kind": "tag-group",
+      "operations": [
+        {
+          "deprecated": false,
+          "kind": "operation",
+          "method": "get",
+          "operationId": "list-pokemon",
+          "path": "/pokemon",
+          "summary": "List Pokémon",
+        },
+        {
+          "deprecated": false,
+          "kind": "operation",
+          "method": "get",
+          "operationId": "get-pokemon",
+          "path": "/pokemon/{name}",
+          "summary": "Get a Pokémon",
+        },
+      ],
+      "tag": "Pokémon",
+    },
+    {
+      "description": "Type damage relations — super effective, resistances, and immunities.",
+      "kind": "tag-group",
+      "operations": [
+        {
+          "deprecated": false,
+          "kind": "operation",
+          "method": "get",
+          "operationId": "get-type",
+          "path": "/type/{name}",
+          "summary": "Get a type",
+        },
+      ],
+      "tag": "Types",
+    },
+    {
+      "description": "Battle moves — power, accuracy, PP, and effects.",
+      "kind": "tag-group",
+      "operations": [
+        {
+          "deprecated": false,
+          "kind": "operation",
+          "method": "get",
+          "operationId": "get-move",
+          "path": "/move/{name}",
+          "summary": "Get a move",
+        },
+      ],
+      "tag": "Moves",
+    },
+    {
+      "description": "Passive abilities Pokémon carry into battle.",
+      "kind": "tag-group",
+      "operations": [
+        {
+          "deprecated": false,
+          "kind": "operation",
+          "method": "get",
+          "operationId": "get-ability",
+          "path": "/ability/{name}",
+          "summary": "Get an ability",
+        },
+      ],
+      "tag": "Abilities",
+    },
+  ],
+  "webhooks": [],
+}
+`;

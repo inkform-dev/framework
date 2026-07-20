@@ -15,10 +15,11 @@
   "scripts": {
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "build:examples": "npm run build --workspace=@inkform/example-pokeapi --workspace=@inkform/example-markdown"
+    "test": "npm run test --workspace=@inkform/framework",
+    "build:examples": "npm run build --workspace=@inkform/example-pokeapi --workspace=@inkform/example-markdown --workspace=@inkform/example-inkform-docs"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "devDependencies": {
     "prettier": "^3.5.1"

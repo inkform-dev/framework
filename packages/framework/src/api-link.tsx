@@ -57,7 +57,7 @@ export async function ApiLink({
     throw new Error(`<ApiLink operationId="${operationId}">: could not load the OpenAPI spec at "${tab.openapi}".`);
   }
 
-  const model = parseOpenApi(spec.raw, spec.format);
+  const model = await parseOpenApi(spec.raw, spec.format);
   const op = findOperation(model, operationId);
   if (!op) {
     throw new Error(

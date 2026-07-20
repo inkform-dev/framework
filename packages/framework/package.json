@@ -53,7 +53,11 @@
     "src"
   ],
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "peerDependencies": {
     "next": ">=16",
@@ -61,6 +65,9 @@
     "react-dom": ">=19"
   },
   "dependencies": {
+    "@scalar/json-magic": "^0.12.19",
+    "@scalar/openapi-parser": "^0.28.10",
+    "@scalar/openapi-types": "^0.9.3",
     "gray-matter": "^4.0.3",
     "next-mdx-remote": "^6.0.0",
     "rehype-pretty-code": "^0.14.1",
@@ -73,6 +80,7 @@
   },
   "devDependencies": {
     "@types/react": "^19",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }

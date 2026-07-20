@@ -1,0 +1,11 @@
+Widget:
+  type: object
+  properties:
+    id:
+      type: string
+      description: Widget identifier, defined in an external file.
+    name:
+      type: string
+  required:
+    - id
+    - name

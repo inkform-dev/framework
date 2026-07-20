@@ -1,0 +1,43 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Edge Case API", "version": "1.0.0" },
+  "tags": [
+    { "name": "widgets", "description": "Widget operations." },
+    { "name": "empty-tag", "description": "Declared in spec.tags, but no operation uses it." }
+  ],
+  "paths": {
+    "/widgets": {
+      "get": {
+        "operationId": "listWidgets",
+        "tags": ["widgets"],
+        "summary": "List widgets",
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/status": {
+      "get": {
+        "summary": "Health check (no operationId, no tags — orphan)",
+        "responses": { "200": { "description": "OK" } }
+      }
+    }
+  },
+  "webhooks": {
+    "widgetCreated": {
+      "post": {
+        "operationId": "onWidgetCreated",
+        "summary": "Fired when a widget is created",
+        "responses": { "200": { "description": "Acknowledged" } }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Widget": {
+        "type": "object",
+        "title": "Widget",
+        "description": "A single widget.",
+        "properties": { "id": { "type": "string" } }
+      }
+    }
+  }
+}
