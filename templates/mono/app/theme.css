@@ -4,8 +4,12 @@
  * Only --fw-* tokens and small Mono-specific accents are set here.
  * The framework's structural CSS is untouched.
  *
- * Identity: monospace · brutalist · terminal. Hot red-orange accent.
- * Sharp corners (radius 0), strong 1.5px borders, hard-offset shadows.
+ * Identity: monospace · brutalist · terminal. Black and white only for brand
+ * accent + UI chrome — no hue anywhere in surfaces, buttons, links, or focus
+ * rings. HTTP method pills are the one deliberate exception: they carry real
+ * semantic meaning (safe vs. destructive at a glance), so they keep the
+ * standard functional color palette every other theme uses. Sharp corners
+ * (radius 0), strong 1.5px borders, hard-offset shadows.
  */
 
 /* ── Font variables (set by next/font in layout.tsx) ─────────────────────── */
@@ -30,10 +34,10 @@
   --fw-code-bg: #f0f0f0;
   --fw-kbd-bg: #e8e8e8;
 
-  /* Brand — hot red-orange */
-  --fw-primary: #f04e23;
+  /* Brand — black. No color, anywhere. */
+  --fw-primary: #0a0a0a;
   --fw-primary-fg: #ffffff;
-  --fw-primary-subtle: rgba(240, 78, 35, 0.08);
+  --fw-primary-subtle: rgba(10, 10, 10, 0.06);
 
   /* Shape — zero radius, brutalist */
   --fw-radius: 0px;
@@ -42,11 +46,13 @@
   /* Shadows — hard offset, zero blur */
   --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.18);
   --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.22);
-  --fw-ring: 0 0 0 2px #f04e23;
+  --fw-ring: 0 0 0 2px #0a0a0a;
 
-  /* HTTP method pills — keep legible on white bg */
+  /* HTTP method pills — the one deliberate exception to "no color": these
+     carry real semantic meaning (safe vs. destructive at a glance), so they
+     keep the standard functional palette. Brand/UI chrome stays monochrome. */
   --fw-method-get: #16a34a;
-  --fw-method-post: #f04e23;
+  --fw-method-post: #2563eb;
   --fw-method-put: #b45309;
   --fw-method-patch: #7c3aed;
   --fw-method-delete: #dc2626;
@@ -68,24 +74,24 @@ html.dark {
   --fw-code-bg: #111111;
   --fw-kbd-bg: #1a1a1a;
 
-  /* Brand — slightly brighter orange-red for dark terminals */
-  --fw-primary: #ff5a36;
+  /* Brand — white, for the same reason: no color, anywhere. */
+  --fw-primary: #f5f5f5;
   --fw-primary-fg: #0a0a0a;
-  --fw-primary-subtle: rgba(255, 90, 54, 0.10);
+  --fw-primary-subtle: rgba(245, 245, 245, 0.08);
 
   /* Shadows on near-black */
   --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.7);
   --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.9);
-  --fw-ring: 0 0 0 2px #ff5a36;
+  --fw-ring: 0 0 0 2px #f5f5f5;
 
-  /* HTTP method pills — brighter on dark */
+  /* HTTP method pills — brighter on dark, same functional palette as light */
   --fw-method-get: #34d399;
-  --fw-method-post: #ff5a36;
+  --fw-method-post: #60a5fa;
   --fw-method-put: #fbbf24;
   --fw-method-patch: #a78bfa;
   --fw-method-delete: #f87171;
   --fw-method-head: #22d3ee;
-  --fw-method-options: #737373;
+  --fw-method-options: #94a3b8;
 }
 
 /* ── Mono top-bar accents ────────────────────────────────────────────────────

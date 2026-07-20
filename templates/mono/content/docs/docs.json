@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "logo": "/logo.svg",
   "favicon": "/favicon.svg",
-  "colors": { "primary": "#f04e23" },
+  "colors": { "primary": "#0a0a0a" },
   "navbarLinks": [
-    { "name": "Support", "href": "mailto:support@example.com" },
-    { "name": "Blog", "href": "/blog" }
+    { "name": "Support", "href": "mailto:support@example.com" }
   ],
   "anchors": [
     { "name": "Documentation", "href": "/", "icon": "book" },

@@ -18,31 +18,31 @@
   <!-- Header label dots replaced with text — terminal style -->
   <text x="64" y="81" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="10" fill="#7a7a7a" letter-spacing="0.04em">TERMINAL</text>
   <!-- Red-orange accent top-left corner bar -->
-  <rect x="48" y="60" width="3" height="32" fill="#f04e23"/>
+  <rect x="48" y="60" width="3" height="32" fill="#0a0a0a"/>
 
   <!-- Terminal lines — prompt + commands -->
   <!-- Line 1: prompt -->
-  <text x="64" y="115" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="11" fill="#f04e23" letter-spacing="0.02em">$</text>
+  <text x="64" y="115" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="11" fill="#0a0a0a" letter-spacing="0.02em">$</text>
   <rect x="76" y="106" width="180" height="8" fill="#2a2a2a"/>
   <!-- Line 2 -->
   <rect x="64" y="124" width="240" height="7" fill="#1e1e1e"/>
   <!-- Line 3: accent -->
-  <rect x="64" y="140" width="140" height="7" fill="#f04e23" opacity="0.35"/>
+  <rect x="64" y="140" width="140" height="7" fill="#0a0a0a" opacity="0.35"/>
   <!-- Line 4 -->
   <rect x="64" y="157" width="200" height="7" fill="#1e1e1e"/>
   <!-- Line 5 -->
   <rect x="64" y="173" width="160" height="7" fill="#1e1e1e"/>
   <!-- Line 6: prompt -->
-  <text x="64" y="197" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="11" fill="#f04e23" letter-spacing="0.02em">$</text>
+  <text x="64" y="197" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="11" fill="#0a0a0a" letter-spacing="0.02em">$</text>
   <rect x="76" y="188" width="120" height="8" fill="#2a2a2a"/>
   <!-- Line 7 -->
   <rect x="64" y="207" width="200" height="7" fill="#1e1e1e"/>
   <!-- Line 8: accent -->
-  <rect x="64" y="223" width="100" height="7" fill="#ff5a36" opacity="0.25"/>
+  <rect x="64" y="223" width="100" height="7" fill="#f5f5f5" opacity="0.25"/>
   <!-- Line 9 -->
   <rect x="64" y="240" width="180" height="7" fill="#1e1e1e"/>
   <!-- Blinking cursor block -->
-  <rect x="64" y="270" width="8" height="14" fill="#f04e23" opacity="0.9"/>
+  <rect x="64" y="270" width="8" height="14" fill="#0a0a0a" opacity="0.9"/>
 
   <!-- Right panel: API reference mock -->
   <rect x="420" y="60" width="332" height="240" fill="#0e0e0e" stroke="#2a2a2a" stroke-width="1.5"/>
@@ -50,7 +50,7 @@
   <rect x="420" y="60" width="332" height="32" fill="#141414" stroke="#2a2a2a" stroke-width="1.5"/>
   <text x="436" y="81" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="10" fill="#7a7a7a" letter-spacing="0.04em">API REFERENCE</text>
   <!-- Red-orange accent bar -->
-  <rect x="420" y="60" width="3" height="32" fill="#f04e23"/>
+  <rect x="420" y="60" width="3" height="32" fill="#0a0a0a"/>
 
   <!-- Method pills — GET, POST, DELETE rows -->
   <!-- Row 1: GET -->
@@ -58,8 +58,8 @@
   <text x="440" y="119" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="8" fill="#34d399" letter-spacing="0.06em">GET</text>
   <rect x="478" y="110" width="180" height="10" fill="#1e1e1e"/>
   <!-- Row 2: POST -->
-  <rect x="436" y="132" width="38" height="14" fill="#f04e23" opacity="0.15"/>
-  <text x="440" y="143" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="8" fill="#f04e23" letter-spacing="0.06em">POST</text>
+  <rect x="436" y="132" width="38" height="14" fill="#0a0a0a" opacity="0.15"/>
+  <text x="440" y="143" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="8" fill="#0a0a0a" letter-spacing="0.06em">POST</text>
   <rect x="482" y="134" width="140" height="10" fill="#1e1e1e"/>
   <!-- Row 3: GET -->
   <rect x="436" y="156" width="34" height="14" fill="#16a34a" opacity="0.15"/>
@@ -78,10 +78,10 @@
   <!-- Response code block -->
   <text x="436" y="248" font-family="ui-monospace, 'JetBrains Mono', monospace" font-size="9" fill="#7a7a7a" letter-spacing="0.04em">200 OK</text>
   <rect x="436" y="256" width="240" height="7" fill="#1e1e1e"/>
-  <rect x="436" y="270" width="180" height="7" fill="#f04e23" opacity="0.18"/>
+  <rect x="436" y="270" width="180" height="7" fill="#0a0a0a" opacity="0.18"/>
 
   <!-- Connector line between panels -->
   <line x1="388" y1="180" x2="420" y2="180" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4 3"/>
   <!-- Small bolt watermark, bottom right, very subtle -->
-  <polygon points="782,328 770,346 776,346 773,356 786,338 780,338" fill="#f04e23" opacity="0.12"/>
+  <polygon points="782,328 770,346 776,346 773,356 786,338 780,338" fill="#0a0a0a" opacity="0.12"/>
 </svg>

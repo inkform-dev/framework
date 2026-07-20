@@ -1,10 +1,11 @@
 # Mono — @inkform/theme-mono
 
 Mono is a monospace-first, brutalist documentation theme built on
-`@inkform/framework`. Terminal-dark with a hot red-orange accent,
-JetBrains Mono for every text surface (prose, headings, and code alike), and
-zero-radius sharp edges throughout. It supports Guides + API Reference tabs out
-of the box.
+`@inkform/framework`. Terminal-dark, black and white only — no color in the
+brand accent or UI chrome (HTTP method pills are the one exception, keeping
+their standard functional palette) — JetBrains Mono for every text surface
+(prose, headings, and code alike), and zero-radius sharp edges throughout.
+It supports Guides + API Reference tabs out of the box.
 
 ---
 
@@ -71,6 +72,24 @@ supports all built-in blocks: `<Note>`, `<Tip>`, `<Warning>`, `<Card>`,
 Replace `content/docs/openapi.json` with your own OpenAPI 3.x spec (JSON or
 YAML). The site auto-generates a sidebar and per-operation pages. No extra
 configuration needed — just point the `openapi` tab field at your spec file.
+
+### Blog and Changelog
+
+Both ship wired and ready — `/blog` (list + post pages) and `/changelog`
+(single dated list) render automatically once you add content:
+
+```
+content/
+  blog/
+    my-first-post.mdx    # frontmatter: title, date, author, tags, description
+    series.json          # optional — group posts into a series
+  changelog/
+    2026-01-15-v1.mdx     # frontmatter: title, date, version
+```
+
+Both nav links only appear once at least one entry exists — an empty
+`content/blog`/`content/changelog` (or no folder at all) keeps the top nav
+clean and the pages still render a "no posts yet" state if visited directly.
 
 ---
 
