@@ -24,7 +24,7 @@ import { buildNavTree } from '../openapi-engine/nav';
 import { parseOpenApiDocument } from '../openapi-engine/parse';
 
 /** Loads + bundles + dereferences the configured OpenAPI spec, if any. Null if no spec is configured. */
-async function loadApiDocument(): Promise<Record<string, unknown> | null> {
+export async function loadApiDocument(): Promise<Record<string, unknown> | null> {
   const config = loadDocsConfig();
   if (!config) return null;
   const apiTab = docTabs(config).find((t) => !!t.openapi);
@@ -105,6 +105,16 @@ export async function search(query: string, limit = 10): Promise<McpSearchResult
       { name: 'title', weight: 2 },
       { name: 'content', weight: 1 },
     ],
+    // Natural-language questions ("What does the id field mean?") don't
+    // match well as one whole fuzzy-matched string against short
+    // titles/long content — threshold-tuning alone couldn't fix this
+    // without over-loosening keyword-style queries too. useTokenSearch
+    // splits multi-word queries into individual terms, fuzzy-matches each
+    // independently, and uses BM25-style IDF weighting, so common words
+    // ("what", "does", "the") naturally rank lower without a hand-rolled
+    // stopword list. Confirmed via a real query this framework's own ask-box
+    // needed to handle correctly (see ai/ask.test.ts).
+    useTokenSearch: true,
     threshold: 0.4,
     ignoreLocation: true,
   });
