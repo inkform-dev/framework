@@ -23,7 +23,7 @@ async function loadReference() {
   const config = loadDocsConfig();
   if (!config) return null;
   const tab = apiTab(config);
-  if (!tab?.openapi || tab.apiReference?.renderer !== 'native') return null;
+  if (!tab?.openapi || tab.apiReference?.renderer === 'scalar') return null;
 
   const spec = await loadOpenApiSpecForBuild(tab.openapi);
   if (!spec) return null;
@@ -91,6 +91,7 @@ export default async function ApiReferencePage({ params }: { params: Promise<{ s
 
   return (
     <DocsShell
+      contentType="api"
       logo={topBar.logo}
       topNav={topBar.topNav}
       topActions={topBar.topActions}
