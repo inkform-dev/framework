@@ -39,6 +39,7 @@
     "./openapi-engine/nav": "./src/openapi-engine/nav.ts",
     "./openapi-engine/parse": "./src/openapi-engine/parse.ts",
     "./openapi-render": "./src/openapi-render/index.ts",
+    "./mcp": "./src/mcp/index.ts",
     "./mdx": "./src/mdx.tsx",
     "./components": "./src/components.tsx",
     "./docs-shell": "./src/docs-shell.tsx",
@@ -68,10 +69,12 @@
     "react-dom": ">=19"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@scalar/json-magic": "^0.12.19",
     "@scalar/openapi-parser": "^0.28.10",
     "@scalar/openapi-types": "^0.9.3",
     "@scalar/snippetz": "^0.9.23",
+    "fuse.js": "^7.5.0",
     "gray-matter": "^4.0.3",
     "next-mdx-remote": "^6.0.0",
     "rehype-pretty-code": "^0.14.1",
@@ -80,7 +83,8 @@
     "remark-gfm": "^4.0.1",
     "shiki": "^1.24.0",
     "unist-util-visit": "^5.0.0",
-    "yaml": "^2.6.0"
+    "yaml": "^2.6.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/react": "^19",
