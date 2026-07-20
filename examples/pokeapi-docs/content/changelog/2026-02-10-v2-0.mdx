@@ -1,0 +1,19 @@
+---
+title: v2.0 — Evolution chains, fair-use guide, and a faster search index
+date: 2026-02-10
+version: "2.0"
+tags: [release]
+status: published
+---
+
+The docs caught up with a year of PokéAPI additions.
+
+- **New:** a full [Evolution](/resources/evolution) reference page — trigger types,
+  conditional items, friendship thresholds, and the recursive chain-walking pattern
+  covered in the [evolution chains blog post](/blog/understanding-evolution-chains).
+- **New:** [Fair Use](/fair-use) — rate-limit guidance and caching recommendations for
+  anyone hitting the API at scale.
+- **Improved:** Cmd/Ctrl+K search now indexes every resource page, not just guides —
+  jumping straight to `/pokemon/pikachu`'s field reference is now one keystroke away.
+- **Fixed:** the `evolution_details` array in chain responses was documented as
+  required; it's actually omitted (not empty) for the root species.

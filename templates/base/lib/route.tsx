@@ -12,12 +12,27 @@
 import type { ReactNode } from 'react';
 import { docTabs, listDocPages, findDocPage, tabNavigation } from '@inkform/framework';
 import type { DocsConfig, DocsTab, FlatDocPage } from '@inkform/framework';
-import { loadDocsConfig, loadDocPage, slugify } from '@inkform/framework/content';
+import { loadDocsConfig, loadDocPage, loadBlogPosts, loadChangelogEntries, slugify } from '@inkform/framework/content';
 import type { SidebarGroup, SidebarItem } from '@inkform/framework/docs-shell';
 
 // ── Re-export for convenience ─────────────────────────────────────────────────
 
 export { loadDocsConfig, loadDocPage };
+
+// ── Content nav links (Blog / Changelog) ──────────────────────────────────────
+
+/**
+ * Extends config.navbarLinks with "Blog" / "Changelog" entries, but only when
+ * content actually exists under content/blog or content/changelog — a
+ * docs-only site stays clean by default (see app/blog, app/changelog).
+ */
+export function withContentNavLinks(config: DocsConfig): DocsConfig {
+  const extra: DocsConfig['navbarLinks'] = [];
+  if (loadBlogPosts().length > 0) extra.push({ name: 'Blog', href: '/blog' });
+  if (loadChangelogEntries().length > 0) extra.push({ name: 'Changelog', href: '/changelog' });
+  if (extra.length === 0) return config;
+  return { ...config, navbarLinks: [...(config.navbarLinks ?? []), ...extra] };
+}
 
 // ── API tab helpers ───────────────────────────────────────────────────────────
 

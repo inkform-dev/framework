@@ -1,0 +1,43 @@
+---
+title: Why MDX Is the Right Format for Technical Writing
+date: 2026-04-02
+author: J. Reyes
+tags: [mdx, opinion]
+status: published
+description: Plain Markdown gets you 90% of the way to good docs. MDX's real value shows up in the last 10% — the parts every technical writer eventually needs and every plain-Markdown tool fights.
+---
+
+Plain Markdown is a genuinely great writing format — see [Why Markdown](/why-markdown)
+for the case. But every technical writer eventually hits the same wall: a paragraph that
+needs a live code example, a comparison table that needs to collapse on mobile, a warning
+that needs to actually look like a warning instead of a blockquote with an emoji glued to
+the front.
+
+## The blockquote-emoji anti-pattern
+
+You've seen this:
+
+```md
+> ⚠️ **Warning:** this will delete your database.
+```
+
+It works, technically. It also renders identically to every other blockquote on the page,
+depends on the reader's font shipping that exact emoji glyph, and can't be styled
+per-severity without a CSS selector hack that breaks the moment someone writes a real
+quote in the docs. [Using Components](/mdx/using-components) covers the actual fix —
+a real `<Callout type="warning">` component, styled once, reused everywhere.
+
+## MDX doesn't replace Markdown — it extends it
+
+This is the detail that trips people up: an `.mdx` file with zero JSX in it is 100%
+valid Markdown, byte for byte. You don't rewrite anything to adopt MDX. You keep writing
+exactly like you were, and reach for a component only on the sentence that actually needs
+one. [What is MDX](/mdx/what-is-mdx) has the full mental model; [Frontmatter](/mdx/frontmatter)
+covers the metadata layer this very post is using (`title`, `date`, `author` up top).
+
+## When plain Markdown is still the right call
+
+READMEs, changelogs, GitHub issue templates, anything that has to render correctly on a
+platform you don't control — stay in plain Markdown. MDX needs a compiler; GitHub's own
+renderer doesn't have one. Reach for MDX specifically when you own the rendering pipeline
+and the content genuinely needs interactivity, not by default.

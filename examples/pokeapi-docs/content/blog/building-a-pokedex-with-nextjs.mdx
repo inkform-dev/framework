@@ -1,0 +1,45 @@
+---
+title: Building a Pokédex with PokéAPI and Next.js
+date: 2026-03-12
+author: Ash K.
+tags: [tutorial, nextjs, react]
+status: published
+description: A walkthrough of fetching, caching, and rendering Pokémon data in a Next.js App Router project — from the first fetch to a paginated, searchable Pokédex.
+---
+
+Every PokéAPI tutorial starts the same way: one `fetch` call to `/api/v2/pokemon/pikachu`,
+a JSON blob on the screen, and a feeling of "okay, now what?" This post covers the "now
+what" — turning that one request into a real, paginated, searchable Pokédex.
+
+## The data shape
+
+PokéAPI's collection endpoints return a `NamedAPIResourceList` — a `count`, `next`/`previous`
+cursor URLs, and a `results` array of `{ name, url }` pairs. Notice there's no Pokémon detail
+in the list response itself; you follow each `url` to get sprites, stats, and types. That's
+the "linked data" model covered in [Core Concepts](/concepts/resources) — plan your fetching
+around it instead of fighting it.
+
+## Fetching with route handlers
+
+Route handlers are a natural fit since they let you cache aggressively (PokéAPI's data barely
+changes) without shipping fetch logic to the client:
+
+```ts
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const offset = searchParams.get('offset') ?? '0';
+  const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=24&offset=${offset}`, {
+    next: { revalidate: 86400 },
+  });
+  return Response.json(await res.json());
+}
+```
+
+## Rendering the grid
+
+Each list item is just a name and a URL — resolve the sprite lazily, once the card is in
+view, rather than resolving all 24 detail endpoints up front. This keeps the initial paint
+fast and matches how the [Quickstart](/quickstart) recommends treating pagination.
+
+That's the whole trick: respect the two-step fetch, cache generously, and resolve details
+lazily. The rest is Tailwind and taste.

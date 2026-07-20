@@ -5,8 +5,7 @@
   "favicon": "/favicon.svg",
   "colors": { "primary": "#ea580c" },
   "navbarLinks": [
-    { "name": "Support", "href": "mailto:support@example.com" },
-    { "name": "Blog", "href": "/blog" }
+    { "name": "Support", "href": "mailto:support@example.com" }
   ],
   "anchors": [
     { "name": "Documentation", "href": "/", "icon": "book" },

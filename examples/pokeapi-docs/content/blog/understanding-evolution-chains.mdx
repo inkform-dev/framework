@@ -1,0 +1,52 @@
+---
+title: Understanding Evolution Chains and Species Relationships
+date: 2026-01-28
+author: Ash K.
+tags: [concepts, data-modeling]
+status: published
+description: Evolution chains are one of the trickier parts of PokéAPI's data model — branching evolutions, conditions, and the species/pokemon split all trip up first-time integrators.
+---
+
+Of all the resources PokéAPI exposes, evolution chains cause the most confusion for
+first-time integrators — not because the API is inconsistent, but because the real-world
+data it models is genuinely branching and conditional.
+
+## Species vs. Pokémon — two different resources
+
+The first surprise: `/pokemon-species/eevee` and `/pokemon/eevee` are different endpoints
+with different jobs. **Species** is the taxonomic concept — Eevee-the-species has an
+`evolution_chain` URL, egg groups, and a genus. **Pokémon** is a specific form — Eevee has
+stats, types, and abilities, and its various evolutions (Vaporeon, Jolteon, Umbreon, and
+seven more) are each their own separate Pokémon resource, each pointing back to the same
+species chain. See [Species vs. Pokémon](/resources/pokemon) for the full field reference.
+
+## Chains branch, they don't just link
+
+An evolution chain isn't a linked list — it's a tree. Eevee's chain has eight children at
+the same depth (one per Eeveelution), each potentially conditional on an item, a friendship
+threshold, a time of day, or a held item. The response models this with an `evolves_to`
+array on every node, recursively, so a naive "walk until null" loop breaks the moment you
+hit Eevee.
+
+```ts
+type ChainLink = {
+  species: { name: string; url: string };
+  evolves_to: ChainLink[];
+  evolution_details: { trigger: { name: string }; item?: { name: string } }[];
+};
+
+function flatten(link: ChainLink): string[] {
+  return [link.species.name, ...link.evolves_to.flatMap(flatten)];
+}
+```
+
+Recursion, not iteration — that's the whole fix. See [Evolution](/resources/evolution) for
+the complete condition-type reference (level-up, trade, item-use, friendship, and the rarer
+location- and time-gated triggers).
+
+## Why this matters beyond Pokémon trivia
+
+This is a genuinely common real-world data shape — anything with conditional, branching
+state transitions (order fulfillment, approval workflows, game-content unlock trees) ends up
+looking like this. PokéAPI's evolution chain is a good, free dataset for practicing
+recursive-tree traversal without inventing synthetic data first.

@@ -72,6 +72,24 @@ Replace `content/docs/openapi.json` with your own OpenAPI 3.x spec (JSON or
 YAML). The site auto-generates a sidebar and per-operation pages. No extra
 configuration needed — just point the `openapi` tab field at your spec file.
 
+### Blog and Changelog
+
+Both ship wired and ready — `/blog` (list + post pages) and `/changelog`
+(single dated list) render automatically once you add content:
+
+```
+content/
+  blog/
+    my-first-post.mdx    # frontmatter: title, date, author, tags, description
+    series.json          # optional — group posts into a series
+  changelog/
+    2026-01-15-v1.mdx     # frontmatter: title, date, version
+```
+
+Both nav links only appear once at least one entry exists — an empty
+`content/blog`/`content/changelog` (or no folder at all) keeps the top nav
+clean and the pages still render a "no posts yet" state if visited directly.
+
 ---
 
 ## Maintain

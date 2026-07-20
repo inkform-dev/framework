@@ -1,0 +1,55 @@
+---
+title: 5 GitHub-Flavored Markdown Features You're Not Using
+date: 2026-01-15
+author: J. Reyes
+tags: [gfm, tips]
+status: published
+description: Most people stop at task lists and tables. GFM's spec covers a lot more ground — here are five features that quietly make technical writing better.
+---
+
+Most Markdown writers know task lists and tables and stop there. The full
+[GitHub-Flavored Markdown spec](/gfm/overview) covers a lot more ground. Five worth
+adopting:
+
+## 1. Footnotes
+
+```md
+Rate limits reset hourly[^1].
+
+[^1]: Not calendar-hourly — a rolling 60-minute window from your first request.
+```
+
+Perfect for the aside that's true and useful but would break the paragraph's flow if
+inlined. Full syntax and edge cases in [Footnotes](/gfm/footnotes).
+
+## 2. Strikethrough for deprecation notices
+
+```md
+Use `~~getUser()~~` `getUserById()` instead — the name-based lookup was removed in v3.
+```
+
+Reads instantly as "this used to be true." See
+[Strikethrough & Autolinks](/gfm/strikethrough-autolinks).
+
+## 3. Autolinks without the angle-bracket dance
+
+`www.example.com` and bare email addresses linkify automatically under GFM — no
+`[text](url)` ceremony needed for a URL that's fine to show verbatim.
+
+## 4. Task lists as living checklists
+
+```md
+- [x] Draft the RFC
+- [ ] Get sign-off from #platform-team
+- [ ] Ship behind a flag
+```
+
+These aren't just decorative — GitHub renders them as real, clickable checkboxes in
+issues and PRs. Full syntax in [Task Lists](/gfm/task-lists).
+
+## 5. Tables, but check the cheatsheet first
+
+Tables are the GFM feature everyone already uses — and also the one people most often
+get wrong (missing the separator row, misaligned pipe counts). The
+[Cheatsheet](/reference/cheatsheet) has the exact syntax so you don't have to
+re-derive it from a half-remembered example every time.

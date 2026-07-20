@@ -6,7 +6,7 @@ import { loadDocsConfig, extractHeadings } from '@inkform/framework/content';
 import { siteMdxComponents } from '@/mdx-components';
 import { buildTopBar } from '@/components/top-bar';
 import { renderIcon } from '@/lib/icons';
-import { resolveRoute, listAllRoutes, sidebarForDoc } from '@/lib/route';
+import { resolveRoute, listAllRoutes, sidebarForDoc, withContentNavLinks } from '@/lib/route';
 
 export const dynamicParams = false;
 
@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   const headings = extractHeadings(page.content);
   const { prev, next } = docNeighbours(config, ref.slug);
   const sidebar = sidebarForDoc(config, tab, ref.slug, renderIcon);
-  const topBar = buildTopBar(config, tab.tab);
+  const topBar = buildTopBar(withContentNavLinks(config), tab.tab);
 
   return (
     <DocsShell

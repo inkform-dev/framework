@@ -14,7 +14,6 @@ import {
   Eye,
   Zap,
   Palette,
-  CircleDot,
   FileText,
   Settings,
   Globe,
