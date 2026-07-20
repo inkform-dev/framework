@@ -270,6 +270,96 @@
   margin: 0;
 }
 
+/* ── Expandable schema rows (nested objects, arrays, oneOf/anyOf/allOf) ──
+   .fw-param-row doubles as a <details> element when a property has further
+   structure to expand — same padding/border rhythm as a plain row, just
+   with a clickable summary instead of a static header. */
+
+.fw-param-row--expandable {
+  cursor: default;
+}
+
+.fw-param-row-summary {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.fw-param-row-summary::-webkit-details-marker {
+  display: none;
+}
+
+.fw-param-row-summary::before {
+  content: '▸';
+  display: inline-block;
+  width: 0.9em;
+  margin-right: 0.15em;
+  color: var(--fw-muted);
+  font-size: 0.7em;
+  transition: transform 0.12s;
+}
+
+.fw-param-row--expandable[open] > .fw-param-row-summary::before {
+  transform: rotate(90deg);
+}
+
+.fw-schema-nested {
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--fw-border);
+}
+
+/* ── oneOf / anyOf variants ──────────────────────────────────── */
+
+.fw-schema-variants {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.fw-schema-variant {
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius-sm);
+  overflow: hidden;
+}
+
+.fw-schema-variant-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--fw-card);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: background 0.12s;
+}
+
+.fw-schema-variant-summary:hover {
+  background: var(--fw-card-hover);
+}
+
+.fw-schema-variant-summary::-webkit-details-marker {
+  display: none;
+}
+
+.fw-schema-variant-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--fw-fg);
+}
+
+.fw-schema-variant-body {
+  padding: 0.75rem;
+  border-top: 1px solid var(--fw-border);
+}
+
+.fw-schema-variant[open] > .fw-schema-variant-summary {
+  border-bottom: 1px solid transparent;
+}
+
 /* ── Response panels ─────────────────────────────────────────── */
 
 .fw-response-list {

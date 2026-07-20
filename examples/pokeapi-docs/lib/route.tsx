@@ -3,10 +3,13 @@
  *
  * Resolves a slug array from the catch-all route into a doc page, generates
  * static params, and builds sidebar groups. The API Reference tab is NOT
- * handled here — it's served by app/api-reference/route.ts, a separate route
- * handler that renders Scalar's own UI directly from the OpenAPI spec.
- * apiBasePath() is still needed by components/top-bar.tsx to build that tab's
- * nav link.
+ * handled here — this project's tab has `apiReference.renderer: 'native'`
+ * (docs.json), so it's served by app/api-reference/[[...slug]]/page.tsx,
+ * the framework's own React/Galley renderer (@inkform/framework/openapi-render)
+ * — no Scalar/Vue dependency. Projects still on the default `'scalar'`
+ * renderer keep the older app/api-reference/route.ts pattern instead (see
+ * templates/aurora for that shape). apiBasePath() is still needed by
+ * components/top-bar.tsx to build the tab's nav link either way.
  */
 
 import type { ReactNode } from 'react';
@@ -37,7 +40,7 @@ export function withContentNavLinks(config: DocsConfig): DocsConfig {
 // ── API tab helpers ───────────────────────────────────────────────────────────
 
 /** Find the tab that has an openapi spec (the API Reference tab). */
-function apiTab(config: DocsConfig): DocsTab | null {
+export function apiTab(config: DocsConfig): DocsTab | null {
   return docTabs(config).find((t) => !!t.openapi) ?? null;
 }
 
