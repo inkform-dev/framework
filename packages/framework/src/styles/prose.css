@@ -288,6 +288,21 @@
   line-height: inherit;
 }
 
+/* Per-token syntax colors. rehype-pretty-code's dual-theme mode (theme:
+   { light, dark }) sets --shiki-light / --shiki-dark as inline custom
+   properties on every token span — it does NOT set `color` itself, so
+   without these two rules every token renders in the surrounding text
+   color and code blocks show zero syntax highlighting despite Shiki having
+   run correctly. `all: unset` above also strips any color the theme's
+   token spans might otherwise inherit, making this rule required rather
+   than a nice-to-have. */
+.fw-prose [data-rehype-pretty-code-figure] code span {
+  color: var(--shiki-light);
+}
+html.dark .fw-prose [data-rehype-pretty-code-figure] code span {
+  color: var(--shiki-dark);
+}
+
 /* Individual lines */
 .fw-prose [data-rehype-pretty-code-figure] code [data-line] {
   padding: 0 1.25em;
