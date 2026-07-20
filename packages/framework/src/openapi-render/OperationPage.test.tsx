@@ -45,8 +45,11 @@ describe('OperationPage (real pokeapi spec, full composition)', () => {
     expect(html).toContain('cURL');
     expect(html).toContain('pokeapi.co/api/v2/pokemon/pikachu');
 
-    // No dead "Try it" button — deferred to a later phase, shouldn't render a non-functional one.
-    expect(html).not.toContain('fw-apiref-tryit');
+    // Try It button present (TryItConsole) — real now, not a dead placeholder.
+    expect(html).toContain('fw-apiref-tryit');
+    expect(html).toContain('Try it');
+    // Modal itself isn't in the initial (unopened) render.
+    expect(html).not.toContain('fw-playground-overlay');
   });
 
   it('get-type: a schema with array-of-object nested fields (damage_relations.no_damage_to etc.) renders without crashing', async () => {
