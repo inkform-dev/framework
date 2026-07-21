@@ -122,6 +122,16 @@ html.dark {
   text-decoration: none;
   color: inherit;
 }
+/* .fw-prose a's underline (prose.css) has higher specificity than the rule
+   above alone (.fw-prose + type-selector a beats one class) — Cards are
+   meant to be used inside MDX prose content, so without this, every card
+   title/body rendered as a real link inside a doc page prose block showed
+   a stray link-underline that had nothing to do with the card being a link
+   (found while building Birch: a real rendering bug, not a false alarm —
+   confirmed by checking specificity, not just eyeballing it). */
+.fw-prose a.fw-card-link {
+  text-decoration: none;
+}
 .fw-card-link:hover .fw-card {
   background: var(--fw-card-hover);
   box-shadow: var(--fw-shadow-lg, var(--fw-shadow));

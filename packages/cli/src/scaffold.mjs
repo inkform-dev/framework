@@ -23,7 +23,9 @@ const TEMPLATE_REF = process.env.INKFORM_DOCS_REF || 'main';
 // archived under archive/templates/ — not deleted, not currently
 // scaffoldable. This list is being rebuilt with a new template set; entries
 // are added here as each one is actually built and verified, not before.
-const THEMES = [];
+const THEMES = [
+  { value: 'birch', label: 'Birch', hint: 'clean & standard — dark, emerald green' },
+];
 const THEME_VALUES = new Set(THEMES.map((t) => t.value));
 
 function parseArgs(argv) {
@@ -208,7 +210,7 @@ export async function run(argv) {
     theme = undefined;
   }
   if (!theme) {
-    const v = await p.select({ message: 'Pick a theme', options: THEMES, initialValue: 'aurora' });
+    const v = await p.select({ message: 'Pick a theme', options: THEMES, initialValue: 'birch' });
     if (p.isCancel(v)) onCancel();
     theme = v;
   }

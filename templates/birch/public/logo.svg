@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 32" fill="none" role="img" aria-label="Birch">
+  <!-- Birch leaf mark -->
+  <path d="M16 4C8 8 6 18 12 26C18 18 24 8 16 4Z" fill="#0d9456"/>
+  <path d="M16 6C16 6 15 15 12 24" stroke="#052e1c" stroke-width="1" stroke-linecap="round" opacity="0.35"/>
+  <!-- Wordmark -->
+  <text x="32" y="21" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" letter-spacing="-0.02em" fill="currentColor">Birch</text>
+</svg>

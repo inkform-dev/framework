@@ -1,0 +1,97 @@
+/*
+ * Birch theme — token overrides for @inkform/framework.
+ * Inspired by Mint (the default Mintlify starter kit): dark-mode-forward,
+ * emerald green accent, generous rounded surfaces, clean sans throughout.
+ * This file is imported AFTER framework/styles.css so its declarations win.
+ * Only --fw-* tokens and small Birch-specific accents are set here.
+ */
+
+:root {
+  --fw-font: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-font-heading: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-mono: var(--font-mono, ui-monospace, "Menlo", "Consolas", monospace);
+}
+
+/* ── Light mode ──────────────────────────────────────────────────────────── */
+:root {
+  --fw-bg: #ffffff;
+  --fw-bg-subtle: #f7faf8;
+  --fw-fg: #0d1117;
+  --fw-muted: #5b6470;
+  --fw-border: #e3e8e5;
+  --fw-border-strong: #cdd5d0;
+  --fw-card: #ffffff;
+  --fw-card-hover: #f7faf8;
+  --fw-code-bg: #f1f5f2;
+  --fw-kbd-bg: #eef2ef;
+
+  --fw-primary: #0d9456;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: rgba(13, 148, 86, 0.08);
+
+  --fw-radius: 10px;
+  --fw-radius-sm: 7px;
+
+  --fw-shadow: 2px 2px 0 rgba(13, 17, 23, 0.06);
+  --fw-shadow-lg: 4px 4px 0 rgba(13, 17, 23, 0.08);
+  --fw-ring: 0 0 0 3px rgba(13, 148, 86, 0.28);
+}
+
+/* ── Dark mode (Mint's actual default) ──────────────────────────────────── */
+html.dark {
+  --fw-bg: #0b0f0d;
+  --fw-bg-subtle: #101512;
+  --fw-fg: #e9efec;
+  --fw-muted: #8b978f;
+  --fw-border: #1d2521;
+  --fw-border-strong: #2b3730;
+  --fw-card: #101512;
+  --fw-card-hover: #151b17;
+  --fw-code-bg: #0e1310;
+  --fw-kbd-bg: #182019;
+
+  --fw-primary: #34d399;
+  --fw-primary-fg: #052e1c;
+  --fw-primary-subtle: rgba(52, 211, 153, 0.14);
+
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.6);
+  --fw-ring: 0 0 0 3px rgba(52, 211, 153, 0.28);
+}
+
+/* ── Birch-specific: search bar reads as a real input, not a bare button ── */
+.fw-search-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 22rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  background: var(--fw-bg-subtle);
+  color: var(--fw-muted);
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.fw-search-trigger:hover {
+  border-color: var(--fw-border-strong);
+  background: var(--fw-card-hover);
+}
+.fw-search-trigger kbd {
+  font-family: var(--fw-mono);
+  font-size: 0.75rem;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  border: 1px solid var(--fw-border-strong);
+  background: var(--fw-card);
+  color: var(--fw-muted);
+}
+
+/* Hero/media frames get Birch's signature big rounded corners */
+.fw-frame,
+.fw-hero {
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
