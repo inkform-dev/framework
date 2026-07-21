@@ -56,12 +56,33 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  /* Fixed docs-measure, shared by the header below (title/desc/endpoint
+     row) and the body grid's left column further down, so both stay
+     left- AND right-aligned with each other regardless of how wide the
+     code-sample rail next to them is allowed to grow. Derived from the
+     existing content/toc/gap tokens (not a hardcoded rem value) so it
+     stays correct if a template ever retunes those. */
+  --fw-apiref-docs-w: calc(var(--fw-content-w) - var(--fw-toc-w) - 3rem);
+}
+
+/* .fw-shell-content's own max-width (layout.css) is the right measure for
+   plain prose pages, but on an operation page it wastes exactly the width
+   .fw-shell-main already reclaimed from the hidden TOC column (hideToc's
+   .fw-shell--no-toc removes the TOC's own reserved space, but
+   .fw-shell-content's cap doesn't know that and clamps straight back down
+   to prose measure) — freed here so the rail can use it instead of it
+   sitting empty on both sides. Scoped to :has(.fw-apiref-body-layout), not
+   just "any API-reference-tab page", so the tab's own overview page (title
+   + description only, no rail to fill the extra width) is unaffected. */
+.fw-shell-content:has(.fw-apiref-body-layout) {
+  max-width: none;
 }
 
 /* ── Endpoint header ─────────────────────────────────────────── */
 
 .fw-apiref-header {
   padding: 1.5rem 0 2rem;
+  max-width: var(--fw-apiref-docs-w);
 }
 
 .fw-apiref-eyebrow {
@@ -141,7 +162,11 @@
 
 .fw-apiref-body-layout {
   display: grid;
-  grid-template-columns: 1fr var(--fw-toc-w, 22rem);
+  /* Docs column fixed at the same measure as the header above it (not 1fr)
+     — the rail is the flexible one now, so it's what actually absorbs the
+     width .fw-shell-content just released, instead of both columns
+     growing and the docs column silently getting wider than before. */
+  grid-template-columns: var(--fw-apiref-docs-w) 1fr;
   gap: 3rem;
   align-items: start;
 }
@@ -956,6 +981,14 @@ html.dark .fw-apiref-sample-code pre.shiki code span {
 /* ── Responsive ──────────────────────────────────────────────── */
 
 @media (max-width: 80rem) {
+  /* Header's fixed docs-measure only makes sense stacked next to a
+     same-width docs column — once body-layout below goes full-width
+     single-column (next rule), the header needs to match or it reads as
+     narrower than everything under it. */
+  .fw-apiref-header {
+    max-width: none;
+  }
+
   .fw-apiref-body-layout {
     grid-template-columns: 1fr;
   }
