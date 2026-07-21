@@ -18,6 +18,7 @@ examples/*           full demo sites (pokeapi-docs, markdown-docs, inkform-docs)
 npm install                 # installs every workspace
 npm run typecheck           # typecheck all packages
 npm test                    # framework's Vitest unit tests
+npm run build                # next build across every theme + example
 
 # run a theme or example:
 npm run dev --workspace=@inkform/theme-aurora
@@ -32,6 +33,12 @@ npm run test:e2e --workspace=@inkform/example-pokeapi
 Each theme/example is a standalone Next.js 16 app; the framework resolves via the
 workspace link, so changes to `packages/framework` are picked up immediately
 (thanks to `transpilePackages`).
+
+`.github/workflows/ci.yml` runs `lint` → `typecheck` → `test` → `build` →
+`npm audit --audit-level=high` on every PR (whatever branch it targets — some
+in-flight work here stacks a chain of PRs branch-to-branch before eventually
+landing on `main`) and on every push to `main`. Same commands as above;
+nothing CI does that you can't run locally first.
 
 ## How the pieces fit
 
