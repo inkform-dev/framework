@@ -242,9 +242,15 @@
 }
 
 .fw-param-type {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1em 0.4em;
   font-family: var(--fw-mono);
   font-size: 0.75rem;
   color: var(--fw-muted);
+  background: var(--fw-bg-subtle);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius-sm);
 }
 
 .fw-param-required {
@@ -256,6 +262,7 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--fw-method-delete);
+  background: color-mix(in srgb, var(--fw-method-delete) 10%, transparent);
   border: 1px solid var(--fw-method-delete);
   border-radius: var(--fw-radius-sm);
 }
