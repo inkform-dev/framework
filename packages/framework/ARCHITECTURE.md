@@ -220,6 +220,35 @@ export function findOperation(model: OpenApiModel, operationId: string): ApiOper
 rendering concerns, not parsing ones — see below). `export * from './openapi'`
 is wired in `src/index.ts`.
 
+### `./openapi-engine/breaking-changes.ts`
+
+```ts
+export type ChangeSeverity = 'breaking' | 'non-breaking';
+export interface SpecChange { severity: ChangeSeverity; category: string; location: string; message: string; }
+export interface DiffResult { changes: SpecChange[]; breaking: SpecChange[]; }
+
+export function diffOpenApiDocuments(before: Record<string, unknown>, after: Record<string, unknown>): DiffResult;
+export function formatDiffAsMarkdown(result: DiffResult): string;
+```
+
+Diffs two dereferenced documents. The rule that matters: breaking-ness is
+*direction-aware*. For a **request** (parameters, request bodies), a client
+is at risk when the server now demands *more* than before — a field becomes
+required, an accepted enum value is removed. For a **response**, a client is
+at risk when the server now promises *less* than before — a field
+disappears or loses its `required` guarantee, a new enum value appears that
+an exhaustive `switch` doesn't handle. A naive diff that treats both
+directions the same way produces both false positives (a new optional
+response field isn't breaking) and false negatives (a response field quietly
+becoming unguaranteed is).
+
+`packages/framework/bin/diff-openapi.ts` is the CLI entry point a CI job
+calls: `npx tsx packages/framework/bin/diff-openapi.ts <before> <after>`,
+prints the Markdown report, exits `1` if any breaking change was found. See
+`.github/workflows/openapi-breaking-changes.yml` for the reference wiring
+(diffs a PR's spec against the base branch's version, posts the report as a
+PR comment) — copy its "Diff" step's paths for any app with its own spec.
+
 ---
 
 ## 3. Native API reference rendering — `./openapi-render`
