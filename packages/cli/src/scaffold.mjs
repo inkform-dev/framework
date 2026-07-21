@@ -25,6 +25,14 @@ const TEMPLATE_REF = process.env.INKFORM_DOCS_REF || 'main';
 // are added here as each one is actually built and verified, not before.
 const THEMES = [
   { value: 'birch', label: 'Birch', hint: 'clean & standard — dark, emerald green' },
+  { value: 'rowan', label: 'Rowan', hint: 'minimal chrome, flat sidebar — dark, amber' },
+  { value: 'yucca', label: 'Yucca', hint: 'centered search, collapsible groups — dark, bright green' },
+  { value: 'folio', label: 'Folio', hint: 'dropdown nav, centered serif hero, all-caps — dark, blue' },
+  { value: 'glyph', label: 'Glyph', hint: 'full monospace, terminal identity — dark, orange' },
+  { value: 'harbor', label: 'Harbor', hint: 'sidebar search, SaaS login/sign-up — dark, teal' },
+  { value: 'meadow', label: 'Meadow', hint: 'marketing landing page, feature cards — light, amber' },
+  { value: 'canopy', label: 'Canopy', hint: 'spacious, AI-tool menu (ChatGPT/Claude/Cursor) — light, olive' },
+  { value: 'feather', label: 'Feather', hint: 'lightweight, 3-tab nav, generous whitespace — light, warm orange' },
 ];
 const THEME_VALUES = new Set(THEMES.map((t) => t.value));
 
