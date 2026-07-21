@@ -19,14 +19,11 @@ import pc from 'picocolors';
 const REPO = 'inkform-dev/framework';
 const TEMPLATE_REF = process.env.INKFORM_DOCS_REF || 'main';
 
-const THEMES = [
-  { value: 'aurora', label: 'Aurora', hint: 'classic dark docs (Nextra-style)' },
-  { value: 'fern', label: 'Fern', hint: 'clean & friendly, emerald green' },
-  { value: 'cedar', label: 'Cedar', hint: 'warm & editorial, burnt orange' },
-  { value: 'mono', label: 'Mono', hint: 'monospace / brutalist / terminal' },
-  { value: 'base', label: 'Base', hint: 'minimal & neutral (start simple)' },
-  { value: 'galley', label: 'Galley', hint: 'warm paper & ink, one editorial red accent' },
-];
+// The previous 6 themes (aurora, fern, cedar, mono, base, galley) are
+// archived under archive/templates/ — not deleted, not currently
+// scaffoldable. This list is being rebuilt with a new template set; entries
+// are added here as each one is actually built and verified, not before.
+const THEMES = [];
 const THEME_VALUES = new Set(THEMES.map((t) => t.value));
 
 function parseArgs(argv) {
