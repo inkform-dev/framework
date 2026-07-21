@@ -21,6 +21,11 @@ describe('OperationPage (real pokeapi spec, full composition)', () => {
       expect(html).toContain(op.summary);
       expect(html).toContain(`fw-method-${op.method}`);
       expect(html).toContain(op.path);
+      // operationId is rendered as visible text (not just a prop) so Pagefind
+      // actually indexes it, and pagefind-weight-boosts it and the path —
+      // see the data-pagefind-weight comment in OperationPage.tsx.
+      expect(html).toContain(op.operationId);
+      expect(html).toContain('data-pagefind-weight="2"');
     }
   });
 
@@ -45,8 +50,11 @@ describe('OperationPage (real pokeapi spec, full composition)', () => {
     expect(html).toContain('cURL');
     expect(html).toContain('pokeapi.co/api/v2/pokemon/pikachu');
 
-    // No dead "Try it" button — deferred to a later phase, shouldn't render a non-functional one.
-    expect(html).not.toContain('fw-apiref-tryit');
+    // Try It button present (TryItConsole) — real now, not a dead placeholder.
+    expect(html).toContain('fw-apiref-tryit');
+    expect(html).toContain('Try it');
+    // Modal itself isn't in the initial (unopened) render.
+    expect(html).not.toContain('fw-playground-overlay');
   });
 
   it('get-type: a schema with array-of-object nested fields (damage_relations.no_damage_to etc.) renders without crashing', async () => {

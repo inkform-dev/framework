@@ -16,7 +16,7 @@ import process from 'node:process';
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
 
-const REPO = 'inkform/framework';
+const REPO = 'inkform-dev/framework';
 const TEMPLATE_REF = process.env.INKFORM_DOCS_REF || 'main';
 
 const THEMES = [

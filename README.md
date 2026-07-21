@@ -31,9 +31,23 @@ This is a monorepo. It contains:
 
 - **Markdown in, polished docs out.** Write MDX, commit it, deploy. No CMS, no
   database, no build service — your repo is the source of truth.
-- **API reference is OpenAPI-first.** Point `docs.json` at an OpenAPI spec and
-  you get a searchable, paginated, "Try it"-enabled API reference automatically.
-  Everything else is MDX. (This is the standard — the way Mintlify does it.)
+- **API reference is OpenAPI-first — and framework-native.** Point `docs.json`
+  at an OpenAPI spec and you get a searchable, paginated, "Try it"-enabled API
+  reference automatically. Rendered with the framework's own React
+  components — **zero Scalar/Vue dependency**, real per-operation pages
+  (SSG'd, not a client-side SPA embed), a real Try It console that makes
+  actual requests. Everything else is MDX.
+- **Your docs are an MCP server.** Ship `/api/mcp` and every page — guides and
+  API operations alike — becomes callable by Claude, Cursor, or any MCP
+  client: `search`, `get_operation`, `list_operations`, `get_doc`. Self-hosted,
+  no external platform, no billing — it's just another Next.js route handler.
+- **An AI ask-box grounded in your actual content**, not a hosted black box.
+  BYO model (Anthropic, OpenAI, or Google) and BYO API key; retrieval reuses
+  the same search the MCP server exposes, so the answers and the sources it
+  cites both trace back to real pages.
+- **`/llms.txt` and `/llms-full.txt` out of the box** — the emerging
+  convention ([llmstxt.org](https://llmstxt.org)) for giving LLMs a plain-text
+  entry point into your content without crawling HTML.
 - **Themes you actually choose between.** Five production themes that look
   nothing alike, plus a minimal base — all driven by the same engine, so you can
   switch with a token file.
@@ -63,6 +77,11 @@ npm install          # installs all workspaces
 npm run typecheck    # typecheck every package
 npm run dev --workspace=@inkform/example-pokeapi   # run an example
 ```
+
+## Changelog
+
+See [`CHANGELOG.md`](./CHANGELOG.md). Upgrading from an existing `docs.json`
+and want to know what changed? See [`MIGRATION.md`](./MIGRATION.md).
 
 ## License
 

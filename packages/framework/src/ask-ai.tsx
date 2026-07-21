@@ -14,9 +14,17 @@ export interface AskAiProps {
   product?: string;
 }
 
+type AskSource = {
+  type: 'doc' | 'operation';
+  title: string;
+  id: string;
+  href: string;
+};
+
 type Message = {
   role: 'user' | 'assistant';
   content: string;
+  sources?: AskSource[];
 };
 
 /* ─────────────────────────────────────────────
@@ -83,16 +91,20 @@ export function AskAi({
 
       const body = await res.json().catch(() => null);
       let reply: string;
+      let sources: AskSource[] | undefined;
 
       if (body && typeof body === 'object' && 'text' in body) {
         reply = String(body.text);
+        if ('sources' in body && Array.isArray(body.sources)) {
+          sources = body.sources as AskSource[];
+        }
       } else if (typeof body === 'string') {
         reply = body;
       } else {
         reply = 'Sorry, I could not parse the response.';
       }
 
-      setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: reply, sources }]);
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : 'An error occurred.';
       setMessages((prev) => [
@@ -184,6 +196,20 @@ export function AskAi({
                     {m.role === 'user' ? 'You' : 'AI'}
                   </span>
                   <div className="fw-askai-message-content">{m.content}</div>
+                  {m.sources && m.sources.length > 0 ? (
+                    <ul className="fw-askai-sources">
+                      {m.sources.map((s) => (
+                        <li key={`${s.type}-${s.id}`}>
+                          <a href={s.href} className="fw-askai-source-link">
+                            <span className={`fw-askai-source-kind fw-askai-source-kind--${s.type}`}>
+                              {s.type === 'operation' ? 'API' : 'Docs'}
+                            </span>
+                            {s.title}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
               ))}
 

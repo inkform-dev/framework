@@ -45,12 +45,13 @@ export type DocsTab = {
    */
   mcp?: { name?: string; url?: string; disabled?: boolean };
   /**
-   * Which renderer draws the API Reference tab. Defaults to `'scalar'`
-   * (today's `@scalar/nextjs-api-reference` embed — unchanged production
-   * behavior) so this stays an opt-in flag while the native renderer is
-   * built out, not a switch that changes default behavior the moment it
-   * exists. `'native'` renders per-operation via the framework's own
-   * React/Galley components (no Scalar/Vue dependency) instead.
+   * Which renderer draws the API Reference tab. Defaults to `'native'` —
+   * per-operation pages via the framework's own React/Galley components,
+   * zero Scalar/Vue dependency. Every shipped example/template has fully
+   * migrated to it; there is no scaffolded Scalar route left to fall back
+   * to. `'scalar'` is kept as a documented escape hatch for a project that
+   * wants to bring back its own `@scalar/nextjs-api-reference` embed (add
+   * an `app/api-reference/route.ts`), not a functional default.
    */
   apiReference?: { renderer?: 'scalar' | 'native' };
 };
