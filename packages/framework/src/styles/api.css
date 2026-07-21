@@ -56,13 +56,19 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  /* Fixed docs-measure, shared by the header below (title/desc/endpoint
+  /* 60/40 docs:rail split, shared by the header below (title/desc/endpoint
      row) and the body grid's left column further down, so both stay
-     left- AND right-aligned with each other regardless of how wide the
-     code-sample rail next to them is allowed to grow. Derived from the
-     existing content/toc/gap tokens (not a hardcoded rem value) so it
-     stays correct if a template ever retunes those. */
-  --fw-apiref-docs-w: calc(var(--fw-content-w) - var(--fw-toc-w) - 3rem);
+     left- AND right-aligned with each other. A real percentage of
+     whatever width .fw-shell-content actually ends up with (not a fixed
+     rem value) — 60% minus this column's share of the 3rem gap, which is
+     exactly what a `3fr` track in a `3fr 2fr` grid with a 3rem gap would
+     resolve to; expressed this way (rather than fr units) because it also
+     has to work as a plain max-width on .fw-apiref-header, which isn't a
+     grid item. The body grid's rail column is plain `1fr`, which — once
+     this fixed-and-percentage first column is subtracted, gap included —
+     lands on exactly the remaining 40% on its own; no matching calc()
+     needed there. */
+  --fw-apiref-docs-w: calc(60% - 1.8rem);
 }
 
 /* .fw-shell-content's own max-width (layout.css) is the right measure for
