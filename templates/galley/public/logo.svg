@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 32" fill="none" role="img" aria-label="Galley">
+  <!-- Typographic wordmark only — per the inkform-design skill's own
+       brand-wordmark spec: no logo was provided, the mark is the name set
+       in the serif display face with a proof-red accent period. -->
+  <text x="0" y="22" font-family="Newsreader, Georgia, 'Times New Roman', serif" font-size="20" font-weight="500" letter-spacing="-0.02em" fill="#191813">Galley<tspan fill="#c24e3d">.</tspan></text>
+</svg>

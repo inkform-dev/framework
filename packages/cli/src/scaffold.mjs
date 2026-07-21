@@ -19,20 +19,19 @@ import pc from 'picocolors';
 const REPO = 'inkform-dev/framework';
 const TEMPLATE_REF = process.env.INKFORM_DOCS_REF || 'main';
 
-// The previous 6 themes (aurora, fern, cedar, mono, base, galley) are
-// archived under archive/templates/ — not deleted, not currently
-// scaffoldable. This list is being rebuilt with a new template set; entries
-// are added here as each one is actually built and verified, not before.
+// Consolidated to one proven structure (Canopy: collapsible sidebar,
+// mobile-drawer nav that actually stays reachable, theme trio) with theme
+// variants on top, instead of maintaining N structurally-independent
+// templates. The previous 9-template set (birch, rowan, folio, glyph,
+// harbor, meadow, feather + the old canopy) is gone, not archived — each
+// had its own hand-rolled, independently-buggy header/nav. The 6 themes
+// before THAT (aurora, fern, cedar, mono, base, galley) are still archived
+// under archive/templates/, not scaffoldable; galley's tokens live on in
+// the new galley entry below.
 const THEMES = [
-  { value: 'birch', label: 'Birch', hint: 'clean & standard — dark, emerald green' },
-  { value: 'rowan', label: 'Rowan', hint: 'minimal chrome, flat sidebar — dark, amber' },
-  { value: 'yucca', label: 'Yucca', hint: 'centered search, collapsible groups — dark, bright green' },
-  { value: 'folio', label: 'Folio', hint: 'dropdown nav, centered serif hero, all-caps — dark, blue' },
-  { value: 'glyph', label: 'Glyph', hint: 'full monospace, terminal identity — dark, orange' },
-  { value: 'harbor', label: 'Harbor', hint: 'sidebar search, SaaS login/sign-up — dark, teal' },
-  { value: 'meadow', label: 'Meadow', hint: 'marketing landing page, feature cards — light, amber' },
-  { value: 'canopy', label: 'Canopy', hint: 'spacious, AI-tool menu (ChatGPT/Claude/Cursor) — light, olive' },
-  { value: 'feather', label: 'Feather', hint: 'lightweight, 3-tab nav, generous whitespace — light, warm orange' },
+  { value: 'canopy', label: 'Canopy', hint: 'centered search, collapsible sidebar — dark, bright green' },
+  { value: 'shadcn', label: 'Shadcn', hint: "reproduces shadcn/ui's own default look — Zinc, monochrome" },
+  { value: 'galley', label: 'Galley', hint: "Inkform's own design system — warm paper + ink, proof-red" },
 ];
 const THEME_VALUES = new Set(THEMES.map((t) => t.value));
 
@@ -218,7 +217,7 @@ export async function run(argv) {
     theme = undefined;
   }
   if (!theme) {
-    const v = await p.select({ message: 'Pick a theme', options: THEMES, initialValue: 'birch' });
+    const v = await p.select({ message: 'Pick a theme', options: THEMES, initialValue: 'canopy' });
     if (p.isCancel(v)) onCancel();
     theme = v;
   }

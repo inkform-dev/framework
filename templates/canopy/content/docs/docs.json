@@ -3,15 +3,7 @@
   "version": "1.0.0",
   "logo": "/logo.svg",
   "favicon": "/favicon.svg",
-  "colors": { "primary": "#4d7c0f" },
-  "navbarLinks": [
-    { "name": "Support", "href": "mailto:support@example.com" }
-  ],
-  "anchors": [
-    { "name": "Community", "href": "https://github.com/inkform-dev/framework/discussions", "icon": "users" },
-    { "name": "GitHub", "href": "https://github.com/inkform-dev/framework", "icon": "github" }
-  ],
-  "cta": { "label": "Dashboard", "href": "https://example.com/dashboard" },
+  "colors": { "primary": "#43c200" },
   "tabs": [
     {
       "tab": "Guides",

@@ -1,13 +1,12 @@
 /*
  * Aurora theme — token overrides for @inkform/framework.
+ * Structure (header/sidebar/drawer/nav) is Canopy's, unchanged. This file
+ * only replaces the TOKENS: Pokédex red accent, hard-offset shadows, a
+ * serif display voice for headings distinct from the sans body/UI voice.
  * This file is imported AFTER framework/styles.css so its declarations win.
- * Only --fw-* tokens and small Aurora-specific accents are set here.
- * The framework's structural CSS is untouched.
  */
 
 /* ── Font variables (set by next/font in layout.tsx) ─────────────────────── */
-/* The variables --font-sans, --font-heading, and --font-mono are injected  */
-/* onto <html> by Next.                                                     */
 :root {
   --fw-font: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
   --fw-font-heading: var(--font-heading, ui-serif, Georgia, "Times New Roman", serif);
@@ -68,8 +67,305 @@ html.dark {
   --fw-ring: 0 0 0 3px rgba(248, 113, 113, 0.28);
 }
 
-/* Top bar (tabs/anchors/nav links/CTA/brand) is now styled by the shared
-   framework layer (packages/framework/src/styles/layout.css) — it only
-   ever consumed --fw-* tokens here, so there was nothing theme-specific
-   left to override for Aurora. See Mono's theme.css for an example of a
-   theme that DOES need a delta on top of the shared base. */
+/* ── Header: two rows, like Palm's real header ─────────────────────────────
+   Verified on palm.mintlify.site: row 1 is logo · centered search · Ask
+   Assistant (no theme toggle, no CTA); row 2 is the tab row, left-aligned
+   under the logo, underlined when active. The shared DocsShell only exposes
+   one header row (logo/topNav/topActions in one flex line — see layout.css's
+   .fw-shell-header-inner), so this reflows it with flex-wrap + explicit
+   `order` rather than forking the shell: topNav (which Aurora's top-bar.tsx
+   fills with ONLY the tabs) is pushed to `flex-basis: 100%`, which both
+   forces it onto its own line AND makes it span the header's full width
+   (so the tabs land flush with the logo's own left edge, same as Palm) —
+   and topActions (search + Ask Assistant) stays on row 1 by getting an
+   `order` lower than topNav's. --fw-header-h grows to fit both rows; every
+   sticky offset elsewhere (.fw-shell-sidebar/.fw-shell-toc top + height)
+   reads that same token, so they follow automatically. ────────────────── */
+
+:root {
+  --fw-header-h: 7rem;
+}
+
+.fw-shell-header {
+  height: auto;
+  min-height: var(--fw-header-h);
+}
+
+.fw-shell-header-inner {
+  flex-wrap: wrap;
+  row-gap: 0.625rem;
+  align-items: center;
+  padding-top: 0.875rem;
+  padding-bottom: 0.75rem;
+}
+
+.fw-shell-header-start {
+  order: 1;
+}
+
+.fw-shell-actions {
+  order: 2;
+  flex: 1;
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--fw-space-2);
+}
+
+.fw-shell-topnav {
+  order: 3;
+  flex-basis: 100%;
+  justify-content: flex-start;
+}
+
+/* Search trigger: centered within the row-1 space between the logo and Ask
+   Assistant (mathematically exact centering isn't possible without a 4th
+   DocsShell slot — see comment above — but the logo and Ask Assistant
+   buttons are close enough in width that this reads as centered, matching
+   the source screenshot). */
+.fw-aurora-search-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.fw-aurora-search-center .fw-search-trigger {
+  width: 100%;
+  max-width: 26rem;
+  justify-content: space-between;
+  padding: 0.5rem 0.875rem;
+  background: var(--fw-bg-subtle);
+}
+
+.fw-aurora-search-center .fw-search-trigger::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat center / contain;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+
+/* Ask Assistant trigger reads neutral on Palm (muted border/text), not
+   primary-tinted like the framework default — measured directly:
+   border rgb(38,41,37) = --fw-border, text rgb(160,162,158) = --fw-muted. */
+.fw-askai-trigger {
+  background: var(--fw-bg);
+  border-color: var(--fw-border);
+  color: var(--fw-muted);
+  font-weight: 500;
+}
+
+.fw-askai-trigger:hover {
+  background: var(--fw-card-hover);
+  border-color: var(--fw-border-strong);
+  color: var(--fw-fg);
+}
+
+/* ── Tabs: underline indicator, not a pill/chip background ────────────────── */
+
+.fw-topnav-tabs {
+  gap: 1.5rem;
+}
+
+.fw-topnav-tab {
+  padding: 0.4rem 0.0625rem 0.6rem;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  font-weight: 600;
+}
+
+.fw-topnav-tab:hover {
+  background: none;
+  color: var(--fw-fg);
+}
+
+.fw-topnav-tab--active {
+  background: none;
+  border-bottom-color: var(--fw-primary);
+  color: var(--fw-fg);
+}
+
+/* ── Sidebar: collapse chrome + Palm's plain (non-uppercase) group labels ── */
+
+.fw-sidebar-group-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--fw-fg);
+}
+
+.fw-aurora-sidebar-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.fw-aurora-sidebar-heading-text {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--fw-fg);
+}
+
+.fw-aurora-sidebar-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--fw-radius-sm);
+  color: var(--fw-muted);
+  cursor: pointer;
+  transition: color 0.12s, background 0.12s;
+}
+
+.fw-aurora-sidebar-toggle:hover {
+  color: var(--fw-fg);
+  background: var(--fw-card-hover);
+}
+
+/* Collapsed rail — real state change (see components/collapsible-sidebar.tsx),
+   not a decorative arrow: the whole nav column shrinks via :has() so the
+   content column reflows into the freed space, same as the live site. */
+.fw-aurora-sidebar-rail {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--fw-space-6);
+  width: 100%;
+}
+
+.fw-shell-sidebar:has(.fw-aurora-sidebar-rail) {
+  width: 3rem;
+  padding-right: 0;
+}
+
+@media (max-width: 60rem) {
+  /* Mobile already has its own collapse mechanism (the hamburger drawer) —
+     don't offer a second, redundant one inside the drawer. */
+  .fw-aurora-sidebar-toggle {
+    display: none;
+  }
+}
+
+/* ── Sidebar footer: language switcher + system/light/dark theme trio ─────── */
+
+.fw-aurora-sidebar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  /* Neither child has an intrinsic minimum below which it still reads —
+     "English" as a bare word and three 1.75rem icon buttons are both
+     already about as small as they can go. Without flex-shrink:0 the
+     default flex-shrink:1 on both let a narrow sidebar (mobile drawer at
+     an unlucky width, a collapsed rail transitioning, a long language
+     label in translation) squeeze the trio's buttons narrower than their
+     declared 1.75rem, crushing the icons inside instead of the row just
+     wrapping. Wrap is the fallback once even flex-shrink:0 can't fit both. */
+  flex-wrap: wrap;
+}
+
+.fw-aurora-lang {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.fw-aurora-lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.5rem;
+  background: none;
+  border: none;
+  border-radius: var(--fw-radius-sm);
+  color: var(--fw-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.12s, background 0.12s;
+}
+
+.fw-aurora-lang-trigger:hover {
+  color: var(--fw-fg);
+  background: var(--fw-card-hover);
+}
+
+.fw-aurora-lang-menu {
+  position: absolute;
+  bottom: calc(100% + 0.375rem);
+  left: 0;
+  z-index: 10;
+  min-width: 8rem;
+  padding: 0.375rem;
+  background: var(--fw-card);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius-sm);
+  box-shadow: var(--fw-shadow-lg);
+}
+
+.fw-aurora-lang-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+  background: var(--fw-primary-subtle);
+  border: none;
+  border-radius: var(--fw-radius-sm);
+  color: var(--fw-primary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.fw-aurora-theme-trio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.1875rem;
+  background: var(--fw-bg-subtle);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius-sm);
+  flex-shrink: 0;
+}
+
+.fw-aurora-theme-trio button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: calc(var(--fw-radius-sm) - 2px);
+  color: var(--fw-muted);
+  cursor: pointer;
+  transition: color 0.12s, background 0.12s;
+}
+
+.fw-aurora-theme-trio button:hover {
+  color: var(--fw-fg);
+}
+
+.fw-aurora-theme-trio button[aria-pressed="true"] {
+  background: var(--fw-card);
+  color: var(--fw-primary);
+  box-shadow: var(--fw-shadow);
+}
+
+/* Hero/media frames get a moderate rounded corner, matching Palm's welcome-page hero card. */
+.fw-frame,
+.fw-hero {
+  border-radius: 1rem;
+  overflow: hidden;
+}

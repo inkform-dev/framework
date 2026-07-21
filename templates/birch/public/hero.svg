@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" fill="none" role="img" aria-label="Birch documentation hero">
-  <rect width="800" height="360" rx="20" fill="#0f3d27"/>
-  <circle cx="150" cy="60" r="180" fill="#12472e"/>
-  <circle cx="660" cy="310" r="170" fill="#0c3521"/>
-  <circle cx="640" cy="40" r="100" fill="#124a30"/>
-  <circle cx="120" cy="330" r="110" fill="#0d3d27"/>
-  <path d="M400 130C340 160 320 230 380 290C440 230 460 160 400 130Z" fill="#34d399"/>
-  <path d="M400 150C400 150 388 200 380 270" stroke="#052e1c" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
-</svg>

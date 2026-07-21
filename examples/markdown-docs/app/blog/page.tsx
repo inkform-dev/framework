@@ -12,7 +12,7 @@ export default function BlogIndexPage() {
   const topBar = config ? buildTopBar(withContentNavLinks(config), '') : null;
 
   return (
-    <DocsShell contentType="blog" logo={topBar?.logo} topNav={topBar?.topNav} topActions={topBar?.topActions} hideSidebar hideToc>
+    <DocsShell contentType="blog" logo={topBar?.logo} topNav={topBar?.topNav} topActions={topBar?.topActions} cta={topBar?.cta} hideSidebar hideToc>
       <div className="fw-prose">
         <h1>Blog</h1>
         {posts.length === 0 ? (

@@ -2,7 +2,7 @@
   "name": "@inkform/theme-canopy",
   "version": "0.1.0",
   "private": true,
-  "description": "Canopy — a light, spacious documentation theme for @inkform/framework, inspired by Mintlify's Sequoia starter kit.",
+  "description": "Canopy — a dark-mode-forward documentation theme for @inkform/framework with a vivid green accent, inspired by Mintlify's Palm starter kit.",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",

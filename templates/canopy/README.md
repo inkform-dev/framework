@@ -1,10 +1,11 @@
 # Canopy — @inkform/theme-canopy
 
-Canopy is a light, spacious documentation theme built on `@inkform/framework`
-— inspired by Mintlify's Sequoia starter kit. Light-first with an olive
-accent, generous line-height and margins for long-form reading, Figtree
-throughout (one confident sans voice, not a serif/sans split), IBM Plex Mono
-for code. It supports Guides + API Reference tabs out of the box.
+Canopy is a dark-mode-forward documentation theme built on
+`@inkform/framework` — inspired by Mintlify's Palm starter kit. Vivid lime
+green accent, a centered header search bar, underline tab indicators, no
+header CTA, a whole-sidebar collapse toggle, and a sidebar-footer language +
+theme switcher. Inter throughout, JetBrains Mono for code. It supports
+Guides + API Reference tabs out of the box.
 
 ---
 
@@ -58,6 +59,10 @@ All content lives in `content/docs/`.
 - `slug` is the URL path (empty string = the index `/`).
 - `file` is the MDX file path relative to `content/docs/`.
 - The `openapi` field on a tab points to a JSON/YAML spec file in `content/docs/`.
+- Canopy's header has no CTA button and no extra anchor/nav links by design
+  (matching Palm) — `cta`, `anchors`, and `navbarLinks` are all still
+  supported by the schema and will render if you add them back, they're
+  just omitted from this theme's sample `docs.json`.
 
 ### Writing MDX
 
@@ -92,37 +97,6 @@ clean and the pages still render a "no posts yet" state if visited directly.
 
 ---
 
-## The AI tool menu
-
-Canopy's signature feature (see the right rail on any doc page, below "On
-this page") is `<AiToolMenu />` — a `@inkform/framework/ai-tool-menu` export,
-built as a real shared framework component rather than something local to
-this theme, so any other theme can use it too. It gives readers one-click
-ways to hand the current page to an AI tool:
-
-- **Copy page** — copies the page's raw Markdown to the clipboard.
-- **Open in ChatGPT / Claude / Perplexity / Grok** — opens that tool with a
-  prompt pre-filled to read the current page's URL.
-- **Connect to Cursor / Connect to VS Code** — these don't open the doc page
-  at all. They're MCP-install deep links (`cursor://…/mcp/install`,
-  `vscode:mcp/install`) that register **this site's own MCP server** —
-  `app/api/mcp/route.ts`, two lines around `createMcpHandler()` from
-  `@inkform/framework/mcp` (see ARCHITECTURE.md §8) — in the reader's editor,
-  so they can point their AI agent at these docs directly. This pattern was
-  reverse-engineered from Sequoia's own production site (intercepting its
-  `window.open` calls), not guessed.
-
-It's wired into `app/[[...slug]]/page.tsx` and the API Reference overview
-page via `DocsShell`'s `toc` slot, stacked underneath the normal `<TocList />`.
-Icons are supplied via `renderAiToolIcon()` in `lib/icons.tsx` (generic Lucide
-glyphs — chat bubble, sparkle, cursor, code brackets, search, bot — not
-reproductions of any tool's actual logo). See the component's own doc comment
-in `packages/framework/src/ai-tool-menu.tsx` for the full prop contract,
-including how to disable the Cursor/VS Code items on a site that hasn't
-mounted an MCP route (`mcpUrl={null}`).
-
----
-
 ## Maintain
 
 ### Slug redirects
@@ -137,6 +111,19 @@ When a page's URL changes, record the old → new slug mapping in
 }
 ```
 
+### Sidebar collapse + footer
+
+`components/collapsible-sidebar.tsx` is Canopy-specific (not part of the
+shared framework): a single toggle collapses the whole nav column to a thin
+rail and back — real `useState`, not a static arrow — matching what
+palm.mintlify.site actually does (verified directly: its arrow collapses the
+entire sidebar, not one group at a time). `components/sidebar-footer.tsx`
+renders the language label and the system/light/dark theme trio at the
+bottom of the sidebar; the theme trio reads and writes the same
+`localStorage['fw-theme']` + `dark` class the framework's own theme init
+script already uses, so there's no flash on load and no shared-framework
+change was needed to add the third "system" state.
+
 ### Ask AI widget
 
 The Ask AI button is built in but **disabled by default**. Enable it by setting
@@ -144,9 +131,7 @@ The Ask AI button is built in but **disabled by default**. Enable it by setting
 (`anthropic` | `openai` | `google`, default `anthropic`) and that provider's
 API key (e.g. `ANTHROPIC_API_KEY`) — see `.env.example`. Answers are grounded
 in this site's own content (`@inkform/framework/ai`'s `askDocs()`), not a
-generic chatbot. This is a separate feature from the AI tool menu above — the
-top-bar widget answers questions inline; the tool menu hands the page off to
-an external AI tool of the reader's choice.
+generic chatbot.
 
 ---
 

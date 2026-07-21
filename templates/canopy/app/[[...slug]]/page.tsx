@@ -1,12 +1,13 @@
 import { notFound } from 'next/navigation';
 import { Mdx } from '@inkform/framework/mdx';
-import { DocsShell, Sidebar, TocList, Pagination } from '@inkform/framework/docs-shell';
-import { AiToolMenu } from '@inkform/framework/ai-tool-menu';
+import { DocsShell, TocList, Pagination } from '@inkform/framework/docs-shell';
 import { docNeighbours } from '@inkform/framework';
 import { loadDocsConfig, extractHeadings } from '@inkform/framework/content';
 import { siteMdxComponents } from '@/mdx-components';
 import { buildTopBar } from '@/components/top-bar';
-import { renderIcon, AI_TOOL_ICONS } from '@/lib/icons';
+import { CollapsibleSidebar } from '@/components/collapsible-sidebar';
+import { SidebarFooter } from '@/components/sidebar-footer';
+import { renderIcon } from '@/lib/icons';
 import { resolveRoute, listAllRoutes, sidebarForDoc, withContentNavLinks } from '@/lib/route';
 
 export const dynamicParams = false;
@@ -50,19 +51,10 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
       logo={topBar.logo}
       topNav={topBar.topNav}
       topActions={topBar.topActions}
-      sidebar={<Sidebar groups={sidebar} />}
-      toc={
-        // Canopy's signature right rail (see sequoia.mintlify.site): the
-        // usual scroll-spy TOC, plus the AI-tool-menu underneath — present
-        // even on pages with no headings, matching the reference site's own
-        // behavior. `title={null}` because Sequoia doesn't repeat a second
-        // section label under "On this page"; the divider alone separates
-        // the two groups (see .fw-aitoolmenu's border-top).
-        <>
-          {headings.length > 0 ? <TocList headings={headings} /> : null}
-          <AiToolMenu pageContent={page.content} siteName={config.name} icons={AI_TOOL_ICONS} title={null} />
-        </>
-      }
+      cta={topBar.cta}
+      sidebar={<CollapsibleSidebar title={tab.tab} groups={sidebar} footer={<SidebarFooter />} />}
+      toc={headings.length > 0 ? <TocList headings={headings} /> : undefined}
+      hideToc={headings.length === 0}
     >
       <Mdx source={page.content} components={siteMdxComponents} />
       <Pagination

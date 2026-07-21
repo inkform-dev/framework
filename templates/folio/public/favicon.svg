@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Folio favicon">
-  <rect width="32" height="32" rx="8" fill="#0a0e17"/>
-  <!-- Folio mark: a folded-corner page/leaf -->
-  <path d="M8 6H18L25 13V26H8V6Z" fill="#3b82f6"/>
-  <path d="M18 6L25 13H18V6Z" fill="#93b8fb"/>
-  <path d="M12 17.5H21M12 21.5H21" stroke="#0a0e17" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/>
-</svg>

@@ -1,14 +1,14 @@
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { DocsShell } from '@inkform/framework/docs-shell';
-import { AiToolMenu } from '@inkform/framework/ai-tool-menu';
 import { loadDocsConfig, loadOpenApiSpecForBuild } from '@inkform/framework/content';
 import { findOperation, parseOpenApi } from '@inkform/framework/openapi';
 import { parseOpenApiDocument } from '@inkform/framework/openapi-engine/parse';
 import { buildNavTree } from '@inkform/framework/openapi-engine/nav';
-import { OperationPage, ReferenceSidebar } from '@inkform/framework/openapi-render';
+import { OperationPage, buildReferenceSidebarGroups } from '@inkform/framework/openapi-render';
 import { buildTopBar } from '@/components/top-bar';
-import { AI_TOOL_ICONS } from '@/lib/icons';
+import { CollapsibleSidebar } from '@/components/collapsible-sidebar';
+import { SidebarFooter } from '@/components/sidebar-footer';
 import { apiBasePath, apiTab, withContentNavLinks } from '@/lib/route';
 
 export const dynamicParams = false;
@@ -74,10 +74,9 @@ export default async function ApiReferencePage({ params }: { params: Promise<{ s
 
   let content: ReactNode;
   let activeOperationId: string | undefined;
-  const isOperationPage = slug?.[0] === 'operations' && !!slug[1];
 
-  if (isOperationPage) {
-    const op = findOperation(model, slug![1]);
+  if (slug?.[0] === 'operations' && slug[1]) {
+    const op = findOperation(model, slug[1]);
     if (!op) notFound();
     activeOperationId = op.operationId;
     content = <OperationPage operation={op} servers={model.servers} />;
@@ -98,22 +97,15 @@ export default async function ApiReferencePage({ params }: { params: Promise<{ s
       logo={topBar.logo}
       topNav={topBar.topNav}
       topActions={topBar.topActions}
-      sidebar={<ReferenceSidebar tree={tree} basePath={basePath} activeOperationId={activeOperationId} />}
-      // Matches sequoia.mintlify.site exactly, verified live: the AI-tool
-      // menu appears on the API Reference overview page (same as any guide
-      // page) but NOT on individual operation pages, where this rail is
-      // occupied by sticky request/response code samples instead.
-      toc={
-        isOperationPage ? undefined : (
-          <AiToolMenu
-            pageContent={`# ${model.info.title}\n\n${model.info.description ?? ''}`}
-            siteName={config.name}
-            icons={AI_TOOL_ICONS}
-            title={null}
-          />
-        )
+      cta={topBar.cta}
+      sidebar={
+        <CollapsibleSidebar
+          title={tab.tab}
+          groups={buildReferenceSidebarGroups(tree, basePath, activeOperationId)}
+          footer={<SidebarFooter />}
+        />
       }
-      hideToc={isOperationPage}
+      hideToc
     >
       {content}
     </DocsShell>
