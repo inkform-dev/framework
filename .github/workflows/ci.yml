@@ -1,0 +1,54 @@
+name: CI
+
+# Runs on every PR (regardless of base branch — this repo stacks phase
+# branches on top of each other, PR'd branch-to-branch before eventually
+# landing on main, not just PR'd straight to main) and on every push to
+# main. Committing this workflow doesn't register anything external; GitHub
+# picks up workflow files already present on the default branch and runs
+# them on the events below automatically, the same as any other repo file.
+#
+# Deliberately NOT included here: the Playwright e2e suite
+# (examples/pokeapi-docs/e2e). It makes one real request to the live
+# PokeAPI per run (see its own header comment) — fine for a developer
+# running it locally once, but wiring it into a workflow that fires on
+# every push to every PR would mean every contributor's every push hits a
+# free, community-funded third-party API, which is exactly what this
+# project's own Fair Use Policy page asks readers not to do to PokeAPI.
+# Run it manually: `npm run test:e2e --workspace=@inkform/example-pokeapi`.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # No workspace has a lint script yet — --if-present makes this a
+      # no-op today, ready to activate the moment one does, rather than
+      # something a future PR has to remember to add to CI.
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+      - run: npm test
+
+      - run: npm run build
+
+      # Catches new high/critical advisories as they're published upstream,
+      # without failing on the currently-acknowledged moderate one (Next.js
+      # bundles its own vulnerable postcss even at the latest 16.2.x patch —
+      # see CHANGELOG.md 0.4.0 and MIGRATION.md; not fixable from here short
+      # of a real Next.js release, so it's excluded from the gate rather
+      # than left permanently red).
+      - run: npm audit --audit-level=high

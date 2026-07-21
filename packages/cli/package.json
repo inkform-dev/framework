@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.9.1",
-    "giget": "^1.2.3",
+    "giget": "^3.3.0",
     "picocolors": "^1.1.1"
   }
 }

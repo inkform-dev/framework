@@ -5,9 +5,9 @@
  * oneOf/anyOf/allOf properly instead of falling back to a type-label
  * string), code samples go through CodeSamples (real @scalar/snippetz
  * multi-language generation instead of a single hand-rolled curl string),
- * and there's no "Try it" button — that's Try-It, a separate later phase
- * (the CSS for its modal already exists in api.css from the old renderer,
- * unused for now).
+ * and "Try it" is TryItConsole — a 'use client' island, not this
+ * (server-rendered) component. The page itself stays SSG; only the console
+ * hydrates client-side.
  */
 
 import type { ReactNode } from 'react';
@@ -19,6 +19,7 @@ import { RequestBody } from './RequestBody';
 import { Responses } from './Responses';
 import { SecuritySchemes } from './SecuritySchemes';
 import { Servers } from './Servers';
+import { TryItConsole } from './TryIt/TryItConsole';
 
 export function OperationPage({
   operation,
@@ -38,11 +39,20 @@ export function OperationPage({
       <div className="fw-apiref-header">
         <div className="fw-apiref-endpoint">
           <MethodPill method={operation.method} />
-          <code className="fw-apiref-path">{operation.path}</code>
+          {/* data-pagefind-weight boosts exact operationId/path matches (e.g.
+              searching "get-pokemon" or "/pokemon/{name}") above pages that
+              only mention the same words incidentally in prose. */}
+          <code className="fw-apiref-path" data-pagefind-weight="2">
+            {operation.path}
+          </code>
+          <code className="fw-apiref-operation-id" data-pagefind-weight="2">
+            {operation.operationId}
+          </code>
           {operation.deprecated ? <span className="fw-apiref-deprecated">deprecated</span> : null}
         </div>
         <div className="fw-apiref-title-row">
           <h1 className="fw-apiref-title">{operation.summary}</h1>
+          <TryItConsole operation={operation} servers={servers} />
         </div>
         {operation.description ? <p className="fw-apiref-desc">{operation.description}</p> : null}
       </div>
