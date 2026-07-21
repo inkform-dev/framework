@@ -1,6 +1,6 @@
 {
   "name": "@inkform/framework",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Standalone Next.js + MDX framework for documentation, API reference (OpenAPI), blog, and changelog sites. The rendering engine behind the inkform docs themes — usable on its own.",
   "license": "MIT",
   "author": "Charan",
@@ -38,6 +38,7 @@
     "./openapi": "./src/openapi.ts",
     "./openapi-engine/nav": "./src/openapi-engine/nav.ts",
     "./openapi-engine/parse": "./src/openapi-engine/parse.ts",
+    "./openapi-engine/breaking-changes": "./src/openapi-engine/breaking-changes.ts",
     "./openapi-render": "./src/openapi-render/index.ts",
     "./mcp": "./src/mcp/index.ts",
     "./ai": "./src/ai/index.ts",
@@ -60,7 +61,8 @@
   ],
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "diff-openapi": "tsx bin/diff-openapi.ts"
   },
   "engines": {
     "node": ">=22"
@@ -94,6 +96,7 @@
   },
   "devDependencies": {
     "@types/react": "^19",
+    "tsx": "^4.23.1",
     "typescript": "^5",
     "vitest": "^3.2.4"
   }

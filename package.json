@@ -16,12 +16,17 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspace=@inkform/framework",
-    "build:examples": "npm run build --workspace=@inkform/example-pokeapi --workspace=@inkform/example-markdown --workspace=@inkform/example-inkform-docs"
+    "build": "npm run build --workspaces --if-present",
+    "build:examples": "npm run build --workspace=@inkform/example-pokeapi --workspace=@inkform/example-markdown --workspace=@inkform/example-inkform-docs",
+    "postinstall": "node scripts/prune-workspace-shadows.mjs"
   },
   "engines": {
     "node": ">=22"
   },
   "devDependencies": {
     "prettier": "^3.5.1"
+  },
+  "overrides": {
+    "js-yaml": "^3.15.0"
   }
 }
