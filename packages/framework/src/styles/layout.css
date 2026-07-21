@@ -440,6 +440,103 @@
 .fw-toc-depth-4 .fw-toc-link { padding-left: 2.25rem; }
 
 /* ═══════════════════════════════════════════════════════════════
+   AI TOOL MENU — right-rail "Copy page / Open in ChatGPT / …" list
+   (see ai-tool-menu.tsx). Sits below TocList inside the same
+   .fw-shell-toc rail; reuses .fw-toc's spacing/type scale so the two
+   read as one continuous rail instead of a bolted-on block.
+═══════════════════════════════════════════════════════════════ */
+
+.fw-aitoolmenu {
+  font-size: 0.8125rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--fw-border);
+}
+
+/* No TocList above it (e.g. a page with no headings) — don't double the rail's top inset. */
+.fw-shell-toc > .fw-aitoolmenu:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.fw-aitoolmenu-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--fw-muted);
+  margin: 0 0 0.6rem;
+  padding: 0;
+}
+
+.fw-aitoolmenu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.fw-aitoolmenu-item {
+  margin: 0;
+}
+
+.fw-aitoolmenu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.375rem 0;
+  border: none;
+  background: none;
+  color: var(--fw-muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.fw-aitoolmenu-link:hover {
+  color: var(--fw-fg);
+}
+
+.fw-aitoolmenu-link:focus-visible {
+  outline: none;
+  box-shadow: var(--fw-ring);
+  border-radius: var(--fw-radius-sm);
+}
+
+.fw-aitoolmenu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  color: var(--fw-muted);
+}
+
+.fw-aitoolmenu-link:hover .fw-aitoolmenu-icon {
+  color: var(--fw-primary);
+}
+
+.fw-aitoolmenu-label {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fw-aitoolmenu-link--copied,
+.fw-aitoolmenu-link--copied .fw-aitoolmenu-icon {
+  color: var(--fw-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
    PAGINATION
 ═══════════════════════════════════════════════════════════════ */
 

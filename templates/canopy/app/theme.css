@@ -1,0 +1,128 @@
+/*
+ * Canopy theme — token overrides for @inkform/framework.
+ * Inspired by Mintlify's Sequoia starter kit (sequoia.mintlify.site):
+ * light-mode-forward, olive/yellow-green accent, spacious editorial reading
+ * layout. This file is imported AFTER framework/styles.css so its
+ * declarations win. Only --fw-* tokens and small Canopy-specific accents are
+ * set here — the framework's structural CSS is untouched.
+ *
+ * Unlike Birch (dark-mode-forward), Canopy leans into the framework's own
+ * light-first token defaults (packages/framework/src/styles/tokens.css) —
+ * dark mode below is a complete, coherent second pass, not an afterthought,
+ * but light is the identity.
+ */
+
+/* ── Font variables (set by next/font in layout.tsx) ─────────────────────── */
+:root {
+  --fw-font: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-font-heading: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-mono: var(--font-mono, ui-monospace, "Menlo", "Consolas", monospace);
+}
+
+/* ── Light mode (Canopy's identity) ──────────────────────────────────────── */
+:root {
+  /* Surfaces — a warm, slightly cream white (not stark #fff) for the
+     "grand, expansive... give content room to breathe" editorial feel. */
+  --fw-bg: #fefefb;
+  --fw-bg-subtle: #f8f8f2;
+  --fw-fg: #1a1b16;
+  --fw-muted: #6f7169;
+  --fw-border: #e8e6da;
+  --fw-border-strong: #d3d0bf;
+  --fw-card: #ffffff;
+  --fw-card-hover: #f6f6ef;
+  --fw-code-bg: #f2f1e7;
+  --fw-kbd-bg: #eeede1;
+
+  /* Brand — olive / yellow-green. #4d7c0f measured to clear 4.5:1 as raw
+     text on --fw-bg (~5:1); the CTA button fill darkens further via the
+     shared --fw-primary-cta-bg token (tokens.css), same mechanism every
+     other theme relies on, so it isn't redefined here. */
+  --fw-primary: #4d7c0f;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: rgba(77, 124, 15, 0.08);
+
+  /* Shape — crisp, restrained (not Mint's soft/bubbly big-radius look). */
+  --fw-radius: 8px;
+  --fw-radius-sm: 6px;
+
+  /* Reading column — Sequoia's own body copy measures ~696px at 18px/28px;
+     nudged from the framework's 46rem default to sit close to that. */
+  --fw-content-w: 44rem;
+
+  --fw-shadow: 2px 2px 0 rgba(26, 27, 22, 0.06);
+  --fw-shadow-lg: 4px 4px 0 rgba(26, 27, 22, 0.08);
+  --fw-ring: 0 0 0 3px rgba(77, 124, 15, 0.28);
+}
+
+/* ── Dark mode (coherent, not the primary identity) ──────────────────────── */
+html.dark {
+  --fw-bg: #0e0f0a;
+  --fw-bg-subtle: #14160f;
+  --fw-fg: #eef0e4;
+  --fw-muted: #9a9d8c;
+  --fw-border: #242619;
+  --fw-border-strong: #343723;
+  --fw-card: #14160f;
+  --fw-card-hover: #191c12;
+  --fw-code-bg: #111309;
+  --fw-kbd-bg: #1d2013;
+
+  /* Brighter lime for dark backgrounds — ~9.7:1 against --fw-bg. */
+  --fw-primary: #84cc16;
+  --fw-primary-fg: #0e0f0a;
+  --fw-primary-subtle: rgba(132, 204, 22, 0.14);
+
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.6);
+  --fw-ring: 0 0 0 3px rgba(132, 204, 22, 0.28);
+}
+
+/* ── Canopy-specific: spacious reading rhythm ─────────────────────────────
+   Sequoia's own body copy measures 18px/28px (a 1.56 ratio) — noticeably
+   looser than the framework default (1rem/1.75). .fw-prose's font-size/
+   line-height are plain CSS, not tokens (see prose.css), so this is a small
+   direct override rather than a --fw-* redefinition — same category of
+   per-theme accent as Birch's .fw-search-trigger/.fw-hero rules below. */
+.fw-prose {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+/* Search bar reads as a real input, not a bare icon button (matches
+   Sequoia's own "Search... Ctrl K" bar). */
+.fw-search-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 22rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  background: var(--fw-bg-subtle);
+  color: var(--fw-muted);
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.fw-search-trigger:hover {
+  border-color: var(--fw-border-strong);
+  background: var(--fw-card-hover);
+}
+.fw-search-trigger kbd {
+  font-family: var(--fw-mono);
+  font-size: 0.75rem;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  border: 1px solid var(--fw-border-strong);
+  background: var(--fw-card);
+  color: var(--fw-muted);
+}
+
+/* Eyebrow-style category labels (e.g. a bold H5/kicker above an H1) pick up
+   the brand olive rather than staying neutral-muted — a small, deliberate
+   accent echoing Sequoia's own "GETTING STARTED" / "API DOCUMENTATION" kicker. */
+.fw-prose h5 {
+  color: var(--fw-primary);
+}

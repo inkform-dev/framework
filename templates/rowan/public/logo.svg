@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 32" fill="none" role="img" aria-label="Rowan">
+  <!-- Rowan berry-cluster mark -->
+  <path d="M15 10C15 10 16 7 19.5 6" stroke="#9a3412" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+  <circle cx="10" cy="20.5" r="5" fill="#c2410c"/>
+  <circle cx="17.5" cy="14.5" r="5.5" fill="#ea580c"/>
+  <circle cx="18" cy="23.5" r="4.5" fill="#f97316"/>
+  <!-- Wordmark -->
+  <text x="32" y="21" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" letter-spacing="-0.02em" fill="currentColor">Rowan</text>
+</svg>

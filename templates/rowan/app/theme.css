@@ -1,0 +1,334 @@
+/*
+ * Rowan theme — token overrides for @inkform/framework.
+ * Inspired by Mintlify's Maple starter kit: no Guides|API-Reference tab
+ * switcher (one flat sidebar mixes doc pages and API operations — see
+ * lib/route.tsx's sidebarFlat()), a 3-way system/light/dark icon toggle,
+ * a "Copy page" action, a sidebar-bottom language switcher, and overall much
+ * less top-bar chrome than Birch/Mint. Orange/amber accent, one clean sans
+ * voice (no serif heading face — the reference site doesn't use one).
+ * This file is imported AFTER framework/styles.css so its declarations win.
+ * Only --fw-* tokens and Rowan-specific accents (search trigger, mode
+ * toggle, copy-page menu, language switcher, page-head layout) are set here.
+ */
+
+:root {
+  --fw-font: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-font-heading: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-mono: var(--font-mono, ui-monospace, "Menlo", "Consolas", monospace);
+
+  /* Rowan's header carries far less than Birch/Aurora (no tabs, no CTA,
+     no anchors by default) — a shorter bar reads as intentional, not empty. */
+  --fw-header-h: 3.5rem;
+  /* The flat sidebar carries more groups than a tabbed theme (doc groups +
+     API tag groups all at once) — a touch of extra width keeps operation
+     summaries and nav labels from wrapping too eagerly. */
+  --fw-sidebar-w: 18rem;
+}
+
+/* ── Light mode ──────────────────────────────────────────────────────────── */
+:root {
+  --fw-bg: #ffffff;
+  --fw-bg-subtle: #fafaf9;
+  --fw-fg: #1c1917;
+  --fw-muted: #78716c;
+  --fw-border: #e7e5e4;
+  --fw-border-strong: #d6d3d1;
+  --fw-card: #ffffff;
+  --fw-card-hover: #fafaf9;
+  --fw-code-bg: #f5f5f4;
+  --fw-kbd-bg: #f0efed;
+
+  /* orange-700 — a deliberately darkened pick vs. the brighter orange-500/600
+     the reference site paints with: at full saturation (#f97316/#ea580c)
+     white-adjacent text/links/borders on a white surface clear only ~3.6:1,
+     under the 4.5:1 AA floor (measured). #c2410c clears ~5.2:1. Same pattern
+     Birch used for its green (see birch/app/theme.css). */
+  --fw-primary: #c2410c;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: rgba(194, 65, 12, 0.08);
+
+  /* Slightly tighter than Birch's 10px/7px — reads a bit more minimal. */
+  --fw-radius: 8px;
+  --fw-radius-sm: 6px;
+
+  --fw-shadow: 2px 2px 0 rgba(28, 25, 23, 0.06);
+  --fw-shadow-lg: 4px 4px 0 rgba(28, 25, 23, 0.08);
+  --fw-ring: 0 0 0 3px rgba(194, 65, 12, 0.28);
+}
+
+/* ── Dark mode (Maple's actual default) ─────────────────────────────────── */
+html.dark {
+  --fw-bg: #0c0a09;
+  --fw-bg-subtle: #120f0e;
+  --fw-fg: #f5f5f4;
+  --fw-muted: #a8a29e;
+  --fw-border: #251f1c;
+  --fw-border-strong: #362e29;
+  --fw-card: #120f0e;
+  --fw-card-hover: #1c1917;
+  --fw-code-bg: #17130f;
+  --fw-kbd-bg: #211a16;
+
+  /* orange-500 — bright, ~6.7:1 against this bg (measured), no darkening
+     needed the way light mode's text color does. */
+  --fw-primary: #f97316;
+  --fw-primary-fg: #2a0e02;
+  --fw-primary-subtle: rgba(249, 115, 22, 0.14);
+
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.6);
+  --fw-ring: 0 0 0 3px rgba(249, 115, 22, 0.28);
+}
+
+/* ── Search trigger: minimal rounded-rect field, not a bare button ───────── */
+.fw-search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  background: var(--fw-bg-subtle);
+  color: var(--fw-muted);
+  font-size: 0.8125rem;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.fw-search-trigger:hover {
+  border-color: var(--fw-border-strong);
+  background: var(--fw-card-hover);
+}
+.fw-search-trigger::before {
+  content: '';
+  flex-shrink: 0;
+  width: 0.95rem;
+  height: 0.95rem;
+  opacity: 0.65;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.3-4.3'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.3-4.3'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.fw-search-trigger kbd {
+  margin-left: auto;
+  font-family: var(--fw-mono);
+  font-size: 0.7rem;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  border: 1px solid var(--fw-border-strong);
+  background: var(--fw-card);
+  color: var(--fw-muted);
+}
+
+/* ── Mode toggle: system / light / dark icon trio, near the search bar ───── */
+/* Outer pill groups 3 tiny circular icon buttons — the ui-guardrails
+   rounded-full ban explicitly exempts pills and small circular icon
+   badges; this is both. */
+.fw-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.2rem;
+  flex-shrink: 0;
+  border: 1px solid var(--fw-border);
+  border-radius: 999px;
+  background: var(--fw-bg-subtle);
+}
+.fw-mode-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fw-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.fw-mode-toggle-btn:hover {
+  color: var(--fw-fg);
+  background: var(--fw-card-hover);
+}
+.fw-mode-toggle-btn--active {
+  background: var(--fw-card);
+  color: var(--fw-primary);
+  box-shadow: var(--fw-shadow);
+}
+
+/* ── Copy-page button + dropdown ──────────────────────────────────────────
+   Two-part control: a primary "Copy page" action fused to a chevron that
+   opens a small menu. Sits in its own zero-height row (.fw-page-head, in
+   app/[[...slug]]/page.tsx and app/api-reference/[[...slug]]/page.tsx) so it
+   reads as sitting beside the page's H1 without needing to reach into the
+   Mdx-rendered content to split the heading out. */
+.fw-copy-page {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+}
+.fw-copy-page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  font-family: var(--fw-font);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fw-fg);
+  background: var(--fw-card);
+  border: 1px solid var(--fw-border);
+  border-right: none;
+  border-radius: var(--fw-radius-sm) 0 0 var(--fw-radius-sm);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+.fw-copy-page-btn:hover {
+  background: var(--fw-card-hover);
+  border-color: var(--fw-border-strong);
+}
+.fw-copy-page-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.45rem;
+  color: var(--fw-muted);
+  background: var(--fw-card);
+  border: 1px solid var(--fw-border);
+  border-radius: 0 var(--fw-radius-sm) var(--fw-radius-sm) 0;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.fw-copy-page-chevron:hover {
+  background: var(--fw-card-hover);
+  border-color: var(--fw-border-strong);
+  color: var(--fw-fg);
+}
+.fw-copy-page-menu {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  z-index: 20;
+  width: 15.5rem;
+  padding: 0.35rem;
+  background: var(--fw-card);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  box-shadow: var(--fw-shadow-lg);
+}
+.fw-copy-page-menu-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: none;
+  background: transparent;
+  border-radius: var(--fw-radius-sm);
+  color: var(--fw-fg);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.fw-copy-page-menu-item:hover {
+  background: var(--fw-bg-subtle);
+}
+.fw-copy-page-menu-item svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: var(--fw-muted);
+}
+.fw-copy-page-menu-item-title {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fw-fg);
+}
+.fw-copy-page-menu-item-desc {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--fw-muted);
+  margin-top: 0.1rem;
+}
+
+/* Zero-height row above the Mdx body — the button overlays the top-right of
+   where the H1 lands instead of pushing content down. Falls back to a plain
+   stacked row on narrow screens, where overlaying would clip into the
+   (likely wrapped) title text. */
+.fw-page-head {
+  position: relative;
+  height: 0;
+  display: flex;
+  justify-content: flex-end;
+  z-index: 2;
+}
+.fw-page-head .fw-copy-page {
+  position: relative;
+  top: 0.3rem;
+}
+@media (max-width: 40rem) {
+  .fw-page-head {
+    position: static;
+    height: auto;
+    margin-bottom: 0.75rem;
+  }
+  .fw-page-head .fw-copy-page {
+    top: 0;
+  }
+}
+
+/* ── Sidebar-bottom language switcher (visual only — see components/language-switcher.tsx) ── */
+.fw-lang-switcher {
+  position: relative;
+}
+.fw-lang-switcher-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  font-family: var(--fw-font);
+  font-size: 0.8125rem;
+  color: var(--fw-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--fw-radius-sm);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.fw-lang-switcher-trigger:hover {
+  background: var(--fw-bg-subtle);
+  border-color: var(--fw-border);
+  color: var(--fw-fg);
+}
+.fw-lang-switcher-menu {
+  position: absolute;
+  bottom: calc(100% + 0.35rem);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+  background: var(--fw-card);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  box-shadow: var(--fw-shadow-lg);
+}
+.fw-lang-switcher-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.8125rem;
+  border-radius: var(--fw-radius-sm);
+  color: var(--fw-fg);
+}
+.fw-lang-switcher-item--active {
+  color: var(--fw-primary);
+  font-weight: 500;
+}
+.fw-lang-switcher-item svg {
+  flex-shrink: 0;
+}

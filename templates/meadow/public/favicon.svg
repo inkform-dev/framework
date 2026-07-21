@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Meadow favicon">
+  <!-- Solid amber tile so the mark reads clearly on any tab/browser-chrome
+       background, light or dark — not relying on page background at all. -->
+  <rect width="32" height="32" rx="8" fill="#d97706"/>
+  <!-- Meadow sun mark, in a warm off-white for contrast against the amber tile -->
+  <circle cx="16" cy="16" r="5.5" fill="#fff7e8"/>
+  <path d="M16 4v4M16 24v4M4 16h4M24 16h4" stroke="#fff7e8" stroke-width="2.25" stroke-linecap="round"/>
+</svg>

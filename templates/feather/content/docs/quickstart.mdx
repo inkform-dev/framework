@@ -1,0 +1,76 @@
+---
+title: Quickstart
+description: Start building beautiful documentation in minutes.
+---
+
+# Quickstart
+
+Start building beautiful documentation in minutes.
+
+## Set up your project
+
+<Steps>
+  <Step title="Scaffold a project">
+    Create a new docs site and pick a theme:
+
+    ```bash
+    npx @inkform/cli@latest init my-docs
+    cd my-docs
+    npm install
+    ```
+  </Step>
+  <Step title="Run it locally">
+    Start the dev server and open [localhost:3000](http://localhost:3000):
+
+    ```bash
+    npm run dev
+    ```
+  </Step>
+  <Step title="Edit your content">
+    Content lives in `content/docs`. Edit any `.mdx` file and the page reloads
+    instantly. Add pages by creating files and listing them in `docs.json`.
+  </Step>
+  <Step title="Deploy">
+    Push to GitHub and import the repo on Vercel — zero config. See the
+    project README for the full deploy guide (Vercel and AWS Amplify).
+  </Step>
+</Steps>
+
+## Add your first page
+
+Create `content/docs/hello.mdx`:
+
+```mdx hello.mdx
+---
+title: Hello
+description: My first page.
+---
+
+# Hello
+
+This is my first documentation page.
+```
+
+Then register it in `content/docs/docs.json`:
+
+```json docs.json
+{
+  "group": "Get Started",
+  "pages": [{ "title": "Hello", "slug": "hello", "file": "hello.mdx" }]
+}
+```
+
+<Tip>
+  The `slug` is the URL path and `file` is the MDX file relative to
+  `content/docs`. Nest pages with a `children` array.
+</Tip>
+
+## Cross-linking to the API Reference
+
+If a project has an OpenAPI spec configured, <ApiLink operationId="list-plants">any doc page can link straight to a specific operation</ApiLink> with `<ApiLink operationId="...">`. The link is validated against the spec at build time — a typo or renamed operation fails the build instead of shipping a dead link.
+
+## Custom widgets
+
+Put a component at `widgets/<Name>.tsx`, register it in `widgets/index.ts`, and use it directly in MDX (or from the CMS's widget block) as `<Name />`:
+
+<Counter start={3} />

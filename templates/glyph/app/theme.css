@@ -1,0 +1,170 @@
+/*
+ * Glyph theme — token overrides for @inkform/framework.
+ * Inspired by Mintlify's Linden starter kit: full monospace typography
+ * everywhere (headings, body copy, sidebar nav, TOC — no separate sans or
+ * serif voice at all), a punchy orange accent, plain-text top-nav links
+ * instead of pill tabs, and an outlined/ghost CTA button.
+ * This file is imported AFTER framework/styles.css so its declarations win.
+ * Only --fw-* tokens and small Glyph-specific accents are set here.
+ * The framework's structural CSS is untouched.
+ */
+
+/* ── Font variables (set by next/font in layout.tsx) ───────────────────────
+   Unlike every other theme, Glyph has no sans/serif voice at all — a single
+   monospace family (JetBrains Mono) is loaded once into --font-mono and all
+   three font slots below point at that same variable. Same idiom as the
+   archived Mono theme's layout.tsx. */
+:root {
+  --fw-font: var(--font-mono, ui-monospace, "JetBrains Mono", "Consolas", monospace);
+  --fw-font-heading: var(--font-mono, ui-monospace, "JetBrains Mono", "Consolas", monospace);
+  --fw-mono: var(--font-mono, ui-monospace, "JetBrains Mono", "Consolas", monospace);
+}
+
+/* ── Light mode (default) ────────────────────────────────────────────────── */
+:root {
+  /* Surfaces — warm paper, not stark white */
+  --fw-bg: #fdfbf7;
+  --fw-bg-subtle: #f6f1e9;
+  --fw-fg: #1c1917;
+  --fw-muted: #6b6459;
+  --fw-border: #e8e1d5;
+  --fw-border-strong: #d3c8b6;
+  --fw-card: #ffffff;
+  --fw-card-hover: #f6f1e9;
+  --fw-code-bg: #f3ede2;
+  --fw-kbd-bg: #efe7d8;
+
+  /* Brand — orange */
+  --fw-primary: #ea580c;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: rgba(234, 88, 12, 0.09);
+
+  /* Shape — small, deliberate radius: terminal-adjacent without going full
+     brutalist-sharp (that's Mono's territory). */
+  --fw-radius: 8px;
+  --fw-radius-sm: 5px;
+
+  /* Shadows — hard offset, zero blur (per ui-guardrails) */
+  --fw-shadow: 2px 2px 0 rgba(28, 25, 23, 0.10);
+  --fw-shadow-lg: 4px 4px 0 rgba(28, 25, 23, 0.12);
+  --fw-ring: 0 0 0 3px rgba(234, 88, 12, 0.28);
+}
+
+/* ── Dark mode (Linden's own default) ────────────────────────────────────── */
+html.dark {
+  /* Near-black terminal surfaces */
+  --fw-bg: #0a0a09;
+  --fw-bg-subtle: #110f0d;
+  --fw-fg: #f3ede3;
+  --fw-muted: #928b83;
+  --fw-border: #242019;
+  --fw-border-strong: #3a332a;
+  --fw-card: #131110;
+  --fw-card-hover: #1a1613;
+  --fw-code-bg: #161310;
+  --fw-kbd-bg: #1f1a15;
+
+  /* Brand — brighter orange for dark backgrounds */
+  --fw-primary: #fb923c;
+  --fw-primary-fg: #1c0a00;
+  --fw-primary-subtle: rgba(251, 146, 60, 0.14);
+
+  /* Shadows on near-black */
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.65);
+  --fw-ring: 0 0 0 3px rgba(251, 146, 60, 0.32);
+}
+
+/* ── Headings: reset the shared default's negative letter-spacing ──────────
+   prose.css tightens h1/h2 tracking (-0.01em/-0.02em) for sans/serif display
+   faces; on an all-monospace page that reads as crowded rather than
+   intentional, since every glyph already has a fixed advance width. Glyph
+   keeps normal-case bold headings (unlike Mono's uppercase treatment) at
+   neutral tracking — matches Linden's own headings directly. */
+.fw-prose h1,
+.fw-prose h2,
+.fw-prose h3,
+.fw-prose h4 {
+  letter-spacing: 0;
+}
+
+/* ── Top bar: plain text links instead of pill tabs ─────────────────────────
+   Linden switches "Documentation" / "API Reference" with two bare anchors —
+   bold+bright when active, muted when not — no background, no border, no
+   pill shape. Rendered by components/top-bar.tsx's TabNav via these two
+   Glyph-only classes (not part of the shared framework's fw-* contract). */
+.glyph-toplinks {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.glyph-toplinks::-webkit-scrollbar {
+  display: none;
+}
+
+.glyph-toplink {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fw-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.glyph-toplink:hover {
+  color: var(--fw-fg);
+}
+.glyph-toplink--active {
+  color: var(--fw-fg);
+  font-weight: 700;
+}
+
+/* ── CTA: outlined/ghost, not solid-fill ─────────────────────────────────────
+   Linden's "Dashboard" button is a transparent chip with just a colored
+   border + colored text (plus a trailing chevron) — not the shared
+   framework's default solid --fw-primary-cta-bg fill. Border width (1.5px)
+   is left as the shared base set it; only color/fill/shadow change. */
+.fw-topnav-cta {
+  background: transparent;
+  color: var(--fw-primary);
+  border: 1.5px solid var(--fw-primary);
+  box-shadow: none;
+}
+.fw-topnav-cta::after {
+  content: '>';
+  margin-left: 0.4em;
+  opacity: 0.7;
+}
+.fw-topnav-cta:hover {
+  background: var(--fw-primary-subtle);
+  opacity: 1;
+  box-shadow: none;
+}
+
+/* ── Active TOC entry: chevron prefix ────────────────────────────────────────
+   TocList (packages/framework/src/shell-client.tsx) already exposes the
+   active heading as data-active="true" on .fw-toc-link — no shared-component
+   change needed, just a ::before in front of the existing text content. */
+.fw-toc-link[data-active='true']::before {
+  content: '>';
+  margin-right: 0.35em;
+  color: var(--fw-primary);
+  font-weight: 700;
+}
+
+/* ── Active sidebar entry: same chevron treatment ────────────────────────────
+   Sidebar (packages/framework/src/docs-shell.tsx) exposes the active item as
+   .fw-sidebar-item--active on the <li>; .fw-sidebar-link is a flex row, so
+   the ::before chevron just becomes its first flex child — the row's own
+   `gap` spaces it from the icon/title automatically, no positioning hacks
+   needed. Same safe pure-CSS idiom as the TOC above (not requested in the
+   brief, which only calls out the TOC, but Linden uses this chevron on both
+   rails — this is free, zero-risk fidelity to the reference). */
+.fw-sidebar-item--active .fw-sidebar-link::before {
+  content: '>';
+  color: var(--fw-primary);
+  font-weight: 700;
+  flex-shrink: 0;
+}

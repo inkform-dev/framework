@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" fill="none" role="img" aria-label="Canopy documentation hero">
+  <rect width="800" height="360" rx="20" fill="#2b3512"/>
+  <circle cx="140" cy="70" r="180" fill="#33401a"/>
+  <circle cx="670" cy="310" r="190" fill="#28320f"/>
+  <circle cx="610" cy="50" r="110" fill="#37451d"/>
+  <circle cx="90" cy="330" r="120" fill="#28320f"/>
+  <!-- Canopy cluster, echoing the logo mark at scale -->
+  <circle cx="330" cy="150" r="70" fill="#4d7c0f"/>
+  <circle cx="410" cy="120" r="80" fill="#65a30d"/>
+  <circle cx="470" cy="185" r="65" fill="#84cc16"/>
+  <circle cx="390" cy="225" r="58" fill="#a3e635"/>
+  <path d="M400 260V310" stroke="#1a1b16" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+</svg>

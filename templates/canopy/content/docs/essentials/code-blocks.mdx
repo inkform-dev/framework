@@ -1,0 +1,55 @@
+---
+title: Code Blocks
+description: Display inline code and richly highlighted code blocks.
+---
+
+# Code Blocks
+
+Display inline code and fenced code blocks with syntax highlighting.
+
+## Inline code
+
+To denote a `word` or `phrase` as code, wrap it in backticks (`` ` ``).
+
+## Code blocks
+
+Fence code with triple backticks and a language for highlighting. Add a title
+after the language to label the block:
+
+```js app.js
+export function greet(name) {
+  return `Hello, ${name}!`;
+}
+```
+
+## Code groups
+
+Group related snippets — different languages or package managers — into a single
+tabbed block:
+
+<CodeGroup>
+```bash npm
+npm install @inkform/framework
+```
+
+```bash pnpm
+pnpm add @inkform/framework
+```
+
+```bash yarn
+yarn add @inkform/framework
+```
+</CodeGroup>
+
+## Highlighting
+
+Code blocks are highlighted with [Shiki](https://shiki.style), the same engine
+VS Code uses, so colors match your editor and stay readable in light and dark
+mode.
+
+```ts server.ts
+import { parseOpenApi } from '@inkform/framework/openapi';
+
+const model = parseOpenApi(rawSpec);
+console.log(model.operations.length, 'endpoints');
+```

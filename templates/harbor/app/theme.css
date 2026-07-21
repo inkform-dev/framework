@@ -1,0 +1,184 @@
+/*
+ * Harbor theme — token overrides for @inkform/framework.
+ * Inspired by Almond (a Mintlify starter kit): dark-mode-forward, teal/cyan
+ * accent, a search bar embedded at the top of the sidebar (not the header —
+ * see components/top-bar.tsx + app/[[...slug]]/page.tsx), and a Login/Sign-up
+ * button pair instead of a single CTA.
+ * This file is imported AFTER framework/styles.css so its declarations win.
+ * Only --fw-* tokens and small Harbor-specific accents are set here.
+ */
+
+:root {
+  --fw-font: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-font-heading: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --fw-mono: var(--font-mono, ui-monospace, "Menlo", "Consolas", monospace);
+}
+
+/* ── Light mode ──────────────────────────────────────────────────────────── */
+:root {
+  --fw-bg: #ffffff;
+  --fw-bg-subtle: #f3faf9;
+  --fw-fg: #0b1615;
+  --fw-muted: #5c706c;
+  --fw-border: #dce8e5;
+  --fw-border-strong: #c0d4cf;
+  --fw-card: #ffffff;
+  --fw-card-hover: #f3faf9;
+  --fw-code-bg: #eef6f4;
+  --fw-kbd-bg: #e8f2f0;
+
+  --fw-primary: #0d9488;
+  --fw-primary-fg: #ffffff;
+  --fw-primary-subtle: rgba(13, 148, 136, 0.08);
+  /* Almond's own solid buttons use a slightly darker, fixed teal in both
+     modes (verified against the live site: rgb(0,150,137) regardless of
+     light/dark) rather than the raw --fw-primary — same reasoning as the
+     framework's own --fw-primary-cta-bg default: keeps white button text
+     comfortably above 4.5:1 at button-scale weight/size. */
+  --fw-primary-cta-bg: color-mix(in srgb, var(--fw-primary) 100%, black 12%);
+
+  --fw-radius: 10px;
+  --fw-radius-sm: 8px;
+
+  --fw-shadow: 2px 2px 0 rgba(11, 22, 21, 0.06);
+  --fw-shadow-lg: 4px 4px 0 rgba(11, 22, 21, 0.08);
+  --fw-ring: 0 0 0 3px rgba(13, 148, 136, 0.28);
+}
+
+/* ── Dark mode (Almond's actual default) ────────────────────────────────── */
+html.dark {
+  --fw-bg: #0a0f0e;
+  --fw-bg-subtle: #0e1514;
+  --fw-fg: #e7f1ef;
+  --fw-muted: #8ba39e;
+  --fw-border: #1c2725;
+  --fw-border-strong: #2a3835;
+  --fw-card: #0e1514;
+  --fw-card-hover: #131c1a;
+  --fw-code-bg: #0c1211;
+  --fw-kbd-bg: #17201e;
+
+  --fw-primary: #14b8a6;
+  --fw-primary-fg: #04211d;
+  --fw-primary-subtle: rgba(20, 184, 166, 0.14);
+  /* Dark mode's --fw-primary-fg is already dark-on-bright (6-10:1 typical) —
+     no darkening needed, same reasoning the framework's own tokens.css uses. */
+  --fw-primary-cta-bg: var(--fw-primary);
+
+  --fw-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+  --fw-shadow-lg: 4px 4px 0 rgba(0, 0, 0, 0.6);
+  --fw-ring: 0 0 0 3px rgba(20, 184, 166, 0.28);
+}
+
+/* ── Harbor-specific: sidebar-embedded search ──────────────────────────────
+   The headline structural difference from every other template: Harbor
+   removes <SearchDialog> from topActions entirely and passes it as
+   <Sidebar>'s header slot instead (see components/top-bar.tsx's
+   `sidebarHeader` + app/[[...slug]]/page.tsx and
+   app/api-reference/[[...slug]]/page.tsx). It therefore only ever renders
+   inside .fw-sidebar-header now, so it's safe to make it fill that width. */
+.fw-sidebar-header .fw-search-trigger {
+  width: 100%;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: var(--fw-bg-subtle);
+}
+
+.fw-sidebar-header .fw-search-trigger:hover {
+  border-color: var(--fw-border-strong);
+  background: var(--fw-card-hover);
+}
+
+/* ── Harbor-specific: Login (ghost) + Sign up (solid) button pair ─────────
+   Almond shows a SaaS-product auth pair instead of a single docs.json `cta`.
+   There's no docs.json field for two buttons, so top-bar.tsx hardcodes
+   placeholder hrefs for this theme (documented there) — these are just the
+   visual styles for that pair. Buttons use --fw-radius-sm (8px, "rounded-lg"
+   on the real site) — a real button pill would be rounded-full, but the
+   reference site's own buttons measure a moderate 8px radius, not a full
+   stadium shape, so this isn't the ui-guardrails pill exception. */
+.fw-harbor-auth {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fw-harbor-login {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fw-muted);
+  text-decoration: none;
+  border-radius: var(--fw-radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+
+.fw-harbor-login:hover {
+  color: var(--fw-fg);
+  background: var(--fw-bg-subtle);
+}
+
+.fw-harbor-signup {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--fw-primary-fg);
+  background: var(--fw-primary-cta-bg);
+  border-radius: var(--fw-radius-sm);
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  box-shadow: var(--fw-shadow);
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.fw-harbor-signup:hover {
+  opacity: 0.9;
+  box-shadow: var(--fw-shadow-lg);
+}
+
+@media (max-width: 60rem) {
+  .fw-harbor-login {
+    display: none;
+  }
+}
+
+/* ── Harbor-specific: "Copy page" button, floated beside the page H1 ──────
+   Rendered as a preceding sibling of <Mdx> in app/[[...slug]]/page.tsx —
+   float:right lets the H1's own line box wrap around it with no fragile
+   height-matching math (works for both a short and a wrapped/long title). */
+.fw-harbor-page-head {
+  float: right;
+  margin-left: 1rem;
+  margin-top: 0.3rem;
+}
+
+.fw-harbor-copy-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fw-muted);
+  background: var(--fw-card);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius-sm);
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+  white-space: nowrap;
+}
+
+.fw-harbor-copy-page:hover {
+  color: var(--fw-fg);
+  border-color: var(--fw-border-strong);
+  background: var(--fw-card-hover);
+}
+
+.fw-harbor-copy-page[data-copied="true"] {
+  color: var(--fw-primary);
+  border-color: var(--fw-primary);
+}

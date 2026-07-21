@@ -280,7 +280,10 @@ html.dark {
   width: 2.1em;
   height: 2.1em;
   border-radius: var(--fw-radius-sm);
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   font-size: 0.82rem;
   font-weight: 700;
@@ -945,7 +948,10 @@ html.dark {
 
 .fw-subscribe button[type='submit'] {
   padding: 0.55em 1.1em;
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   border: none;
   border-radius: var(--fw-radius-sm);
@@ -1039,7 +1045,10 @@ html.dark {
   display: inline-flex;
   align-items: center;
   padding: 0.25em 0.75em;
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   border-radius: 999px;
   font-size: 0.78rem;

@@ -535,7 +535,10 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.35em 0.9em;
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   border: none;
   border-radius: var(--fw-radius-sm);
@@ -764,7 +767,10 @@
 .fw-playground-send {
   width: 100%;
   padding: 0.6rem 1rem;
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   border: none;
   border-radius: var(--fw-radius-sm);

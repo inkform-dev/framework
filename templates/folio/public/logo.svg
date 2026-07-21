@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 32" fill="none" role="img" aria-label="Folio">
+  <!-- Folio mark: a folded-corner page/leaf, echoing the product name -->
+  <path d="M6 5H18L25 12V27H6V5Z" fill="#2563eb"/>
+  <path d="M18 5L25 12H18V5Z" fill="#93b8fb"/>
+  <path d="M11 17H20M11 21.5H20" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.9"/>
+  <!-- Wordmark -->
+  <text x="33" y="21" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" letter-spacing="-0.02em" fill="currentColor">Folio</text>
+  <text x="71" y="14" font-family="system-ui, -apple-system, sans-serif" font-size="7.5" font-weight="600" fill="currentColor" opacity="0.65">&#8482;</text>
+</svg>

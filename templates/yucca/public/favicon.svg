@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Yucca favicon">
+  <rect width="32" height="32" rx="8" fill="#0a0d0b"/>
+  <!-- Yucca rosette mark -->
+  <path d="M14 26 Q13 16 16 6 Q19 16 18 26 Z" fill="#329100" transform="rotate(-55 16 26)"/>
+  <path d="M14 26 Q13 15 16 5 Q19 15 18 26 Z" fill="#43c200" transform="rotate(-27 16 26)"/>
+  <path d="M14 26 Q13 14 16 4 Q19 14 18 26 Z" fill="#43c200"/>
+  <path d="M14 26 Q13 15 16 5 Q19 15 18 26 Z" fill="#43c200" transform="rotate(27 16 26)"/>
+  <path d="M14 26 Q13 16 16 6 Q19 16 18 26 Z" fill="#329100" transform="rotate(55 16 26)"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Canopy favicon">
+  <rect width="32" height="32" rx="8" fill="#1a1b16"/>
+  <!-- Canopy mark: three overlapping leaf-cluster circles -->
+  <circle cx="13" cy="12" r="6.5" fill="#84cc16"/>
+  <circle cx="19.5" cy="15" r="5.5" fill="#65a30d"/>
+  <circle cx="9.5" cy="17.5" r="5" fill="#a3e635"/>
+</svg>

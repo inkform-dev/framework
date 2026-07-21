@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" fill="none" role="img" aria-label="Feather documentation hero">
+  <rect width="800" height="360" rx="20" fill="#fbe4d3"/>
+  <circle cx="140" cy="70" r="190" fill="#f6cba9"/>
+  <circle cx="660" cy="300" r="180" fill="#f4bd93"/>
+  <circle cx="630" cy="50" r="100" fill="#f8d5b8"/>
+  <circle cx="110" cy="320" r="110" fill="#f6cba9"/>
+  <path d="M414 110C384 122 366 156 378 196C388 216 402 232 414 238C426 216 460 158 442 124C434 112 422 110 414 110Z" fill="#d15a35"/>
+  <path d="M404 122C398 122 396 168 398 232" stroke="#7a2f16" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+  <path d="M400 142L426 132" stroke="#7a2f16" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+  <path d="M400 162L430 150" stroke="#7a2f16" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+  <path d="M400 182L428 170" stroke="#7a2f16" stroke-width="2" stroke-linecap="round" opacity="0.25"/>
+</svg>
