@@ -618,6 +618,53 @@
   border-bottom-left-radius: var(--fw-radius-sm);
 }
 
+/* Sources — the answer's citations (docs pages + API operations it drew from) */
+.fw-askai-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0.375rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fw-askai-source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  color: var(--fw-muted);
+  text-decoration: none;
+  transition: color 0.12s;
+}
+
+.fw-askai-source-link:hover {
+  color: var(--fw-fg);
+  text-decoration: underline;
+}
+
+.fw-askai-source-kind {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05em 0.4em;
+  font-family: var(--fw-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: var(--fw-radius-sm);
+  flex-shrink: 0;
+}
+
+.fw-askai-source-kind--doc {
+  color: var(--fw-muted);
+  background: var(--fw-bg-subtle);
+}
+
+.fw-askai-source-kind--operation {
+  color: var(--fw-method-get-text);
+  background: color-mix(in srgb, var(--fw-method-get) 14%, transparent);
+}
+
 /* Loading dots */
 .fw-askai-loading-dots {
   display: flex;

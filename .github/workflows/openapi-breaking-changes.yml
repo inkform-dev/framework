@@ -1,0 +1,72 @@
+name: OpenAPI breaking-change check
+
+# Reference wiring for packages/framework/bin/diff-openapi.ts — see
+# ARCHITECTURE.md and CHANGELOG.md for what it detects. Scoped to
+# examples/pokeapi-docs's spec as the reference; copy the "Diff" step's
+# paths for any other app with its own content/docs/openapi.json.
+#
+# This workflow only reports — it fails the check on breaking changes but
+# never blocks a merge by itself (branch protection, if you want that, is a
+# separate repo setting). No webhook is registered by this file; GitHub
+# runs workflows already present in the repo automatically on the events
+# below once merged, the same as any other Actions workflow.
+
+on:
+  pull_request:
+    paths:
+      - 'examples/pokeapi-docs/content/docs/openapi.json'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      - name: Save the base branch's spec
+        run: git show ${{ github.event.pull_request.base.sha }}:examples/pokeapi-docs/content/docs/openapi.json > /tmp/before.json
+
+      - name: Diff against this PR's spec
+        id: diff
+        # Run via the repo-root-relative script path, not `npm run
+        # --workspace`, which changes cwd to packages/framework and breaks
+        # the repo-root-relative spec path below.
+        run: |
+          set +e
+          npx tsx packages/framework/bin/diff-openapi.ts \
+            /tmp/before.json examples/pokeapi-docs/content/docs/openapi.json \
+            > /tmp/report.md
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          cat /tmp/report.md
+
+      # Optional: post the report as a PR comment. Needs `pull-requests:
+      # write` (already granted above) — remove this step if you'd rather
+      # keep the report log-only.
+      - name: Comment on the PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('/tmp/report.md', 'utf-8');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `### OpenAPI spec changes\n\n${body}`,
+            });
+
+      - name: Fail if breaking changes were found
+        if: steps.diff.outputs.exit_code == '1'
+        run: exit 1

@@ -1,6 +1,6 @@
 {
   "name": "@inkform/framework",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Standalone Next.js + MDX framework for documentation, API reference (OpenAPI), blog, and changelog sites. The rendering engine behind the inkform docs themes — usable on its own.",
   "license": "MIT",
   "author": "Charan",
@@ -38,8 +38,11 @@
     "./openapi": "./src/openapi.ts",
     "./openapi-engine/nav": "./src/openapi-engine/nav.ts",
     "./openapi-engine/parse": "./src/openapi-engine/parse.ts",
+    "./openapi-engine/breaking-changes": "./src/openapi-engine/breaking-changes.ts",
     "./openapi-render": "./src/openapi-render/index.ts",
     "./mcp": "./src/mcp/index.ts",
+    "./ai": "./src/ai/index.ts",
+    "./llms-txt": "./src/llms-txt.ts",
     "./mdx": "./src/mdx.tsx",
     "./components": "./src/components.tsx",
     "./docs-shell": "./src/docs-shell.tsx",
@@ -58,7 +61,8 @@
   ],
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "diff-openapi": "tsx bin/diff-openapi.ts"
   },
   "engines": {
     "node": ">=22"
@@ -69,11 +73,15 @@
     "react-dom": ">=19"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.16",
+    "@ai-sdk/google": "^4.0.18",
+    "@ai-sdk/openai": "^4.0.16",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@scalar/json-magic": "^0.12.19",
     "@scalar/openapi-parser": "^0.28.10",
     "@scalar/openapi-types": "^0.9.3",
     "@scalar/snippetz": "^0.9.23",
+    "ai": "^7.0.31",
     "fuse.js": "^7.5.0",
     "gray-matter": "^4.0.3",
     "next-mdx-remote": "^6.0.0",
@@ -88,6 +96,7 @@
   },
   "devDependencies": {
     "@types/react": "^19",
+    "tsx": "^4.23.1",
     "typescript": "^5",
     "vitest": "^3.2.4"
   }

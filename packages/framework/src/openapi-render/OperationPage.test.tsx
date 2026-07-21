@@ -21,6 +21,11 @@ describe('OperationPage (real pokeapi spec, full composition)', () => {
       expect(html).toContain(op.summary);
       expect(html).toContain(`fw-method-${op.method}`);
       expect(html).toContain(op.path);
+      // operationId is rendered as visible text (not just a prop) so Pagefind
+      // actually indexes it, and pagefind-weight-boosts it and the path —
+      // see the data-pagefind-weight comment in OperationPage.tsx.
+      expect(html).toContain(op.operationId);
+      expect(html).toContain('data-pagefind-weight="2"');
     }
   });
 
