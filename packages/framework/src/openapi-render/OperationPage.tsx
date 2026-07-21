@@ -39,7 +39,15 @@ export function OperationPage({
       <div className="fw-apiref-header">
         <div className="fw-apiref-endpoint">
           <MethodPill method={operation.method} />
-          <code className="fw-apiref-path">{operation.path}</code>
+          {/* data-pagefind-weight boosts exact operationId/path matches (e.g.
+              searching "get-pokemon" or "/pokemon/{name}") above pages that
+              only mention the same words incidentally in prose. */}
+          <code className="fw-apiref-path" data-pagefind-weight="2">
+            {operation.path}
+          </code>
+          <code className="fw-apiref-operation-id" data-pagefind-weight="2">
+            {operation.operationId}
+          </code>
           {operation.deprecated ? <span className="fw-apiref-deprecated">deprecated</span> : null}
         </div>
         <div className="fw-apiref-title-row">

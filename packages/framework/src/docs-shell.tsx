@@ -165,6 +165,16 @@ export function Breadcrumbs({
    DocsShell — 3-zone layout
 ───────────────────────────────────────────── */
 
+/** Search-result type facet. Maps to a Pagefind `data-pagefind-filter="type:…"` value on the indexed region. */
+export type ContentType = 'doc' | 'api' | 'changelog' | 'blog';
+
+const CONTENT_TYPE_LABEL: Record<ContentType, string> = {
+  doc: 'Docs',
+  api: 'API',
+  changelog: 'Changelog',
+  blog: 'Blog',
+};
+
 export interface DocsShellProps {
   logo?: ReactNode;
   topNav?: ReactNode;
@@ -175,6 +185,8 @@ export interface DocsShellProps {
   footer?: ReactNode;
   hideToc?: boolean;
   hideSidebar?: boolean;
+  /** Tags the indexed content with a Pagefind filter facet (e.g. search-result type badges). Omit for no facet. */
+  contentType?: ContentType;
 }
 
 export function DocsShell({
@@ -187,6 +199,7 @@ export function DocsShell({
   footer,
   hideToc,
   hideSidebar,
+  contentType,
 }: DocsShellProps): ReactNode {
   return (
     <div className={`fw-shell${hideSidebar ? ' fw-shell--no-sidebar' : ''}${hideToc ? ' fw-shell--no-toc' : ''}`}>
@@ -224,8 +237,16 @@ export function DocsShell({
         ) : null}
 
         {/* Main content — data-pagefind-body scopes the Pagefind index to just
-            the article, not nav/sidebar/header chrome. */}
-        <main className="fw-shell-main" id="main-content" data-pagefind-body>
+            the article, not nav/sidebar/header chrome. data-pagefind-filter
+            (when contentType is given) tags every result from this page with
+            a "type" facet so the search UI can render a Docs/API/Changelog/
+            Blog badge and let users filter by it. */}
+        <main
+          className="fw-shell-main"
+          id="main-content"
+          data-pagefind-body
+          data-pagefind-filter={contentType ? `type:${CONTENT_TYPE_LABEL[contentType]}` : undefined}
+        >
           <div className="fw-shell-content">
             {children}
           </div>

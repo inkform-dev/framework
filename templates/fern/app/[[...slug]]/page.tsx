@@ -45,6 +45,7 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
 
   return (
     <DocsShell
+      contentType="doc"
       logo={topBar.logo}
       topNav={topBar.topNav}
       topActions={topBar.topActions}

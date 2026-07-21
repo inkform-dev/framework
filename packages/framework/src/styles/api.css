@@ -83,6 +83,12 @@
   word-break: break-all;
 }
 
+.fw-apiref-operation-id {
+  font-family: var(--fw-mono);
+  font-size: 0.8125rem;
+  color: var(--fw-muted);
+}
+
 .fw-apiref-deprecated {
   display: inline-flex;
   padding: 0.1em 0.5em;
