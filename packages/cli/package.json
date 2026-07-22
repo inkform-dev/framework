@@ -1,6 +1,6 @@
 {
   "name": "@inkform/cli",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Scaffold a documentation site powered by @inkform/framework — pick a theme, get a deployable Next.js project.",
   "license": "MIT",
   "type": "module",
