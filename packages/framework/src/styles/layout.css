@@ -77,16 +77,83 @@
   display: flex;
   align-items: center;
   gap: var(--fw-space-1);
-  /* The tab row used to just `overflow: hidden` on its ancestor, silently
-     clipping tabs with no way to reach them — confirmed by measurement at
-     tablet width (~834px). Scrolls instead now, with the scrollbar hidden
-     since this is a nav affordance, not a content area. */
+  flex-shrink: 0;
+  white-space: nowrap;
+  /* Legacy: themes without ScrollableTopNav still scroll at narrow widths */
   overflow-x: auto;
   scrollbar-width: none;
 }
 
+.fw-topnav-scroll .fw-topnav-tabs {
+  overflow-x: visible;
+}
+
 .fw-topnav-tabs::-webkit-scrollbar {
   display: none;
+}
+
+/* Scrollable secondary nav — mobile edge hints live on the wrapper */
+.fw-topnav-scroll {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+}
+
+.fw-topnav-scroll-track {
+  min-width: 0;
+}
+
+.fw-topnav-scroll-hint {
+  display: none;
+}
+
+@media (max-width: 60rem) {
+  .fw-topnav-scroll-track {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .fw-topnav-scroll-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fw-topnav-scroll-hint {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .fw-topnav-scroll-hint svg {
+    width: 14px;
+    height: 14px;
+    color: var(--fw-muted);
+  }
+
+  .fw-topnav-scroll-hint--left {
+    left: 0;
+    padding-right: 0.5rem;
+    background: linear-gradient(to right, var(--fw-bg) 45%, transparent);
+  }
+
+  .fw-topnav-scroll-hint--right {
+    right: 0;
+    padding-left: 0.5rem;
+    background: linear-gradient(to left, var(--fw-bg) 45%, transparent);
+  }
+
+  .fw-topnav-scroll--can-left .fw-topnav-scroll-hint--left,
+  .fw-topnav-scroll--can-right .fw-topnav-scroll-hint--right {
+    opacity: 1;
+  }
 }
 
 .fw-topnav-tab {
@@ -185,18 +252,10 @@
   letter-spacing: -0.01em;
 }
 
-/* Hide secondary top-nav links from the HEADER specifically on mobile
-   (prevents overflow in the now-cramped row) — the tab row itself scrolls
-   (above) rather than needing to hide. Scoped to .fw-shell-header, not
-   global: DocsShell also renders topNav (and cta, if given) a second time
-   inside the hamburger drawer — see .fw-drawer-nav below and
-   MobileSidebarToggle in shell-client.tsx — so hiding them here doesn't
-   remove them from reach entirely. It used to: plain display:none with no
-   second copy anywhere meant these links were completely inaccessible on
-   mobile, not just relocated. */
+/* Hide header CTA on mobile (relocated to drawer). Secondary nav links stay
+   visible in the scrollable second row — anchors/navlinks now share
+   .fw-topnav-tab styling inside SecondaryTopNav. */
 @media (max-width: 60rem) {
-  .fw-shell-header .fw-topnav-anchors,
-  .fw-shell-header .fw-topnav-navlink,
   .fw-shell-header .fw-topnav-cta {
     display: none;
   }

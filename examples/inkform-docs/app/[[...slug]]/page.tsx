@@ -43,7 +43,8 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   const headings = extractHeadings(page.content);
   const { prev, next } = docNeighbours(config, ref.slug);
   const sidebar = sidebarForDoc(config, tab, ref.slug, renderIcon);
-  const topBar = buildTopBar(withContentNavLinks(config), tab.tab);
+  const pathname = (slug ?? []).length === 0 ? '/' : `/${(slug ?? []).join('/')}`;
+  const topBar = buildTopBar(withContentNavLinks(config), tab.tab, pathname);
 
   return (
     <DocsShell

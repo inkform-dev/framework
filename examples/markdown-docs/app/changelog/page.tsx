@@ -10,7 +10,7 @@ export const metadata = { title: 'Changelog' };
 export default function ChangelogPage() {
   const config = loadDocsConfig();
   const entries = loadChangelogEntries();
-  const topBar = config ? buildTopBar(withContentNavLinks(config), '') : null;
+  const topBar = config ? buildTopBar(withContentNavLinks(config), '', '/changelog') : null;
 
   return (
     <DocsShell contentType="changelog" logo={topBar?.logo} topNav={topBar?.topNav} topActions={topBar?.topActions} cta={topBar?.cta} hideSidebar hideToc>

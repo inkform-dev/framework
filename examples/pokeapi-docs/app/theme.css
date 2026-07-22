@@ -96,7 +96,7 @@ html.dark {
   row-gap: 0.625rem;
   align-items: center;
   padding-top: 0.875rem;
-  padding-bottom: 0.75rem;
+  padding-bottom: 0;
 }
 
 .fw-shell-header-start {
@@ -171,7 +171,8 @@ html.dark {
 }
 
 .fw-topnav-tab {
-  padding: 0.4rem 0.0625rem 0.6rem;
+  padding: 0.5rem 0.0625rem 0.75rem;
+  margin-bottom: -1px;
   border: none;
   border-bottom: 2px solid transparent;
   border-radius: 0;
