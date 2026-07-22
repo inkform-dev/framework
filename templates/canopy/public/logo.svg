@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 32" fill="none" role="img" aria-label="Canopy">
+  <!-- Canopy rosette mark: five pointed blades fanning from a base point -->
+  <path d="M12 28 Q11 17 14 6 Q17 17 16 28 Z" fill="#329100" transform="rotate(-55 14 28)"/>
+  <path d="M12 28 Q11 16 14 5 Q17 16 16 28 Z" fill="#43c200" transform="rotate(-27 14 28)"/>
+  <path d="M12 28 Q11 15 14 4 Q17 15 16 28 Z" fill="#43c200"/>
+  <path d="M12 28 Q11 16 14 5 Q17 16 16 28 Z" fill="#43c200" transform="rotate(27 14 28)"/>
+  <path d="M12 28 Q11 17 14 6 Q17 17 16 28 Z" fill="#329100" transform="rotate(55 14 28)"/>
+  <!-- Wordmark -->
+  <text x="32" y="21" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" letter-spacing="-0.02em" fill="currentColor">Canopy</text>
+</svg>

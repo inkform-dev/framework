@@ -179,6 +179,13 @@ export interface DocsShellProps {
   logo?: ReactNode;
   topNav?: ReactNode;
   topActions?: ReactNode;
+  /**
+   * Optional CTA, rendered at the end of the header actions row AND
+   * (unlike topActions, which stays header-only — see MobileSidebarToggle's
+   * doc comment) duplicated into the mobile drawer, since it's usually the
+   * one part of the header worth keeping reachable once collapsed.
+   */
+  cta?: ReactNode;
   sidebar?: ReactNode;
   toc?: ReactNode;
   children: ReactNode;
@@ -193,6 +200,7 @@ export function DocsShell({
   logo,
   topNav,
   topActions,
+  cta,
   sidebar,
   toc,
   children,
@@ -201,6 +209,12 @@ export function DocsShell({
   hideSidebar,
   contentType,
 }: DocsShellProps): ReactNode {
+  // The hamburger/drawer is also how topNav + cta stay reachable once the
+  // header hides them past a width (see layout.css) — so it has to render
+  // whenever there's a sidebar OR nav content to reveal, not just for the
+  // sidebar tree alone.
+  const showMobileMenu = (!hideSidebar && sidebar) || topNav || cta;
+
   return (
     <div className={`fw-shell${hideSidebar ? ' fw-shell--no-sidebar' : ''}${hideToc ? ' fw-shell--no-toc' : ''}`}>
       {/* ── Top header ── */}
@@ -210,8 +224,10 @@ export function DocsShell({
           <div className="fw-shell-header-start">
             {logo ? <div className="fw-shell-logo">{logo}</div> : null}
             {/* Mobile drawer toggle — client component */}
-            {!hideSidebar && sidebar ? (
-              <MobileSidebarToggle>{sidebar}</MobileSidebarToggle>
+            {showMobileMenu ? (
+              <MobileSidebarToggle nav={topNav} cta={cta}>
+                {!hideSidebar ? sidebar : null}
+              </MobileSidebarToggle>
             ) : null}
           </div>
 
@@ -223,8 +239,11 @@ export function DocsShell({
           ) : null}
 
           {/* Right actions */}
-          {topActions ? (
-            <div className="fw-shell-actions">{topActions}</div>
+          {topActions || cta ? (
+            <div className="fw-shell-actions">
+              {topActions}
+              {cta}
+            </div>
           ) : null}
         </div>
       </header>

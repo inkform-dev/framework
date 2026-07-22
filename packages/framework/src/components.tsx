@@ -255,20 +255,20 @@ export function ParamField({
   const location = query ? 'query' : path ? 'path' : body ? 'body' : header ? 'header' : undefined;
 
   return (
-    <div className={`fw-param${deprecated ? ' fw-param--deprecated' : ''}`}>
-      <div className="fw-param-header">
-        <code className="fw-param-name">{fieldName}</code>
-        {type && <span className="fw-param-type">{type}</span>}
-        {location && <span className="fw-param-location">{location}</span>}
-        {required && <span className="fw-param-required">required</span>}
-        {deprecated && <span className="fw-param-deprecated">deprecated</span>}
+    <div className={`fw-mdx-param${deprecated ? ' fw-mdx-param--deprecated' : ''}`}>
+      <div className="fw-mdx-param-header">
+        <code className="fw-mdx-param-name">{fieldName}</code>
+        {type && <span className="fw-mdx-param-type">{type}</span>}
+        {location && <span className="fw-mdx-param-location">{location}</span>}
+        {required && <span className="fw-mdx-param-required">required</span>}
+        {deprecated && <span className="fw-mdx-param-deprecated">deprecated</span>}
         {defaultValue !== undefined && (
-          <span className="fw-param-default">
+          <span className="fw-mdx-param-default">
             default: <code>{String(defaultValue)}</code>
           </span>
         )}
       </div>
-      {children && <div className="fw-param-body">{children}</div>}
+      {children && <div className="fw-mdx-param-body">{children}</div>}
     </div>
   );
 }
@@ -284,11 +284,11 @@ export function ResponseField({ name, type, required = false, children }: Respon
   return (
     <div className="fw-response-field">
       <div className="fw-response-field-header">
-        <code className="fw-param-name">{name}</code>
-        {type && <span className="fw-param-type">{type}</span>}
-        {required && <span className="fw-param-required">required</span>}
+        <code className="fw-mdx-param-name">{name}</code>
+        {type && <span className="fw-mdx-param-type">{type}</span>}
+        {required && <span className="fw-mdx-param-required">required</span>}
       </div>
-      {children && <div className="fw-param-body">{children}</div>}
+      {children && <div className="fw-mdx-param-body">{children}</div>}
     </div>
   );
 }
@@ -460,12 +460,12 @@ export function NewsletterCTA({
 export function ApiReference({ spec, endpoint }: { spec?: string; endpoint?: string }) {
   const [method, ...rest] = (endpoint ?? 'GET /').split(' ');
   return (
-    <div className="fw-apiref">
-      <div className="fw-apiref-head">
+    <div className="fw-mdx-apiref">
+      <div className="fw-mdx-apiref-head">
         <span className={`fw-method-pill fw-method-${(method ?? 'get').toLowerCase()}`}>{method}</span>
-        <code className="fw-apiref-path">{rest.join(' ')}</code>
+        <code className="fw-mdx-apiref-path">{rest.join(' ')}</code>
       </div>
-      {spec ? <p className="fw-apiref-note">from {spec}</p> : null}
+      {spec ? <p className="fw-mdx-apiref-note">from {spec}</p> : null}
     </div>
   );
 }

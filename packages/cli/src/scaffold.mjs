@@ -19,13 +19,19 @@ import pc from 'picocolors';
 const REPO = 'inkform-dev/framework';
 const TEMPLATE_REF = process.env.INKFORM_DOCS_REF || 'main';
 
+// Consolidated to one proven structure (Canopy: collapsible sidebar,
+// mobile-drawer nav that actually stays reachable, theme trio) with theme
+// variants on top, instead of maintaining N structurally-independent
+// templates. The previous 9-template set (birch, rowan, folio, glyph,
+// harbor, meadow, feather + the old canopy) is gone, not archived — each
+// had its own hand-rolled, independently-buggy header/nav. The 6 themes
+// before THAT (aurora, fern, cedar, mono, base, galley) are still archived
+// under archive/templates/, not scaffoldable; galley's tokens live on in
+// the new galley entry below.
 const THEMES = [
-  { value: 'aurora', label: 'Aurora', hint: 'classic dark docs (Nextra-style)' },
-  { value: 'fern', label: 'Fern', hint: 'clean & friendly, emerald green' },
-  { value: 'cedar', label: 'Cedar', hint: 'warm & editorial, burnt orange' },
-  { value: 'mono', label: 'Mono', hint: 'monospace / brutalist / terminal' },
-  { value: 'base', label: 'Base', hint: 'minimal & neutral (start simple)' },
-  { value: 'galley', label: 'Galley', hint: 'warm paper & ink, one editorial red accent' },
+  { value: 'canopy', label: 'Canopy', hint: 'centered search, collapsible sidebar — dark, bright green' },
+  { value: 'shadcn', label: 'Shadcn', hint: "reproduces shadcn/ui's own default look — Zinc, monochrome" },
+  { value: 'galley', label: 'Galley', hint: "Inkform's own design system — warm paper + ink, proof-red" },
 ];
 const THEME_VALUES = new Set(THEMES.map((t) => t.value));
 
@@ -211,7 +217,7 @@ export async function run(argv) {
     theme = undefined;
   }
   if (!theme) {
-    const v = await p.select({ message: 'Pick a theme', options: THEMES, initialValue: 'aurora' });
+    const v = await p.select({ message: 'Pick a theme', options: THEMES, initialValue: 'canopy' });
     if (p.isCancel(v)) onCancel();
     theme = v;
   }

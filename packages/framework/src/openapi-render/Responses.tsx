@@ -7,11 +7,9 @@
 
 import type { ApiResponse } from '../openapi';
 import { Section } from './Parameters';
-import { sampleFromSchema } from './sample';
 import { SchemaFields } from './SchemaObject';
 
 function ResponsePanel({ response }: { response: ApiResponse }) {
-  const sample = sampleFromSchema(response.schema);
   const isOk = response.status.startsWith('2');
 
   return (
@@ -21,18 +19,16 @@ function ResponsePanel({ response }: { response: ApiResponse }) {
         {response.description ? <span className="fw-response-desc">{response.description}</span> : null}
         {response.contentType ? <span className="fw-response-ct">{response.contentType}</span> : null}
       </summary>
-      {response.schema || sample != null ? (
+      {/* The actual JSON sample renders in the right rail (ResponseSamples,
+          alongside the request's CodeSamples) with syntax highlighting and
+          a status-code tab switcher, matching the reference layout — this
+          column stays schema documentation only, not a second copy of the
+          same sample. */}
+      {response.schema?.properties ? (
         <div className="fw-response-body">
-          {response.schema?.properties ? (
-            <div className="fw-response-fields">
-              <SchemaFields schema={response.schema} depth={0} />
-            </div>
-          ) : null}
-          {sample != null ? (
-            <pre className="fw-response-sample">
-              <code>{JSON.stringify(sample, null, 2)}</code>
-            </pre>
-          ) : null}
+          <div className="fw-response-fields">
+            <SchemaFields schema={response.schema} depth={0} />
+          </div>
         </div>
       ) : null}
     </details>
