@@ -22,14 +22,30 @@ function tabClass(active: boolean) {
   return `fw-topnav-tab${active ? ' fw-topnav-tab--active' : ''}`;
 }
 
+/** Anchors and navbarLinks can point at the same URL; render once (anchors win). */
+function mergeTopBarLinks(
+  anchors: NonNullable<DocsConfig['anchors']>,
+  navlinks: NonNullable<DocsConfig['navbarLinks']>,
+) {
+  const seen = new Set<string>();
+  const merged: Array<{ name: string; href: string }> = [];
+
+  for (const link of [...anchors, ...navlinks]) {
+    if (seen.has(link.href)) continue;
+    seen.add(link.href);
+    merged.push(link);
+  }
+
+  return merged;
+}
+
 /**
  * Unified secondary header row: doc tabs, anchors, and navbar links share the
  * same underline-tab styling and active state logic.
  */
 export function SecondaryTopNav({ config, activeTab, pathname, apiBase }: SecondaryTopNavProps) {
   const tabs = docTabs(config);
-  const anchors = config.anchors ?? [];
-  const navlinks = config.navbarLinks ?? [];
+  const extraLinks = mergeTopBarLinks(config.anchors ?? [], config.navbarLinks ?? []);
 
   const onBlog = pathname.startsWith('/blog');
   const onChangelog = pathname.startsWith('/changelog');
@@ -56,24 +72,7 @@ export function SecondaryTopNav({ config, activeTab, pathname, apiBase }: Second
           );
         })}
 
-        {anchors.map((a) => {
-          const external = a.href.startsWith('http');
-          const isActive = isInternalNavActive(pathname, a.href);
-
-          return (
-            <a
-              key={a.href}
-              href={a.href}
-              className={tabClass(isActive)}
-              aria-current={isActive ? 'page' : undefined}
-              {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-            >
-              {a.name}
-            </a>
-          );
-        })}
-
-        {navlinks.map((l) => {
+        {extraLinks.map((l) => {
           const external = l.href.startsWith('http');
           const isActive = isInternalNavActive(pathname, l.href);
 

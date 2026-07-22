@@ -4,10 +4,7 @@
   "logo": "/logo.svg",
   "favicon": "/favicon.svg",
   "colors": { "primary": "#dc2626" },
-  "navbarLinks": [
-    { "name": "pokeapi.co", "href": "https://pokeapi.co" },
-    { "name": "GitHub", "href": "https://github.com/PokeAPI/pokeapi" }
-  ],
+  "navbarLinks": [],
   "anchors": [
     { "name": "PokéAPI", "href": "https://pokeapi.co", "icon": "globe" },
     { "name": "GitHub", "href": "https://github.com/PokeAPI/pokeapi", "icon": "github" }
