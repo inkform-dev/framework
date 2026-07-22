@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" fill="none" role="img" aria-label="Canopy documentation hero">
+  <rect width="800" height="360" rx="20" fill="#0f2e08"/>
+  <circle cx="130" cy="70" r="190" fill="#153a0d"/>
+  <circle cx="670" cy="300" r="180" fill="#0c2606"/>
+  <circle cx="650" cy="50" r="110" fill="#173f0e"/>
+  <circle cx="110" cy="320" r="120" fill="#0f2e08"/>
+  <circle cx="400" cy="180" r="86" fill="#329100"/>
+  <path d="M394 220 Q391 178 400 140 Q409 178 406 220 Z" fill="#f4f7f2" transform="rotate(-55 400 220)"/>
+  <path d="M394 220 Q391 176 400 136 Q409 176 406 220 Z" fill="#f4f7f2" transform="rotate(-27 400 220)"/>
+  <path d="M394 220 Q391 174 400 132 Q409 174 406 220 Z" fill="#f4f7f2"/>
+  <path d="M394 220 Q391 176 400 136 Q409 176 406 220 Z" fill="#f4f7f2" transform="rotate(27 400 220)"/>
+  <path d="M394 220 Q391 178 400 140 Q409 178 406 220 Z" fill="#f4f7f2" transform="rotate(55 400 220)"/>
+</svg>

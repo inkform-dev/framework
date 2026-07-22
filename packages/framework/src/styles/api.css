@@ -56,37 +56,46 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  /* 60/40 docs:rail split, shared by the header below (title/desc/endpoint
+     row) and the body grid's left column further down, so both stay
+     left- AND right-aligned with each other. A real percentage of
+     whatever width .fw-shell-content actually ends up with (not a fixed
+     rem value) — 60% minus this column's share of the 3rem gap, which is
+     exactly what a `3fr` track in a `3fr 2fr` grid with a 3rem gap would
+     resolve to; expressed this way (rather than fr units) because it also
+     has to work as a plain max-width on .fw-apiref-header, which isn't a
+     grid item. The body grid's rail column is plain `1fr`, which — once
+     this fixed-and-percentage first column is subtracted, gap included —
+     lands on exactly the remaining 40% on its own; no matching calc()
+     needed there. */
+  --fw-apiref-docs-w: calc(60% - 1.8rem);
+}
+
+/* .fw-shell-content's own max-width (layout.css) is the right measure for
+   plain prose pages, but on an operation page it wastes exactly the width
+   .fw-shell-main already reclaimed from the hidden TOC column (hideToc's
+   .fw-shell--no-toc removes the TOC's own reserved space, but
+   .fw-shell-content's cap doesn't know that and clamps straight back down
+   to prose measure) — freed here so the rail can use it instead of it
+   sitting empty on both sides. Scoped to :has(.fw-apiref-body-layout), not
+   just "any API-reference-tab page", so the tab's own overview page (title
+   + description only, no rail to fill the extra width) is unaffected. */
+.fw-shell-content:has(.fw-apiref-body-layout) {
+  max-width: none;
 }
 
 /* ── Endpoint header ─────────────────────────────────────────── */
 
 .fw-apiref-header {
-  padding: 1.5rem 0 1.5rem;
-  border-bottom: 1px solid var(--fw-border);
-  margin-bottom: 2rem;
+  padding: 1.5rem 0 2rem;
+  max-width: var(--fw-apiref-docs-w);
 }
 
-.fw-apiref-endpoint {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.fw-apiref-path {
-  font-family: var(--fw-mono);
-  font-size: 0.9375rem;
-  color: var(--fw-fg);
-  background: var(--fw-code-bg);
-  padding: 0.2em 0.5em;
-  border-radius: var(--fw-radius-sm);
-  word-break: break-all;
-}
-
-.fw-apiref-operation-id {
-  font-family: var(--fw-mono);
+.fw-apiref-eyebrow {
   font-size: 0.8125rem;
-  color: var(--fw-muted);
+  font-weight: 600;
+  color: var(--fw-primary);
+  margin: 0 0 0.5rem;
 }
 
 .fw-apiref-deprecated {
@@ -100,6 +109,7 @@
   border: 1px solid var(--fw-method-delete);
   border-radius: var(--fw-radius-sm);
   opacity: 0.8;
+  margin-bottom: 0.5rem;
 }
 
 .fw-apiref-title-row {
@@ -123,14 +133,46 @@
   color: var(--fw-muted);
   font-size: 0.9375rem;
   line-height: 1.6;
-  margin: 0;
+  margin: 0 0 1.5rem;
+}
+
+/* Method + path + Try It — one bordered row, not three separate pieces. */
+.fw-apiref-endpoint {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.625rem 0.625rem 0.875rem;
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  background: var(--fw-bg-subtle);
+}
+
+.fw-apiref-path {
+  font-family: var(--fw-mono);
+  font-size: 0.9375rem;
+  color: var(--fw-fg);
+  word-break: break-all;
+}
+
+.fw-apiref-operation-id {
+  font-family: var(--fw-mono);
+  font-size: 0.75rem;
+  color: var(--fw-muted);
+}
+
+.fw-apiref-endpoint .fw-apiref-tryit {
+  margin-left: auto;
 }
 
 /* ── Two-column body layout ──────────────────────────────────── */
 
 .fw-apiref-body-layout {
   display: grid;
-  grid-template-columns: 1fr var(--fw-toc-w, 22rem);
+  /* Docs column fixed at the same measure as the header above it (not 1fr)
+     — the rail is the flexible one now, so it's what actually absorbs the
+     width .fw-shell-content just released, instead of both columns
+     growing and the docs column silently getting wider than before. */
+  grid-template-columns: var(--fw-apiref-docs-w) 1fr;
   gap: 3rem;
   align-items: start;
 }
@@ -156,11 +198,9 @@
 }
 
 .fw-apiref-section-title {
-  font-size: 0.8125rem;
+  font-size: 1.125rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--fw-muted);
+  color: var(--fw-fg);
   margin: 0 0 1rem;
 }
 
@@ -233,9 +273,15 @@
 }
 
 .fw-param-type {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1em 0.4em;
   font-family: var(--fw-mono);
   font-size: 0.75rem;
   color: var(--fw-muted);
+  background: var(--fw-bg-subtle);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius-sm);
 }
 
 .fw-param-required {
@@ -247,6 +293,7 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--fw-method-delete);
+  background: color-mix(in srgb, var(--fw-method-delete) 10%, transparent);
   border: 1px solid var(--fw-method-delete);
   border-radius: var(--fw-radius-sm);
 }
@@ -456,12 +503,12 @@
 
 /* ── Right rail ──────────────────────────────────────────────── */
 
-.fw-apiref-rail {
+.fw-apiref-rail-stack {
   position: sticky;
   top: calc(var(--fw-header-h) + 1.5rem);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .fw-apiref-sample-block {
@@ -474,45 +521,90 @@
 .fw-apiref-sample-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.5rem 0.875rem;
+  padding: 0.5rem 0.625rem 0.5rem 0.875rem;
   background: var(--fw-card);
   border-bottom: 1px solid var(--fw-border);
 }
 
-.fw-apiref-sample-lang {
+.fw-apiref-sample-select {
+  border: none;
+  background: none;
+  color: var(--fw-fg);
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--fw-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  padding: 0.2rem 0;
+  cursor: pointer;
 }
 
-.fw-apiref-curl {
+.fw-apiref-sample-copy {
+  border: none;
+  background: none;
+  color: var(--fw-muted);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--fw-radius-sm);
+  cursor: pointer;
+  transition: color 0.12s, background 0.12s;
+}
+.fw-apiref-sample-copy:hover {
+  color: var(--fw-fg);
+  background: var(--fw-card-hover);
+}
+
+/* shiki's own output (highlight.ts) — .shiki sets its own background-color
+   + --shiki-dark-bg inline (its dual-theme convention); overridden here so
+   the code area matches --fw-code-bg exactly instead of shiki's raw github
+   theme background, keeping one continuous surface with the header above.
+   Per-token color follows the same --shiki-light/-dark toggle prose.css
+   already uses for regular MDX code blocks (rehype-pretty-code) — same
+   mechanism, different selector, so both stay visually consistent. */
+.fw-apiref-sample-code pre.shiki {
   margin: 0;
   padding: 1rem;
   font-family: var(--fw-mono);
   font-size: 0.78125rem;
   line-height: 1.65;
   overflow-x: auto;
-  color: var(--fw-fg);
-  white-space: pre;
+  background-color: var(--fw-code-bg) !important;
+}
+.fw-apiref-sample-code pre.shiki code span {
+  color: var(--shiki-light);
+}
+html.dark .fw-apiref-sample-code pre.shiki code span {
+  color: var(--shiki-dark);
 }
 
-.fw-apiref-response-sample {
+/* ── Response status tabs (right rail) ───────────────────────── */
+
+.fw-apiref-response-tabs {
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.625rem 0.875rem;
+  background: var(--fw-card);
+  border-bottom: 1px solid var(--fw-border);
 }
 
-.fw-apiref-status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
+.fw-apiref-response-tab {
+  border: none;
+  background: none;
+  padding: 0.2rem 0;
   font-family: var(--fw-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  border-bottom: 1px solid var(--fw-border);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--fw-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.fw-apiref-response-tab--active {
+  color: var(--fw-method-get-text);
+  border-bottom-color: var(--fw-method-get);
+}
+.fw-apiref-response-tab--err.fw-apiref-response-tab--active {
+  color: var(--fw-method-delete-text);
+  border-bottom-color: var(--fw-method-delete);
 }
 
 .fw-apiref-status-ok  { color: var(--fw-method-get); background: color-mix(in srgb, var(--fw-method-get) 14%, transparent); }
@@ -535,7 +627,10 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.35em 0.9em;
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   border: none;
   border-radius: var(--fw-radius-sm);
@@ -559,20 +654,27 @@
    API PLAYGROUND MODAL
 ═══════════════════════════════════════════════════════════════ */
 
+/* A panel that drops down from the header, not a full-height sidebar —
+   position: fixed and top-anchored (not tied to scroll position within the
+   page), full page width up to a max, rounded BOTTOM corners only (flush
+   against the header above it), page content stays fully visible around
+   and below it (no dimming backdrop — the backdrop element is kept only
+   as an invisible click-outside-to-close catcher). */
 .fw-playground-overlay {
   position: fixed;
-  inset: 0;
+  top: var(--fw-header-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 50;
   display: flex;
-  align-items: stretch;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .fw-playground-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(11, 15, 23, 0.5);
-  backdrop-filter: blur(2px);
+  background: transparent;
 }
 
 .fw-playground-panel {
@@ -580,10 +682,14 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  width: min(42rem, 90vw);
-  height: 100%;
+  width: 100%;
+  max-width: 90rem;
+  max-height: calc(100vh - var(--fw-header-h) - 2rem);
+  margin: 0 1.5rem;
   background: var(--fw-bg);
-  border-left: 1px solid var(--fw-border);
+  border: 1px solid var(--fw-border);
+  border-top: none;
+  border-radius: 0 0 var(--fw-radius) var(--fw-radius);
   box-shadow: var(--fw-shadow-lg);
   overflow: hidden;
 }
@@ -640,15 +746,73 @@
   background: var(--fw-card-hover);
 }
 
+/* Slim, token-colored scrollbars for small scrollable surfaces (code
+   blocks, the Try It panel body) instead of the browser's chunky default.
+   scrollbar-width/-color covers Firefox and current Chromium; the
+   ::-webkit-scrollbar rules cover Safari and older Chromium, which ignore
+   those properties entirely. */
+.fw-playground-body,
+.fw-apiref-sample-code pre.shiki {
+  scrollbar-width: thin;
+  scrollbar-color: var(--fw-border-strong) transparent;
+}
+.fw-playground-body::-webkit-scrollbar,
+.fw-apiref-sample-code pre.shiki::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.fw-playground-body::-webkit-scrollbar-track,
+.fw-apiref-sample-code pre.shiki::-webkit-scrollbar-track {
+  background: transparent;
+}
+.fw-playground-body::-webkit-scrollbar-thumb,
+.fw-apiref-sample-code pre.shiki::-webkit-scrollbar-thumb {
+  background-color: var(--fw-border-strong);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.fw-playground-body::-webkit-scrollbar-thumb:hover,
+.fw-apiref-sample-code pre.shiki::-webkit-scrollbar-thumb:hover {
+  background-color: var(--fw-muted);
+}
+
+/* Two columns — request form on the left, response on the right — matching
+   the reference's wide layout, rather than one narrow stacked column. */
 .fw-playground-body {
   flex: 1;
   overflow-y: auto;
   padding: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.fw-playground-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--fw-border) transparent;
+  min-width: 0;
+}
+
+.fw-playground-result {
+  min-width: 0;
+}
+
+.fw-playground-result-placeholder {
+  color: var(--fw-muted);
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--fw-border);
+  border-radius: var(--fw-radius);
+  text-align: center;
+}
+
+@media (max-width: 48rem) {
+  .fw-playground-body {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Form fields */
@@ -764,7 +928,10 @@
 .fw-playground-send {
   width: 100%;
   padding: 0.6rem 1rem;
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   border: none;
   border-radius: var(--fw-radius-sm);
@@ -820,11 +987,19 @@
 /* ── Responsive ──────────────────────────────────────────────── */
 
 @media (max-width: 80rem) {
+  /* Header's fixed docs-measure only makes sense stacked next to a
+     same-width docs column — once body-layout below goes full-width
+     single-column (next rule), the header needs to match or it reads as
+     narrower than everything under it. */
+  .fw-apiref-header {
+    max-width: none;
+  }
+
   .fw-apiref-body-layout {
     grid-template-columns: 1fr;
   }
 
-  .fw-apiref-rail {
+  .fw-apiref-rail-stack {
     position: static;
     order: -1; /* Show code samples above docs on narrow screens */
   }
@@ -833,14 +1008,8 @@
 @media (max-width: 40rem) {
   .fw-playground-panel {
     /* Not 100vw: that includes the scrollbar gutter on most desktop
-       browsers, overflowing the actual viewport. The parent overlay is
-       already `position: fixed; inset: 0`, so 100% of it is exactly right. */
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid var(--fw-border);
-  }
-
-  .fw-playground-overlay {
-    align-items: flex-end;
+       browsers, overflowing the actual viewport. */
+    margin: 0 0.75rem;
+    max-height: calc(100vh - var(--fw-header-h) - 1rem);
   }
 }

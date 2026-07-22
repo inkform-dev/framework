@@ -4,11 +4,17 @@ import * as React from 'react';
 
 /**
  * Mounted once by <DocsShell> on every content page. On load, if the URL
- * carries `?q=` (repeated, one value per word — see search-dialog.tsx), highlights
- * each word within the page's `[data-pagefind-body]` region using Pagefind's
- * own generated pagefind-highlight.js (mark.js under the hood) and scrolls to
- * the first match. This is the Mintlify-style "land on the highlighted
- * result" behavior.
+ * carries `?highlight=` (repeated, one value per word — see
+ * search-dialog.tsx), highlights each word within the page's
+ * `[data-pagefind-body]` region using Pagefind's own generated
+ * pagefind-highlight.js (mark.js under the hood) and scrolls to the first
+ * match. This is the Mintlify-style "land on the highlighted result"
+ * behavior.
+ *
+ * Deliberately a different param than SearchDialog's own `?q=` (which
+ * re-opens the dialog itself on mount) — they used to share `?q=`, so
+ * clicking a search result carried it to the destination page, whose own
+ * SearchDialog then saw `?q=` on load and re-opened itself every time.
  *
  * Degrades silently (no highlight, no error) if the script is missing — same
  * postbuild-dependent availability as the search dialog itself.
@@ -52,14 +58,14 @@ export function PagefindHighlightMount() {
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
-    if (!params.has('q')) return;
+    if (!params.has('highlight')) return;
 
     let cancelled = false;
     (async () => {
       const PagefindHighlight = await loadPagefindHighlightCtor();
       if (cancelled || !PagefindHighlight) return;
       new PagefindHighlight({
-        highlightParam: 'q',
+        highlightParam: 'highlight',
         addStyles: false, // we style .fw-search-highlight ourselves (widgets.css) — Pagefind's default is inline yellow
         markOptions: {
           className: 'fw-search-highlight',

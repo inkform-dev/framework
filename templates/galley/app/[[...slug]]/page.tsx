@@ -1,10 +1,12 @@
 import { notFound } from 'next/navigation';
 import { Mdx } from '@inkform/framework/mdx';
-import { DocsShell, Sidebar, TocList, Pagination } from '@inkform/framework/docs-shell';
+import { DocsShell, TocList, Pagination } from '@inkform/framework/docs-shell';
 import { docNeighbours } from '@inkform/framework';
 import { loadDocsConfig, extractHeadings } from '@inkform/framework/content';
 import { siteMdxComponents } from '@/mdx-components';
 import { buildTopBar } from '@/components/top-bar';
+import { CollapsibleSidebar } from '@/components/collapsible-sidebar';
+import { SidebarFooter } from '@/components/sidebar-footer';
 import { renderIcon } from '@/lib/icons';
 import { resolveRoute, listAllRoutes, sidebarForDoc, withContentNavLinks } from '@/lib/route';
 
@@ -49,7 +51,8 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
       logo={topBar.logo}
       topNav={topBar.topNav}
       topActions={topBar.topActions}
-      sidebar={<Sidebar groups={sidebar} />}
+      cta={topBar.cta}
+      sidebar={<CollapsibleSidebar title={tab.tab} groups={sidebar} footer={<SidebarFooter />} />}
       toc={headings.length > 0 ? <TocList headings={headings} /> : undefined}
       hideToc={headings.length === 0}
     >

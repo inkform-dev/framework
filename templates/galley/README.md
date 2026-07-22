@@ -4,8 +4,11 @@ Galley is Inkform's own design system, built on `@inkform/framework`. Warm
 opaque paper + ink, one editorial "Proof" red-pencil accent, a serif prose
 voice (Newsreader) beside a mono machine voice (JetBrains Mono) and a sans UI
 voice (General Sans). Depth comes from paper layering and hairlines, never
-heavy shadow or gradient. It supports Guides + API Reference tabs, plus Blog
-and Changelog, out of the box.
+heavy shadow or gradient. Structurally identical to Canopy (same header,
+sidebar, mobile drawer, and search patterns — only the token layer differs):
+a centered header search bar, underline tab indicators, no header CTA, a
+whole-sidebar collapse toggle, and a sidebar-footer language + theme
+switcher. It supports Guides + API Reference tabs out of the box.
 
 ---
 
@@ -59,11 +62,15 @@ All content lives in `content/docs/`.
 - `slug` is the URL path (empty string = the index `/`).
 - `file` is the MDX file path relative to `content/docs/`.
 - The `openapi` field on a tab points to a JSON/YAML spec file in `content/docs/`.
+- Galley's header has no CTA button and no extra anchor/nav links by design
+  (matching Palm) — `cta`, `anchors`, and `navbarLinks` are all still
+  supported by the schema and will render if you add them back, they're
+  just omitted from this theme's sample `docs.json`.
 
 ### Writing MDX
 
-Add `.mdx` files under `content/docs/` and register them in `docs.json`.
-Galley supports all built-in blocks: `<Note>`, `<Tip>`, `<Warning>`, `<Card>`,
+Add `.mdx` files under `content/docs/` and register them in `docs.json`. Galley
+supports all built-in blocks: `<Note>`, `<Tip>`, `<Warning>`, `<Card>`,
 `<CardGroup>`, `<Steps>`, `<Step>`, `<Tabs>`, `<Tab>`, `<CodeGroup>`,
 `<Accordion>`, `<ParamField>`, `<Frame>`, and more.
 
@@ -107,11 +114,27 @@ When a page's URL changes, record the old → new slug mapping in
 }
 ```
 
+### Sidebar collapse + footer
+
+`components/collapsible-sidebar.tsx` is Galley-specific (not part of the
+shared framework): a single toggle collapses the whole nav column to a thin
+rail and back — real `useState`, not a static arrow — matching what
+palm.mintlify.site actually does (verified directly: its arrow collapses the
+entire sidebar, not one group at a time). `components/sidebar-footer.tsx`
+renders the language label and the system/light/dark theme trio at the
+bottom of the sidebar; the theme trio reads and writes the same
+`localStorage['fw-theme']` + `dark` class the framework's own theme init
+script already uses, so there's no flash on load and no shared-framework
+change was needed to add the third "system" state.
+
 ### Ask AI widget
 
 The Ask AI button is built in but **disabled by default**. Enable it by setting
-`NEXT_PUBLIC_DOCS_AI_ENABLED=true` in `.env.local`. Wire up a real LLM provider
-in `app/api/ask/route.ts` (see the TODO comment there; currently returns a stub).
+`NEXT_PUBLIC_DOCS_AI_ENABLED=true` in `.env.local`, plus `DOCS_AI_PROVIDER`
+(`anthropic` | `openai` | `google`, default `anthropic`) and that provider's
+API key (e.g. `ANTHROPIC_API_KEY`) — see `.env.example`. Answers are grounded
+in this site's own content (`@inkform/framework/ai`'s `askDocs()`), not a
+generic chatbot.
 
 ---
 
@@ -121,7 +144,7 @@ in `app/api/ask/route.ts` (see the TODO comment there; currently returns a stub)
 2. In the Vercel dashboard, click **Add New → Project** and import the repo.
 3. **Framework preset**: Next.js.
 4. **Root directory**: set to the path of this folder if deploying as a
-   standalone (e.g. `oss/templates/galley`), or leave blank if deploying the
+   standalone (e.g. `templates/galley`), or leave blank if deploying the
    directory itself.
 5. Add the environment variable `NEXT_PUBLIC_SITE_URL` (your production URL,
    e.g. `https://docs.example.com`).
@@ -142,16 +165,3 @@ your domain. Vercel handles SSL automatically.
 3. Add the `NEXT_PUBLIC_SITE_URL` environment variable under
    **Environment variables**.
 4. Deploy. Amplify Hosting supports Next.js SSR/ISR natively since Gen 2.
-
----
-
-## Ask AI (deferred)
-
-The `<AskAi />` widget in the top bar is built in. To activate it:
-
-1. Set `NEXT_PUBLIC_DOCS_AI_ENABLED=true`.
-2. Implement the LLM call in `app/api/ask/route.ts`.
-3. Add `ANTHROPIC_API_KEY` (or your provider key) as a server-side env var.
-
-The widget renders in both enabled and disabled states — it just shows an
-informational notice when disabled.

@@ -185,14 +185,71 @@
   letter-spacing: -0.01em;
 }
 
-/* Hide secondary top-nav links on mobile (prevents overflow) — the tab row
-   itself now scrolls (above) rather than needing to hide. */
+/* Hide secondary top-nav links from the HEADER specifically on mobile
+   (prevents overflow in the now-cramped row) — the tab row itself scrolls
+   (above) rather than needing to hide. Scoped to .fw-shell-header, not
+   global: DocsShell also renders topNav (and cta, if given) a second time
+   inside the hamburger drawer — see .fw-drawer-nav below and
+   MobileSidebarToggle in shell-client.tsx — so hiding them here doesn't
+   remove them from reach entirely. It used to: plain display:none with no
+   second copy anywhere meant these links were completely inaccessible on
+   mobile, not just relocated. */
 @media (max-width: 60rem) {
-  .fw-topnav-anchors,
-  .fw-topnav-navlink,
-  .fw-topnav-cta {
+  .fw-shell-header .fw-topnav-anchors,
+  .fw-shell-header .fw-topnav-navlink,
+  .fw-shell-header .fw-topnav-cta {
     display: none;
   }
+}
+
+/* ── Mobile drawer nav ────────────────────────────────────────────────────
+   The drawer copy of topNav/cta (see above) — same tabs/anchors/navlinks/
+   cta markup and classes as the header, restyled here from a horizontal
+   row into a vertical stack of full-width, real-touch-target rows, which
+   is what a drawer actually wants regardless of which theme is active. */
+
+.fw-drawer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-bottom: var(--fw-space-4);
+  margin-bottom: var(--fw-space-4);
+  border-bottom: 1px solid var(--fw-border);
+}
+
+.fw-drawer-nav .fw-topnav-tabs,
+.fw-drawer-nav .fw-topnav-anchors {
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: visible;
+  gap: 0.125rem;
+}
+
+.fw-drawer-nav .fw-topnav-tab,
+.fw-drawer-nav .fw-topnav-anchor,
+.fw-drawer-nav .fw-topnav-navlink {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 2.75rem; /* ~44px real touch target, not just a compact header link */
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--fw-radius-sm);
+  font-size: 0.9375rem;
+  white-space: normal;
+}
+
+.fw-drawer-nav .fw-topnav-tab:hover,
+.fw-drawer-nav .fw-topnav-anchor:hover,
+.fw-drawer-nav .fw-topnav-navlink:hover {
+  background: var(--fw-card-hover);
+}
+
+.fw-drawer-nav .fw-topnav-cta {
+  justify-content: center;
+  width: 100%;
+  min-height: 2.75rem;
+  margin-top: 0.375rem;
+  box-sizing: border-box;
 }
 
 /* ── Body (sidebar + main + toc) ────────────────────────────── */
@@ -438,6 +495,103 @@
 .fw-toc-depth-2 .fw-toc-link { padding-left: 0.75rem; }
 .fw-toc-depth-3 .fw-toc-link { padding-left: 1.5rem; }
 .fw-toc-depth-4 .fw-toc-link { padding-left: 2.25rem; }
+
+/* ═══════════════════════════════════════════════════════════════
+   AI TOOL MENU — right-rail "Copy page / Open in ChatGPT / …" list
+   (see ai-tool-menu.tsx). Sits below TocList inside the same
+   .fw-shell-toc rail; reuses .fw-toc's spacing/type scale so the two
+   read as one continuous rail instead of a bolted-on block.
+═══════════════════════════════════════════════════════════════ */
+
+.fw-aitoolmenu {
+  font-size: 0.8125rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--fw-border);
+}
+
+/* No TocList above it (e.g. a page with no headings) — don't double the rail's top inset. */
+.fw-shell-toc > .fw-aitoolmenu:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.fw-aitoolmenu-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--fw-muted);
+  margin: 0 0 0.6rem;
+  padding: 0;
+}
+
+.fw-aitoolmenu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.fw-aitoolmenu-item {
+  margin: 0;
+}
+
+.fw-aitoolmenu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.375rem 0;
+  border: none;
+  background: none;
+  color: var(--fw-muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.fw-aitoolmenu-link:hover {
+  color: var(--fw-fg);
+}
+
+.fw-aitoolmenu-link:focus-visible {
+  outline: none;
+  box-shadow: var(--fw-ring);
+  border-radius: var(--fw-radius-sm);
+}
+
+.fw-aitoolmenu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  color: var(--fw-muted);
+}
+
+.fw-aitoolmenu-link:hover .fw-aitoolmenu-icon {
+  color: var(--fw-primary);
+}
+
+.fw-aitoolmenu-label {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fw-aitoolmenu-link--copied,
+.fw-aitoolmenu-link--copied .fw-aitoolmenu-icon {
+  color: var(--fw-primary);
+}
 
 /* ═══════════════════════════════════════════════════════════════
    PAGINATION

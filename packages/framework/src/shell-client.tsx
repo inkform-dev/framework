@@ -16,8 +16,27 @@ export interface TocHeading {
 /**
  * Thin client wrapper used by DocsShell to toggle the mobile sidebar drawer.
  * The sidebar content is passed as children so the server can render it.
+ *
+ * `nav`/`cta` are DocsShell's own `topNav`/`cta` slots, rendered a second
+ * time here (above the sidebar tree, styled as a vertical stack by
+ * .fw-drawer-nav in layout.css) — not a mobile-specific nav authored
+ * separately. The header's own copies of these get hidden past a width
+ * (layout.css, scoped to .fw-shell-header) to avoid overflow in the
+ * cramped mobile header row; without a second copy somewhere, that CSS
+ * would just delete them from reach entirely on mobile, which is exactly
+ * the bug this fixes. `topActions` (search, AI assistant) is deliberately
+ * NOT duplicated here — those are stateful widgets, not links, and
+ * mounting two independent copies would be confusing rather than helpful.
  */
-export function MobileSidebarToggle({ children }: { children: React.ReactNode }) {
+export function MobileSidebarToggle({
+  nav,
+  cta,
+  children,
+}: {
+  nav?: React.ReactNode;
+  cta?: React.ReactNode;
+  children: React.ReactNode;
+}) {
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -60,6 +79,12 @@ export function MobileSidebarToggle({ children }: { children: React.ReactNode })
 
       {/* Drawer */}
       <div className={`fw-sidebar-drawer${open ? ' fw-sidebar-drawer--open' : ''}`} aria-hidden={!open}>
+        {nav || cta ? (
+          <nav className="fw-drawer-nav" aria-label="Primary">
+            {nav}
+            {cta}
+          </nav>
+        ) : null}
         {children}
       </div>
     </>
