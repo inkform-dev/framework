@@ -7,10 +7,8 @@
   "navbarLinks": [
     { "name": "GitHub", "href": "https://github.com/inkform-dev/framework" }
   ],
-  "anchors": [
-    { "name": "Platform docs", "href": "https://docs.inkform.dev", "icon": "book" }
-  ],
-  "cta": { "label": "Try the platform", "href": "https://inkform.dev" },
+  "anchors": [],
+  "cta": { "label": "Platform soon...", "href": "https://inkform.dev" },
   "navigation": [
     {
       "group": "Get Started",
