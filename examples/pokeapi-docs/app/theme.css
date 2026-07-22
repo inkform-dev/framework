@@ -89,12 +89,16 @@ html.dark {
 .fw-shell-header {
   height: auto;
   min-height: var(--fw-header-h);
+  border-bottom: none;
 }
 
 .fw-shell-header-inner {
   flex-wrap: wrap;
   row-gap: 0.625rem;
   align-items: center;
+  align-content: flex-start;
+  height: 100%;
+  min-height: var(--fw-header-h);
   padding-top: 0.875rem;
   padding-bottom: 0;
 }
@@ -116,6 +120,8 @@ html.dark {
   order: 3;
   flex-basis: 100%;
   justify-content: flex-start;
+  margin-top: auto;
+  border-bottom: 1px solid var(--fw-border);
 }
 
 /* Search trigger: centered within the row-1 space between the logo and Ask
@@ -171,7 +177,7 @@ html.dark {
 }
 
 .fw-topnav-tab {
-  padding: 0.5rem 0.0625rem 0.75rem;
+  padding: 0.625rem 0.0625rem 0.625rem;
   margin-bottom: -1px;
   border: none;
   border-bottom: 2px solid transparent;
@@ -186,8 +192,11 @@ html.dark {
 
 .fw-topnav-tab--active {
   background: none;
+  margin-bottom: -2px;
   border-bottom-color: var(--fw-primary);
   color: var(--fw-fg);
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Sidebar: collapse chrome + Palm's plain (non-uppercase) group labels ── */
