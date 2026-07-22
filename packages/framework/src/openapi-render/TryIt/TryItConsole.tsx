@@ -128,6 +128,7 @@ function PlaygroundModal({
         </div>
 
         <div className="fw-playground-body">
+        <div className="fw-playground-form">
           {servers.length > 1 ? (
             <label className="fw-playground-field">
               <span className="fw-playground-label">Server</span>
@@ -267,8 +268,15 @@ function PlaygroundModal({
           <button type="button" className="fw-playground-send" onClick={send} disabled={state === 'loading' || state === 'streaming'}>
             {state === 'loading' ? 'Sending…' : state === 'streaming' ? 'Receiving…' : 'Send Request'}
           </button>
+        </div>
 
-          {result ? <ResponseViewer result={result} streaming={state === 'streaming'} /> : null}
+          <div className="fw-playground-result">
+            {result ? (
+              <ResponseViewer result={result} streaming={state === 'streaming'} />
+            ) : (
+              <p className="fw-playground-result-placeholder">Send a request to see the response here.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

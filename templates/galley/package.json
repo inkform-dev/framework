@@ -1,8 +1,8 @@
 {
   "name": "@inkform/theme-galley",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "Galley — the warm paper-and-ink editorial theme for @inkform/framework (Inkform's own design system).",
+  "description": "Galley — Inkform's own design system as a documentation theme for @inkform/framework. Warm paper + ink, a single editorial proof-red accent, Newsreader serif prose beside a General Sans UI voice.",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
@@ -20,9 +20,9 @@
   },
   "devDependencies": {
     "@types/node": "^20",
-    "pagefind": "^1.5.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "pagefind": "^1.5.2",
     "typescript": "^5"
   }
 }

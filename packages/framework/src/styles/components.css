@@ -122,6 +122,16 @@ html.dark {
   text-decoration: none;
   color: inherit;
 }
+/* .fw-prose a's underline (prose.css) has higher specificity than the rule
+   above alone (.fw-prose + type-selector a beats one class) — Cards are
+   meant to be used inside MDX prose content, so without this, every card
+   title/body rendered as a real link inside a doc page prose block showed
+   a stray link-underline that had nothing to do with the card being a link
+   (found while building Birch: a real rendering bug, not a false alarm —
+   confirmed by checking specificity, not just eyeballing it). */
+.fw-prose a.fw-card-link {
+  text-decoration: none;
+}
 .fw-card-link:hover .fw-card {
   background: var(--fw-card-hover);
   box-shadow: var(--fw-shadow-lg, var(--fw-shadow));
@@ -270,7 +280,10 @@ html.dark {
   width: 2.1em;
   height: 2.1em;
   border-radius: var(--fw-radius-sm);
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   font-size: 0.82rem;
   font-weight: 700;
@@ -506,10 +519,19 @@ html.dark {
 }
 
 /* ===========================================================================
- * PARAM FIELD  (.fw-param, .fw-param-*)
+ * PARAM FIELD (inline MDX shortcode — ParamField/ResponseField in
+ * components.tsx)  (.fw-mdx-param, .fw-mdx-param-*)
+ *
+ * Namespaced fw-mdx-param-* (not fw-param-*) deliberately: openapi-render's
+ * full-page ParamsSection (api.css) used to share these exact class names.
+ * Since neither rule declared every property the other did, the browser
+ * merged them instead of one cleanly overriding the other — the full-page
+ * param rows were silently inheriting this widget's pill/badge treatment.
+ * Two unrelated components must never share a class name; see api.css's
+ * .fw-param-type/.fw-param-required for the full-page side of this fix.
  * =========================================================================*/
 
-.fw-param {
+.fw-mdx-param {
   border: 1px solid var(--fw-border);
   border-radius: var(--fw-radius);
   padding: 0.8em 1em;
@@ -517,17 +539,17 @@ html.dark {
   font-size: 0.88rem;
   transition: border-color 0.12s;
 }
-.fw-param:hover { border-color: var(--fw-border-strong); }
-.fw-param--deprecated { opacity: 0.55; }
+.fw-mdx-param:hover { border-color: var(--fw-border-strong); }
+.fw-mdx-param--deprecated { opacity: 0.55; }
 
-.fw-param-header {
+.fw-mdx-param-header {
   display: flex;
   align-items: center;
   gap: 0.45em;
   flex-wrap: wrap;
   margin-bottom: 0.3em;
 }
-.fw-param-name {
+.fw-mdx-param-name {
   font-family: var(--fw-mono);
   font-size: 0.875em;
   font-weight: 600;
@@ -536,11 +558,11 @@ html.dark {
 }
 
 /* Pill tags */
-.fw-param-type,
-.fw-param-location,
-.fw-param-required,
-.fw-param-deprecated,
-.fw-param-default {
+.fw-mdx-param-type,
+.fw-mdx-param-location,
+.fw-mdx-param-required,
+.fw-mdx-param-deprecated,
+.fw-mdx-param-default {
   display: inline-flex;
   align-items: center;
   padding: 0.15em 0.5em;
@@ -550,33 +572,33 @@ html.dark {
   line-height: 1.4;
 }
 
-.fw-param-type {
+.fw-mdx-param-type {
   background: var(--fw-bg-subtle);
   border: 1px solid var(--fw-border);
   color: var(--fw-muted);
   font-family: var(--fw-mono);
 }
 
-.fw-param-location {
+.fw-mdx-param-location {
   background: color-mix(in srgb, var(--fw-primary) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--fw-primary) 25%, transparent);
   color: var(--fw-primary);
   font-family: var(--fw-mono);
 }
 
-.fw-param-required {
+.fw-mdx-param-required {
   background: color-mix(in srgb, var(--fw-callout-error-hue) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--fw-callout-error-hue) 25%, transparent);
   color: var(--fw-callout-error-hue);
 }
 
-.fw-param-deprecated {
+.fw-mdx-param-deprecated {
   background: color-mix(in srgb, var(--fw-callout-warning-hue) 10%, transparent);
   border: 1px solid color-mix(in srgb, var(--fw-callout-warning-hue) 25%, transparent);
   color: var(--fw-callout-warning-hue);
 }
 
-.fw-param-default {
+.fw-mdx-param-default {
   color: var(--fw-muted);
   font-style: italic;
   background: transparent;
@@ -584,7 +606,7 @@ html.dark {
   padding: 0;
   font-family: inherit;
 }
-.fw-param-default code {
+.fw-mdx-param-default code {
   font-family: var(--fw-mono);
   background: var(--fw-code-bg);
   border: 1px solid var(--fw-border);
@@ -592,14 +614,14 @@ html.dark {
   padding: 0.1em 0.3em;
 }
 
-.fw-param-body {
+.fw-mdx-param-body {
   font-size: 0.9em;
   color: var(--fw-muted);
   line-height: 1.6;
   margin-top: 0.4em;
 }
-.fw-param-body > *:first-child { margin-top: 0; }
-.fw-param-body > *:last-child { margin-bottom: 0; }
+.fw-mdx-param-body > *:first-child { margin-top: 0; }
+.fw-mdx-param-body > *:last-child { margin-bottom: 0; }
 
 /* ===========================================================================
  * RESPONSE FIELD  (.fw-response-field)
@@ -935,7 +957,10 @@ html.dark {
 
 .fw-subscribe button[type='submit'] {
   padding: 0.55em 1.1em;
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   border: none;
   border-radius: var(--fw-radius-sm);
@@ -966,10 +991,19 @@ html.dark {
 }
 
 /* ===========================================================================
- * API REFERENCE (inline)  (.fw-apiref)
+ * API REFERENCE (inline MDX shortcode — ApiReference in components.tsx)
+ * (.fw-mdx-apiref)
+ *
+ * Namespaced fw-mdx-apiref-* (not fw-apiref-*) deliberately: this used to
+ * share its root class with openapi-render's full-page OperationPage
+ * (.fw-apiref in api.css). api.css's .fw-apiref never declared border/
+ * background/margin, so this rule's card treatment was never overridden —
+ * only merged in — and the full-page API reference silently inherited a
+ * boxed-card look it was never designed to have. Two unrelated components
+ * must never share a class name.
  * =========================================================================*/
 
-.fw-apiref {
+.fw-mdx-apiref {
   border: 1px solid var(--fw-border);
   border-radius: var(--fw-radius);
   overflow: hidden;
@@ -977,7 +1011,7 @@ html.dark {
   background: var(--fw-card);
 }
 
-.fw-apiref-head {
+.fw-mdx-apiref-head {
   display: flex;
   align-items: center;
   gap: 0.75em;
@@ -986,21 +1020,14 @@ html.dark {
   border-bottom: 1px solid var(--fw-border);
 }
 
-/* .fw-apiref-method + the .fw-method-* background overrides that used to
-   live here were an exact duplicate of .fw-method-pill + its variants in
-   api.css (which loads after this file in styles.css, so it always won the
-   cascade anyway — this was dead weight, not a live conflict). The inline
-   <ApiReference> component (components.tsx) now uses fw-method-pill
-   directly instead of fw-apiref-method. */
-
-.fw-apiref-path {
+.fw-mdx-apiref-path {
   font-family: var(--fw-mono);
   font-size: 0.875rem;
   color: var(--fw-fg);
   word-break: break-all;
 }
 
-.fw-apiref-note {
+.fw-mdx-apiref-note {
   padding: 0.6em 1em;
   font-size: 0.8rem;
   color: var(--fw-muted);
@@ -1029,7 +1056,10 @@ html.dark {
   display: inline-flex;
   align-items: center;
   padding: 0.25em 0.75em;
-  background: var(--fw-primary);
+  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
+     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
+     several themes' light-mode primary (as low as 3.3:1). */
+  background: var(--fw-primary-cta-bg);
   color: var(--fw-primary-fg);
   border-radius: 999px;
   font-size: 0.78rem;

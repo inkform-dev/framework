@@ -1,13 +1,29 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { renderToStaticMarkup } from 'react-dom/server';
+import type { ReactElement } from 'react';
+import { renderToReadableStream } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { findOperation, parseOpenApi } from '../openapi';
 import { OperationPage } from './OperationPage';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..');
 const POKEAPI_SPEC = path.join(REPO_ROOT, 'examples', 'pokeapi-docs', 'content', 'docs', 'openapi.json');
+
+/** OperationPage is an async Server Component (shiki highlighting) — renderToStaticMarkup can't render it; this can, and `stream.allReady` ensures highlighting has actually finished before reading. */
+async function renderAsync(node: ReactElement): Promise<string> {
+  const stream = await renderToReadableStream(node);
+  await stream.allReady;
+  const reader = stream.getReader();
+  const decoder = new TextDecoder();
+  let html = '';
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    html += decoder.decode(value, { stream: true });
+  }
+  return html;
+}
 
 describe('OperationPage (real pokeapi spec, full composition)', () => {
   it('renders every real operation without crashing, with correct core content', async () => {
@@ -16,7 +32,7 @@ describe('OperationPage (real pokeapi spec, full composition)', () => {
     expect(model.operations.length).toBeGreaterThan(0);
 
     for (const op of model.operations) {
-      const html = renderToStaticMarkup(<OperationPage operation={op} servers={model.servers} />);
+      const html = await renderAsync(<OperationPage operation={op} servers={model.servers} />);
       expect(html.length).toBeGreaterThan(0);
       expect(html).toContain(op.summary);
       expect(html).toContain(`fw-method-${op.method}`);
@@ -36,7 +52,7 @@ describe('OperationPage (real pokeapi spec, full composition)', () => {
     expect(op).not.toBeNull();
     if (!op) return;
 
-    const html = renderToStaticMarkup(<OperationPage operation={op} servers={model.servers} />);
+    const html = await renderAsync(<OperationPage operation={op} servers={model.servers} />);
 
     // Path Parameters section — the "name" path param.
     expect(html).toContain('Path Parameters');
@@ -64,7 +80,7 @@ describe('OperationPage (real pokeapi spec, full composition)', () => {
     expect(op).not.toBeNull();
     if (!op) return;
 
-    const html = renderToStaticMarkup(<OperationPage operation={op} servers={model.servers} />);
+    const html = await renderAsync(<OperationPage operation={op} servers={model.servers} />);
     expect(html).toContain('damage_relations');
     expect(html).toContain('no_damage_to');
   });

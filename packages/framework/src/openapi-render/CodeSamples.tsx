@@ -13,15 +13,21 @@
 
 import { snippetz } from '@scalar/snippetz';
 import type { ApiOperation, OpenApiServer } from '../openapi';
+import { CodeSamplesPanel } from './CodeSamplesPanel';
+import { highlightCode } from './highlight';
 import { sampleFromSchema } from './sample';
 
-type SampleTarget = { target: 'shell'; client: 'curl'; label: 'cURL' } | { target: 'js'; client: 'fetch'; label: 'JavaScript' } | { target: 'python'; client: 'requests'; label: 'Python' } | { target: 'node'; client: 'fetch'; label: 'Node.js' };
+type SampleTarget =
+  | { target: 'shell'; client: 'curl'; label: 'cURL'; lang: 'bash' }
+  | { target: 'js'; client: 'fetch'; label: 'JavaScript'; lang: 'javascript' }
+  | { target: 'python'; client: 'requests'; label: 'Python'; lang: 'python' }
+  | { target: 'node'; client: 'fetch'; label: 'Node.js'; lang: 'javascript' };
 
 const DEFAULT_TARGETS: SampleTarget[] = [
-  { target: 'shell', client: 'curl', label: 'cURL' },
-  { target: 'js', client: 'fetch', label: 'JavaScript' },
-  { target: 'python', client: 'requests', label: 'Python' },
-  { target: 'node', client: 'fetch', label: 'Node.js' },
+  { target: 'shell', client: 'curl', label: 'cURL', lang: 'bash' },
+  { target: 'js', client: 'fetch', label: 'JavaScript', lang: 'javascript' },
+  { target: 'python', client: 'requests', label: 'Python', lang: 'python' },
+  { target: 'node', client: 'fetch', label: 'Node.js', lang: 'javascript' },
 ];
 
 function buildHarRequest(operation: ApiOperation, serverUrl: string) {
@@ -65,7 +71,7 @@ function buildHarRequest(operation: ApiOperation, serverUrl: string) {
   return request;
 }
 
-export function CodeSamples({
+export async function CodeSamples({
   operation,
   servers,
   baseUrl,
@@ -78,22 +84,17 @@ export function CodeSamples({
   const request = buildHarRequest(operation, serverUrl);
   const generator = snippetz();
 
-  return (
-    <div className="fw-apiref-rail">
-      {DEFAULT_TARGETS.map(({ target, client, label }) => {
-        const code = generator.hasPlugin(target, client) ? generator.print(target, client, request) : undefined;
-        if (!code) return null;
-        return (
-          <div key={`${target}/${client}`} className="fw-apiref-sample-block">
-            <div className="fw-apiref-sample-header">
-              <span className="fw-apiref-sample-lang">{label}</span>
-            </div>
-            <pre className="fw-apiref-curl">
-              <code>{code}</code>
-            </pre>
-          </div>
-        );
-      })}
-    </div>
+  const samples = await Promise.all(
+    DEFAULT_TARGETS.map(async ({ target, client, label, lang }) => {
+      const code = generator.hasPlugin(target, client) ? generator.print(target, client, request) : undefined;
+      if (!code) return null;
+      const html = await highlightCode(code, lang);
+      return { label, lang: `${target}/${client}`, code, html };
+    }),
   );
+
+  const real = samples.filter((s): s is NonNullable<typeof s> => s !== null);
+  if (real.length === 0) return null;
+
+  return <CodeSamplesPanel samples={real} />;
 }

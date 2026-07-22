@@ -16,12 +16,13 @@ import { MethodPill } from './badges';
 import { CodeSamples } from './CodeSamples';
 import { ParamsSection } from './Parameters';
 import { RequestBody } from './RequestBody';
+import { ResponseSamples } from './ResponseSamples';
 import { Responses } from './Responses';
 import { SecuritySchemes } from './SecuritySchemes';
 import { Servers } from './Servers';
 import { TryItConsole } from './TryIt/TryItConsole';
 
-export function OperationPage({
+export async function OperationPage({
   operation,
   servers,
   baseUrl,
@@ -29,7 +30,7 @@ export function OperationPage({
   operation: ApiOperation;
   servers: OpenApiServer[];
   baseUrl?: string;
-}): ReactNode {
+}): Promise<ReactNode> {
   const pathParams = operation.parameters.filter((p) => p.in === 'path');
   const queryParams = operation.parameters.filter((p) => p.in === 'query');
   const headerParams = operation.parameters.filter((p) => p.in === 'header');
@@ -37,7 +38,25 @@ export function OperationPage({
   return (
     <div className="fw-apiref">
       <div className="fw-apiref-header">
-        <div className="fw-apiref-endpoint">
+        {operation.tag ? <p className="fw-apiref-eyebrow">{operation.tag}</p> : null}
+        {operation.deprecated ? <span className="fw-apiref-deprecated">deprecated</span> : null}
+        <div className="fw-apiref-title-row">
+          <h1 className="fw-apiref-title">{operation.summary}</h1>
+        </div>
+        {operation.description ? <p className="fw-apiref-desc">{operation.description}</p> : null}
+
+        {/* One bordered row — method, path, and Try It together, matching
+            the reference layout (previously three separate pieces: a plain
+            .fw-apiref-endpoint row with its own small path badge, and the
+            Try It button off in the title row next to the H1). */}
+        <div
+          className="fw-apiref-endpoint"
+          // Lets search results show this operation's real method pill
+          // (SearchDialog reads Pagefind's per-result `filters.method`) —
+          // distinct from the type:API facet (docs-shell.tsx), which only
+          // says "this is an API page," not which method.
+          data-pagefind-filter={`method:${operation.method.toUpperCase()}`}
+        >
           <MethodPill method={operation.method} />
           {/* data-pagefind-weight boosts exact operationId/path matches (e.g.
               searching "get-pokemon" or "/pokemon/{name}") above pages that
@@ -48,13 +67,8 @@ export function OperationPage({
           <code className="fw-apiref-operation-id" data-pagefind-weight="2">
             {operation.operationId}
           </code>
-          {operation.deprecated ? <span className="fw-apiref-deprecated">deprecated</span> : null}
-        </div>
-        <div className="fw-apiref-title-row">
-          <h1 className="fw-apiref-title">{operation.summary}</h1>
           <TryItConsole operation={operation} servers={servers} />
         </div>
-        {operation.description ? <p className="fw-apiref-desc">{operation.description}</p> : null}
       </div>
 
       <div className="fw-apiref-body-layout">
@@ -68,7 +82,10 @@ export function OperationPage({
           <Responses responses={operation.responses} />
         </div>
 
-        <CodeSamples operation={operation} servers={servers} baseUrl={baseUrl} />
+        <div className="fw-apiref-rail-stack">
+          <CodeSamples operation={operation} servers={servers} baseUrl={baseUrl} />
+          <ResponseSamples responses={operation.responses} />
+        </div>
       </div>
     </div>
   );
