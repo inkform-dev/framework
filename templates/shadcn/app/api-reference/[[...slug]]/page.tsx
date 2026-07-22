@@ -70,7 +70,11 @@ export default async function ApiReferencePage({ params }: { params: Promise<{ s
 
   const { config, tab, model, tree } = ref;
   const basePath = `/${apiBasePath(config)}`;
-  const topBar = buildTopBar(withContentNavLinks(config), tab.tab);
+  const topBar = buildTopBar(
+    withContentNavLinks(config),
+    tab.tab,
+    slug?.length ? `${basePath}/${slug.join('/')}` : basePath,
+  );
 
   let content: ReactNode;
   let activeOperationId: string | undefined;

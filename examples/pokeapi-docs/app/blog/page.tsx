@@ -9,7 +9,7 @@ export const metadata = { title: 'Blog' };
 export default function BlogIndexPage() {
   const config = loadDocsConfig();
   const posts = loadBlogPosts();
-  const topBar = config ? buildTopBar(withContentNavLinks(config), '') : null;
+  const topBar = config ? buildTopBar(withContentNavLinks(config), '', '/blog') : null;
 
   return (
     <DocsShell contentType="blog" logo={topBar?.logo} topNav={topBar?.topNav} topActions={topBar?.topActions} cta={topBar?.cta} hideSidebar hideToc>

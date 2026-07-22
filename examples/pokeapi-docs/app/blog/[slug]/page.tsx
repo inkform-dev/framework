@@ -24,7 +24,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!post) notFound();
 
   const config = loadDocsConfig();
-  const topBar = config ? buildTopBar(withContentNavLinks(config), '') : null;
+  const topBar = config ? buildTopBar(withContentNavLinks(config), '', `/blog/${slug}`) : null;
 
   return (
     <DocsShell contentType="blog" logo={topBar?.logo} topNav={topBar?.topNav} topActions={topBar?.topActions} cta={topBar?.cta} hideSidebar hideToc>

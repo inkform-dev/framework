@@ -55,7 +55,8 @@
     "./theme-toggle": "./src/theme-toggle.tsx",
     "./subscribe-form": "./src/subscribe-form.tsx",
     "./analytics-script": "./src/analytics-script.tsx",
-    "./reactions": "./src/reactions.tsx",
+    "./secondary-top-nav": "./src/secondary-top-nav.tsx",
+    "./scrollable-top-nav": "./src/scrollable-top-nav.tsx",
     "./comments": "./src/comments.tsx"
   },
   "files": [
