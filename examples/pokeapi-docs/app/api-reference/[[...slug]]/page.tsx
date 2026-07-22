@@ -5,10 +5,8 @@ import { loadDocsConfig, loadOpenApiSpecForBuild } from '@inkform/framework/cont
 import { findOperation, parseOpenApi } from '@inkform/framework/openapi';
 import { parseOpenApiDocument } from '@inkform/framework/openapi-engine/parse';
 import { buildNavTree } from '@inkform/framework/openapi-engine/nav';
-import { OperationPage, buildReferenceSidebarGroups } from '@inkform/framework/openapi-render';
+import { OperationPage, ReferenceSidebar } from '@inkform/framework/openapi-render';
 import { buildTopBar } from '@/components/top-bar';
-import { CollapsibleSidebar } from '@/components/collapsible-sidebar';
-import { SidebarFooter } from '@/components/sidebar-footer';
 import { apiBasePath, apiTab, withContentNavLinks } from '@/lib/route';
 
 export const dynamicParams = false;
@@ -97,14 +95,7 @@ export default async function ApiReferencePage({ params }: { params: Promise<{ s
       logo={topBar.logo}
       topNav={topBar.topNav}
       topActions={topBar.topActions}
-      cta={topBar.cta}
-      sidebar={
-        <CollapsibleSidebar
-          title={tab.tab}
-          groups={buildReferenceSidebarGroups(tree, basePath, activeOperationId)}
-          footer={<SidebarFooter />}
-        />
-      }
+      sidebar={<ReferenceSidebar tree={tree} basePath={basePath} activeOperationId={activeOperationId} />}
       hideToc
     >
       {content}

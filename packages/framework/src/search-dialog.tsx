@@ -22,13 +22,7 @@ import * as React from 'react';
 
 type PagefindSearchResult = {
   id: string;
-  data: () => Promise<{
-    url: string;
-    meta: { title?: string };
-    excerpt: string;
-    /** Populated from data-pagefind-filter attributes (docs-shell.tsx's type:*, OperationPage.tsx's method:*). */
-    filters: Record<string, string[]>;
-  }>;
+  data: () => Promise<{ url: string; meta: { title?: string }; excerpt: string }>;
 };
 
 type PagefindModule = {
@@ -36,18 +30,9 @@ type PagefindModule = {
   search: (query: string) => Promise<{ results: PagefindSearchResult[] }>;
 };
 
-type Result = { url: string; title: string; excerpt: string; method?: string };
+type Result = { url: string; title: string; excerpt: string };
 
 const QUERY_PARAM = 'q';
-// Separate from QUERY_PARAM deliberately: QUERY_PARAM re-opens the dialog
-// itself on mount (a shareable "deep link into a search-in-progress").
-// HIGHLIGHT_PARAM only tells PagefindHighlightMount which words to
-// highlight on a destination page. They used to be the same `?q=` param —
-// clicking a result carried it to the destination, whose own SearchDialog
-// then saw `?q=` on mount and re-opened itself, every time, with no way to
-// dismiss it short of clearing the query first (which finally emptied the
-// URL param). Two params, two independent behaviors, bug gone.
-const HIGHLIGHT_PARAM = 'highlight';
 
 let pagefindPromise: Promise<PagefindModule | null> | null = null;
 
@@ -112,11 +97,11 @@ function syncQueryParam(value: string) {
   window.history.replaceState(window.history.state, '', url.toString());
 }
 
-/** Builds a destination URL carrying the query under HIGHLIGHT_PARAM for PagefindHighlightMount to pick up — not QUERY_PARAM, so landing on the destination doesn't also re-open the dialog. */
+/** Builds a destination URL carrying the query for PagefindHighlightMount to pick up. */
 function withQueryParam(url: string, value: string): string {
   const dest = new URL(url, typeof window === 'undefined' ? 'http://localhost' : window.location.origin);
-  dest.searchParams.delete(HIGHLIGHT_PARAM);
-  for (const w of wordsFromQuery(value)) dest.searchParams.append(HIGHLIGHT_PARAM, w);
+  dest.searchParams.delete(QUERY_PARAM);
+  for (const w of wordsFromQuery(value)) dest.searchParams.append(QUERY_PARAM, w);
   return dest.pathname + dest.search + dest.hash;
 }
 
@@ -183,14 +168,7 @@ export function SearchDialog({
       if (cancelled) return;
       const data = await Promise.all(hits.slice(0, 12).map((r) => r.data()));
       if (cancelled) return;
-      setResults(
-        data.map((d) => ({
-          url: d.url,
-          title: d.meta.title ?? d.url,
-          excerpt: d.excerpt,
-          method: d.filters?.method?.[0],
-        })),
-      );
+      setResults(data.map((d) => ({ url: d.url, title: d.meta.title ?? d.url, excerpt: d.excerpt })));
     }, 120);
 
     return () => {
@@ -252,10 +230,7 @@ export function SearchDialog({
                         goTo(r.url);
                       }}
                     >
-                      <span className="fw-search-result-title">
-                        {r.method ? <span className={`fw-method-pill fw-method-${r.method.toLowerCase()}`}>{r.method}</span> : null}
-                        {r.title}
-                      </span>
+                      <span className="fw-search-result-title">{r.title}</span>
                       {/* Pagefind's own excerpt already wraps matches in <mark> — safe, generated
                           from our own indexed content, not user input. */}
                       <span className="fw-search-result-excerpt" dangerouslySetInnerHTML={{ __html: r.excerpt }} />

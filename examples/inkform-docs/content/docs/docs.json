@@ -34,7 +34,6 @@
       "pages": [
         { "title": "Docs", "slug": "guides/docs", "file": "guides/docs.mdx", "icon": "book-open" },
         { "title": "Blog", "slug": "guides/blog", "file": "guides/blog.mdx", "icon": "pencil" },
-        { "title": "Add a Blog to an Existing Site", "slug": "guides/blog-in-existing-site", "file": "guides/blog-in-existing-site.mdx", "icon": "layers" },
         { "title": "Changelog", "slug": "guides/changelog", "file": "guides/changelog.mdx", "icon": "map" },
         { "title": "Widgets", "slug": "guides/widgets", "file": "guides/widgets.mdx", "icon": "blocks" },
         { "title": "Comments, Reactions & Subscribe Forms", "slug": "guides/interactive", "file": "guides/interactive.mdx", "icon": "heart" }

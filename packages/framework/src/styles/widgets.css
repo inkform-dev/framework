@@ -271,10 +271,7 @@
 .fw-comment-compose button {
   align-self: flex-end;
   padding: 0.35rem 0.875rem;
-  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
-     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
-     several themes' light-mode primary (as low as 3.3:1). */
-  background: var(--fw-primary-cta-bg);
+  background: var(--fw-primary);
   color: var(--fw-primary-fg);
   border: none;
   border-radius: var(--fw-radius-sm);
@@ -389,10 +386,7 @@
 
 .fw-subscribe button {
   padding: 0.5rem 1.125rem;
-  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
-     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
-     several themes' light-mode primary (as low as 3.3:1). */
-  background: var(--fw-primary-cta-bg);
+  background: var(--fw-primary);
   color: var(--fw-primary-fg);
   border: none;
   border-radius: var(--fw-radius-sm);
@@ -612,10 +606,7 @@
 }
 
 .fw-askai-message--user .fw-askai-message-content {
-  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
-     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
-     several themes' light-mode primary (as low as 3.3:1). */
-  background: var(--fw-primary-cta-bg);
+  background: var(--fw-primary);
   color: var(--fw-primary-fg);
   border-bottom-right-radius: var(--fw-radius-sm);
 }
@@ -796,10 +787,7 @@
   width: 2.25rem;
   height: 2.25rem;
   flex-shrink: 0;
-  /* --fw-primary-cta-bg, not --fw-primary directly — see tokens.css: white
-     --fw-primary-fg text on an un-darkened --fw-primary fails WCAG AA for
-     several themes' light-mode primary (as low as 3.3:1). */
-  background: var(--fw-primary-cta-bg);
+  background: var(--fw-primary);
   color: var(--fw-primary-fg);
   border: none;
   border-radius: var(--fw-radius-sm);

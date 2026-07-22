@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 32" fill="none" role="img" aria-label="Base">
-  <!-- Stacked squares mark (base/foundation metaphor) -->
-  <rect x="2" y="12" width="12" height="12" rx="2" fill="#c24e3d"/>
-  <rect x="6" y="7"  width="12" height="12" rx="2" fill="#c24e3d" opacity="0.4"/>
-  <!-- Wordmark -->
-  <text x="24" y="21" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" letter-spacing="-0.02em" fill="currentColor">Base</text>
-</svg>

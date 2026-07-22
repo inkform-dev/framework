@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { AskAi } from '@inkform/framework/ask-ai';
+import { ThemeToggle } from '@inkform/framework/theme-toggle';
 import { SearchDialog } from '@inkform/framework/search-dialog';
 import type { DocsConfig } from '@inkform/framework';
 import { docTabs } from '@inkform/framework';
@@ -28,12 +29,6 @@ function Logo({ config }: { config: DocsConfig }) {
 }
 
 // ── Tab nav ───────────────────────────────────────────────────────────────────
-// Rendered into the `topNav` slot, but pushed onto its own full-width row
-// below the logo/search/assistant row by Aurora's own theme.css (see the
-// "header" section there) — verified on palm.mintlify.site: the tabs sit on
-// a second line, left-aligned under the logo, underlined when active (no
-// pill background). `.fw-topnav-tab`/`--active` classes are shared with
-// every other theme; only the underline treatment is Aurora-specific CSS.
 
 function TabNav({ config, activeTab }: { config: DocsConfig; activeTab: string }) {
   const tabs = docTabs(config);
@@ -87,27 +82,12 @@ export interface TopBarParts {
   logo: ReactNode;
   topNav: ReactNode;
   topActions: ReactNode;
-  /** Separate from topActions so DocsShell can duplicate just this into the mobile drawer without also duplicating the (stateful) search/AI widgets. */
-  cta: ReactNode;
 }
 
 /**
  * Build the three DocsShell header slot contents for Aurora.
- * Server component — client islands (SearchDialog, AskAi) are already
- * marked 'use client' in the framework.
- *
- * Notes, verified directly on palm.mintlify.site:
- *  - No `<ThemeToggle>` here — Palm's header carries no theme control at
- *    all; the theme switcher lives at the bottom of the sidebar instead
- *    (see components/sidebar-footer.tsx), wired into page.tsx via
- *    CollapsibleSidebar's `footer` slot.
- *  - The search trigger is wrapped in `.fw-aurora-search-center` so it reads
- *    as centered in the header instead of flush right (CSS in theme.css).
- *  - `config.cta` is simply never set in this theme's docs.json — Palm's
- *    header has no CTA button at all. The render-if-present branch below is
- *    left in place (confirmed `buildTopBar` already no-ops with no `cta`)
- *    so a fork of this theme can still opt back in without touching this
- *    file.
+ * Server component — client islands (SearchDialog, ThemeToggle, AskAi) are
+ * already marked 'use client' in the framework.
  */
 export function buildTopBar(config: DocsConfig, activeTab: string): TopBarParts {
   const aiEnabled = process.env.NEXT_PUBLIC_DOCS_AI_ENABLED === 'true';
@@ -134,23 +114,21 @@ export function buildTopBar(config: DocsConfig, activeTab: string): TopBarParts 
 
   const topActions = (
     <>
-      <div className="fw-aurora-search-center">
-        <SearchDialog />
-      </div>
-      <AskAi enabled={aiEnabled} product={config.name} label="Ask Assistant" />
+      <SearchDialog />
+      <ThemeToggle />
+      <AskAi enabled={aiEnabled} product={config.name} />
+      {config.cta ? (
+        <a
+          href={config.cta.href}
+          className="fw-topnav-cta"
+          target={config.cta.href.startsWith('http') ? '_blank' : undefined}
+          rel={config.cta.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+        >
+          {config.cta.label}
+        </a>
+      ) : null}
     </>
   );
 
-  const cta = config.cta ? (
-    <a
-      href={config.cta.href}
-      className="fw-topnav-cta"
-      target={config.cta.href.startsWith('http') ? '_blank' : undefined}
-      rel={config.cta.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-    >
-      {config.cta.label}
-    </a>
-  ) : null;
-
-  return { logo, topNav, topActions, cta };
+  return { logo, topNav, topActions };
 }

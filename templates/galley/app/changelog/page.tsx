@@ -13,7 +13,7 @@ export default function ChangelogPage() {
   const topBar = config ? buildTopBar(withContentNavLinks(config), '') : null;
 
   return (
-    <DocsShell contentType="changelog" logo={topBar?.logo} topNav={topBar?.topNav} topActions={topBar?.topActions} cta={topBar?.cta} hideSidebar hideToc>
+    <DocsShell contentType="changelog" logo={topBar?.logo} topNav={topBar?.topNav} topActions={topBar?.topActions} hideSidebar hideToc>
       <div className="fw-prose">
         <h1>Changelog</h1>
         {entries.length === 0 ? <p>No entries yet.</p> : null}

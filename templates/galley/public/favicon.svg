@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Galley favicon">
-  <!-- Ink-1 background square, matching the wordmark's letter + accent-period pattern in miniature. -->
-  <rect width="32" height="32" rx="7" fill="#191813"/>
-  <text x="7" y="23" font-family="Newsreader, Georgia, 'Times New Roman', serif" font-size="19" font-weight="500" fill="#fcfbf7">G</text>
-  <circle cx="24.5" cy="21.5" r="2.25" fill="#c24e3d"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Base favicon">
+  <!-- Neutral dark background square -->
+  <rect width="32" height="32" rx="7" fill="#0d0d0d"/>
+  <!-- Stacked squares mark -->
+  <rect x="8"  y="14" width="14" height="10" rx="2" fill="#c24e3d"/>
+  <rect x="10" y="8"  width="14" height="10" rx="2" fill="#d6796b" opacity="0.5"/>
 </svg>
