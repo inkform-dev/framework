@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118 32" fill="none" role="img" aria-label="shadcn">
-  <!-- Monochrome nested-square mark — a generic "components" motif, not a
-       reproduction of shadcn/ui's actual logo. -->
-  <rect x="4" y="4" width="24" height="24" rx="6" fill="none" stroke="#18181b" stroke-width="2"/>
-  <rect x="10" y="10" width="12" height="12" rx="3" fill="#18181b"/>
-  <!-- Wordmark — lowercase, matching how the real project styles its own name. -->
-  <text x="36" y="21" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="600" letter-spacing="-0.01em" fill="currentColor">shadcn</text>
-</svg>

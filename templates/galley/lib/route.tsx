@@ -1,5 +1,5 @@
 /**
- * lib/route.ts — Galley routing core.
+ * lib/route.ts — Aurora routing core.
  *
  * Resolves a slug array from the catch-all route into a doc page, generates
  * static params, and builds sidebar groups. The API Reference tab is NOT

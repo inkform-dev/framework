@@ -3,11 +3,11 @@
  *
  * Resolves a slug array from the catch-all route into a doc page, generates
  * static params, and builds sidebar groups. The API Reference tab is NOT
- * handled here — this project's tab has `apiReference.renderer: 'native'`
- * (docs.json), so it's served by app/api-reference/[[...slug]]/page.tsx,
- * the framework's own React/Galley renderer (@inkform/framework/openapi-render)
- * — no Scalar/Vue dependency. apiBasePath() is still needed by
- * components/top-bar.tsx to build that tab's nav link.
+ * handled here — it's served by app/api-reference/[[...slug]]/page.tsx, the
+ * framework's own React/Galley renderer (@inkform/framework/openapi-render),
+ * native by default (docs.json's `apiReference.renderer` doesn't need to be
+ * set) — no Scalar/Vue dependency. apiBasePath() is still needed by
+ * components/top-bar.tsx to build the tab's nav link either way.
  */
 
 import type { ReactNode } from 'react';

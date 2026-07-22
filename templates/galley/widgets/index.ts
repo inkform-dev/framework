@@ -1,5 +1,4 @@
 import type { ComponentType } from 'react';
-import { Counter } from './Counter';
 
 /**
  * Custom widget registry. Put your component at widgets/<Name>.tsx, import
@@ -7,7 +6,7 @@ import { Counter } from './Counter';
  * MDX/CMS content uses (<Name ... />). Framework docs: "Custom Widgets."
  */
 const widgets: Record<string, ComponentType<any>> = {
-  Counter,
+  // Example: MyChart,
 };
 
 export default widgets;

@@ -27,7 +27,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const topBar = config ? buildTopBar(withContentNavLinks(config), '') : null;
 
   return (
-    <DocsShell contentType="blog" logo={topBar?.logo} topNav={topBar?.topNav} topActions={topBar?.topActions} cta={topBar?.cta} hideSidebar hideToc>
+    <DocsShell contentType="blog" logo={topBar?.logo} topNav={topBar?.topNav} topActions={topBar?.topActions} hideSidebar hideToc>
       <div className="fw-prose">
         <h1>{post.title}</h1>
         <p style={{ opacity: 0.7, fontSize: '0.875rem' }}>
