@@ -1,6 +1,11 @@
 'use client';
 
 import * as React from 'react';
+import { AI_TOOLS, buildAiToolAction, buildPrompt, safeOrigin, type AiToolId } from './ai-tools';
+import { defaultAiToolIcons } from './ai-tool-icons';
+import { Confetti } from './confetti';
+import { CopyGlyph, CheckGlyph, ExternalGlyph } from './glyphs';
+import { copyText } from './clipboard';
 
 /**
  * AiToolMenu — a right-rail list of "hand this page to an AI tool" actions:
@@ -8,10 +13,8 @@ import * as React from 'react';
  * pre-filled prompt), Connect to Cursor/VS Code (installs THIS SITE'S OWN
  * MCP server — see '@inkform/framework/mcp' — into the reader's editor).
  *
- * Modeled on the right-rail menu at sequoia.mintlify.site (verified by
- * directly inspecting that site's own shipped implementation — intercepting
- * `window.open`/`navigator.clipboard.writeText` calls rather than guessing —
- * see the comment on each URL builder below for what was actually observed).
+ * Tool definitions (labels, URLs, query params) live in ./ai-tools — a data
+ * registry, not per-tool functions.
  * Ties into this framework's existing llms.txt/MCP work: the Cursor/VS Code
  * items are only meaningful because a theme can mount `createMcpHandler()`
  * (./mcp) at a real route in a couple of lines; this component is otherwise
@@ -20,16 +23,18 @@ import * as React from 'react';
  *
  * Framework components don't bundle an icon library (see ARCHITECTURE.md
  * §5) — `renderIcon` follows the same convention as Sidebar/DocsShell's own
- * `renderIcon` prop. Without one, a small brand-neutral built-in glyph is
- * used (a generic "copy" icon, and a generic external-link arrow for every
- * other item) rather than reproducing any tool's actual logo mark.
+ * `renderIcon` prop. Without one, a small monochrome brand mark per tool
+ * (./ai-tool-icons, single-color `currentColor` glyphs from thesvg.org) is
+ * used rather than reproducing any tool's multi-color logo, so icons inherit
+ * the theme's text color just like the previous generic arrow/copy glyphs.
  */
 
 /* ─────────────────────────────────────────────
    Types
 ───────────────────────────────────────────── */
 
-export type AiToolId = 'copy' | 'chatgpt' | 'claude' | 'cursor' | 'vscode' | 'perplexity' | 'grok';
+export type { AiToolId };
+export { buildPrompt };
 
 export interface AiToolMenuProps {
   /**
@@ -62,7 +67,7 @@ export interface AiToolMenuProps {
   /** Section heading, or `null` to omit it (e.g. stacking under a TocList that already renders "On this page"). */
   title?: string | null;
   /**
-   * Pre-rendered icon per tool (e.g. Lucide elements), keyed by `AiToolId`.
+   * Pre-rendered icon per tool (e.g. icon-library elements), keyed by `AiToolId`.
    * A plain ReactNode map rather than a `renderIcon` callback — this
    * component is a Client Component, and a live function prop can't cross
    * the Server → Client Component boundary from a page.tsx that builds this
@@ -71,150 +76,12 @@ export interface AiToolMenuProps {
    * map once with real icons (e.g. a small constant in lib/icons.tsx) and
    * pass it down as data, the same way Sidebar/DocsShell's own `renderIcon`
    * convention resolves icons into ReactNode server-side before they ever
-   * reach a component. Falls back to a small built-in glyph per tool for any
-   * id not present in the map.
+   * reach a component. Falls back to a small monochrome brand mark per tool
+   * (./ai-tool-icons) for any id not present in the map.
    */
   icons?: Partial<Record<AiToolId, React.ReactNode>>;
   /** Extra class name on the root <nav>. */
   className?: string;
-}
-
-/* ─────────────────────────────────────────────
-   Link builders
-
-   Verified 2026-07 against sequoia.mintlify.site's own production build —
-   intercepted `window.open()` there rather than guessing, since its actions
-   are onClick handlers, not plain <a href>. Findings behind each comment.
-───────────────────────────────────────────── */
-
-function buildPrompt(pageUrl: string): string {
-  return `Read ${pageUrl} and help me understand it`;
-}
-
-/** Unicode-safe base64 (btoa() alone only handles Latin1) — guards a siteName with non-ASCII characters. */
-function safeBase64(text: string): string {
-  const bytes = new TextEncoder().encode(text);
-  let binary = '';
-  for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary);
-}
-
-function safeOrigin(url: string): string | undefined {
-  try {
-    return new URL(url).origin;
-  } catch {
-    return undefined;
-  }
-}
-
-function chatGptUrl(pageUrl: string): string {
-  // https://chat.openai.com/?hints=search&q=<prompt> — `q` pre-fills (but
-  // doesn't auto-submit) the composer. `hints=search` is undocumented but
-  // present in Sequoia's real link; left in since it's what was observed
-  // actually shipping, not a guess.
-  return `https://chat.openai.com/?hints=search&q=${encodeURIComponent(buildPrompt(pageUrl))}`;
-}
-
-function claudeUrl(pageUrl: string): string {
-  // https://claude.ai/new?q=<prompt> — same pre-fill convention as ChatGPT.
-  return `https://claude.ai/new?q=${encodeURIComponent(buildPrompt(pageUrl))}`;
-}
-
-function perplexityUrl(pageUrl: string): string {
-  return `https://www.perplexity.ai/search?q=${encodeURIComponent(buildPrompt(pageUrl))}`;
-}
-
-function grokUrl(pageUrl: string): string {
-  // grok.com's `q` param isn't publicly documented anywhere findable, but it
-  // demonstrably pre-fills the composer on Sequoia's real production site
-  // (confirmed the same way as chatGptUrl above) — real and working, just
-  // unofficial, unlike the other three.
-  return `https://grok.com/?q=${encodeURIComponent(buildPrompt(pageUrl))}`;
-}
-
-function cursorDeeplink(siteName: string, mcpUrl: string): string {
-  // Cursor's documented one-click MCP install deep link:
-  //   cursor://anysphere.cursor-deeplink/mcp/install?name=<name>&config=<base64 JSON>
-  // This deliberately does NOT open the doc page — it registers THIS SITE'S
-  // OWN MCP server (see '@inkform/framework/mcp') in the reader's Cursor, so
-  // they can point Cursor's agent at these docs directly. Chosen over a
-  // guessed `cursor://open?url=...` scheme because this is what Sequoia's
-  // real button actually does (confirmed by decoding its intercepted
-  // window.open call) and it's a materially more useful feature.
-  const config = safeBase64(JSON.stringify({ url: mcpUrl }));
-  return `cursor://anysphere.cursor-deeplink/mcp/install?name=${encodeURIComponent(siteName)}&config=${config}`;
-}
-
-function vscodeDeeplink(siteName: string, mcpUrl: string): string {
-  // VS Code's documented MCP install URI: vscode:mcp/install?<url-encoded JSON>
-  // — note the query segment IS the encoded JSON, not key=value pairs. Same
-  // "install this site's MCP server" idea as cursorDeeplink above.
-  return `vscode:mcp/install?${encodeURIComponent(JSON.stringify({ name: siteName, url: mcpUrl }))}`;
-}
-
-/* ─────────────────────────────────────────────
-   Default icons — dependency-free, brand-neutral (no framework package
-   bundles an icon library; see ARCHITECTURE.md §5). A theme can pass real
-   per-tool icons via `renderIcon`.
-───────────────────────────────────────────── */
-
-function CopyGlyph() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="9" y="9" width="12" height="12" rx="2" />
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-    </svg>
-  );
-}
-
-function CheckGlyph() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-function ExternalGlyph() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M7 17 17 7" />
-      <path d="M8 7h9v9" />
-    </svg>
-  );
-}
-
-function defaultIcon(tool: AiToolId): React.ReactNode {
-  return tool === 'copy' ? <CopyGlyph /> : <ExternalGlyph />;
-}
-
-/* ─────────────────────────────────────────────
-   Copy-to-clipboard, with a fallback for contexts without the async
-   Clipboard API (e.g. non-HTTPS dev over a LAN IP).
-───────────────────────────────────────────── */
-
-async function copyText(text: string): Promise<boolean> {
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-  } catch {
-    // fall through to the legacy path below
-  }
-  try {
-    const el = document.createElement('textarea');
-    el.value = text;
-    el.style.position = 'fixed';
-    el.style.opacity = '0';
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 /* ─────────────────────────────────────────────
@@ -231,6 +98,7 @@ export function AiToolMenu({
   className,
 }: AiToolMenuProps): React.ReactNode {
   const [copied, setCopied] = React.useState(false);
+  const [commandCopied, setCommandCopied] = React.useState<string | null>(null);
 
   // See the `pageUrl` prop doc above: both the server pass and the first
   // client pass (before the effect below fires) render from the same
@@ -257,25 +125,31 @@ export function AiToolMenu({
     }
   }
 
-  function icon(tool: AiToolId): React.ReactNode {
-    return icons?.[tool] ?? defaultIcon(tool);
+  function icon(tool: AiToolId, isCommand: boolean): React.ReactNode {
+    if (icons?.[tool]) return icons[tool] as React.ReactNode;
+    if (defaultAiToolIcons[tool]) return defaultAiToolIcons[tool] as React.ReactNode;
+    if (isCommand) return <CopyGlyph />;
+    return <ExternalGlyph />;
   }
 
-  // Built once per render instead of hand-repeating six near-identical <li>
-  // blocks — the promptable web tools and the MCP-install tools each gate on
-  // a different prerequisite (a resolved page URL vs. a resolved MCP URL).
-  const links: { id: AiToolId; label: string; href: string }[] = [];
-  if (resolvedUrl) {
-    links.push({ id: 'chatgpt', label: 'Open in ChatGPT', href: chatGptUrl(resolvedUrl) });
-    links.push({ id: 'claude', label: 'Open in Claude', href: claudeUrl(resolvedUrl) });
+  // Walk the registry (./ai-tools) once per render. Each tool resolves its
+  // href from a prerequisite: prompt tools need a page URL, MCP tools need a
+  // resolved MCP endpoint.
+  const links: { id: AiToolId; label: string; action: { type: 'link'; href: string } | { type: 'command'; command: string } }[] = [];
+  for (const tool of AI_TOOLS) {
+    const action = buildAiToolAction(tool, {
+      pageUrl: resolvedUrl,
+      mcpUrl: resolvedMcpUrl ?? undefined,
+      siteName,
+    });
+    if (action !== null) links.push({ id: tool.id, label: tool.label, action });
   }
-  if (resolvedMcpUrl) {
-    links.push({ id: 'cursor', label: 'Connect to Cursor', href: cursorDeeplink(siteName, resolvedMcpUrl) });
-    links.push({ id: 'vscode', label: 'Connect to VS Code', href: vscodeDeeplink(siteName, resolvedMcpUrl) });
-  }
-  if (resolvedUrl) {
-    links.push({ id: 'perplexity', label: 'Open in Perplexity', href: perplexityUrl(resolvedUrl) });
-    links.push({ id: 'grok', label: 'Open in Grok', href: grokUrl(resolvedUrl) });
+
+  async function copyCommand(id: string, command: string) {
+    if (await copyText(command)) {
+      setCommandCopied(id);
+      setTimeout(() => setCommandCopied((current) => (current === id ? null : current)), 1500);
+    }
   }
 
   return (
@@ -288,18 +162,35 @@ export function AiToolMenu({
             className={`fw-aitoolmenu-link${copied ? ' fw-aitoolmenu-link--copied' : ''}`}
             onClick={() => void handleCopy()}
           >
-            <span className="fw-aitoolmenu-icon">{copied ? <CheckGlyph /> : icon('copy')}</span>
+            <span className="fw-aitoolmenu-icon">{copied ? <CheckGlyph /> : <CopyGlyph />}{copied ? <Confetti /> : null}</span>
             <span className="fw-aitoolmenu-label">{copied ? 'Copied!' : 'Copy page'}</span>
           </button>
         </li>
-        {links.map((l) => (
-          <li key={l.id} className="fw-aitoolmenu-item">
-            <a className="fw-aitoolmenu-link" href={l.href} target="_blank" rel="noopener noreferrer">
-              <span className="fw-aitoolmenu-icon">{icon(l.id)}</span>
-              <span className="fw-aitoolmenu-label">{l.label}</span>
-            </a>
-          </li>
-        ))}
+        {links.map((l) => {
+          if (l.action.type === 'command') {
+            const command = l.action.command;
+            return (
+              <li key={l.id} className="fw-aitoolmenu-item">
+                <button
+                  type="button"
+                  className="fw-aitoolmenu-link"
+                  onClick={() => void copyCommand(l.id, command)}
+                >
+                  <span className="fw-aitoolmenu-icon">{commandCopied === l.id ? <CheckGlyph /> : icon(l.id, true)}{commandCopied === l.id ? <Confetti /> : null}</span>
+                  <span className="fw-aitoolmenu-label">{commandCopied === l.id ? 'Copied command' : l.label}</span>
+                </button>
+              </li>
+            );
+          }
+          return (
+            <li key={l.id} className="fw-aitoolmenu-item">
+              <a className="fw-aitoolmenu-link" href={l.action.href} target="_blank" rel="noopener noreferrer">
+                <span className="fw-aitoolmenu-icon">{icon(l.id, false)}</span>
+                <span className="fw-aitoolmenu-label">{l.label}</span>
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

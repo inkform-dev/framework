@@ -27,7 +27,7 @@
     "prettier": "^3.5.1"
   },
   "overrides": {
-    "js-yaml": "^3.15.0",
+    "js-yaml": "^3.15.1",
     "next": {
       "postcss": "8.5.23",
       "sharp": "0.35.3"

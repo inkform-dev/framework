@@ -626,6 +626,7 @@
 }
 
 .fw-aitoolmenu-icon {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -637,6 +638,87 @@
 
 .fw-aitoolmenu-link:hover .fw-aitoolmenu-icon {
   color: var(--fw-primary);
+  animation: fw-aitool-wiggle 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Playful one-shot "hop + wag" for the per-tool icons on hover — bouncy
+   overshoot curve, squash-and-stretch scale, and independent translateY /
+   rotate layers, animating only transform/opacity (hardware-accelerated).
+   Also used by ViewOptionsPopover's menu items (widgets.css). */
+@keyframes fw-aitool-wiggle {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1, 1);
+  }
+  25% {
+    transform: translateY(-2px) rotate(-12deg) scale(0.92, 1.08);
+  }
+  45% {
+    transform: translateY(-1px) rotate(9deg) scale(1.08, 0.92);
+  }
+  65% {
+    transform: translateY(0) rotate(-6deg) scale(0.96, 1.04);
+  }
+  80% {
+    transform: translateY(0) rotate(3deg) scale(1.03, 0.97);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-aitoolmenu-link:hover .fw-aitoolmenu-icon {
+    animation: none;
+  }
+}
+
+/* Tiny confetti burst, mounted inside an icon span when a copy action
+   succeeds (see ./confetti.tsx). Each piece launches outward from the icon's
+   center and fades, driven by per-piece custom properties. Piece colors are
+   local tokens here so themes can restyle them via --fw-confetti-* overrides. */
+.fw-confetti {
+  --fw-confetti-1: var(--fw-primary);
+  --fw-confetti-2: #f59e0b;
+  --fw-confetti-3: #ec4899;
+  --fw-confetti-4: #22c55e;
+  --fw-confetti-5: #3b82f6;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.fw-confetti-piece {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--size);
+  height: var(--size);
+  background: var(--color);
+  border-radius: 1px;
+  opacity: 0;
+  animation: fw-confetti-burst 1.2s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+}
+
+@keyframes fw-confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) rotate(var(--rot)) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--tx) * 1.25), calc(-50% + var(--ty) + 30px)) rotate(calc(var(--rot) * 1.8)) scale(0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-confetti-piece {
+    animation: none;
+    opacity: 0;
+  }
 }
 
 .fw-aitoolmenu-label {

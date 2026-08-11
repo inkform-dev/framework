@@ -278,6 +278,11 @@ export function loadSlugHistory(dir = 'docs'): Record<string, string> {
 
 export type Heading = { depth: number; text: string; slug: string };
 
+/** Remove a leading `# H1` line — used when the page shell renders the title itself. */
+export function stripLeadingH1(content: string): string {
+  return content.replace(/^\s*#\s+.+[\r\n]+/, '');
+}
+
 /** Slugify a heading the same way `rehype-slug`/GitHub do, for anchor links. */
 export function slugify(text: string): string {
   return text
