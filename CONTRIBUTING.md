@@ -16,6 +16,7 @@ documentation theme that lands in the CLI's theme picker.
 - [Contributing to the CLI](#contributing-to-the-cli)
 - [Pull request process](#pull-request-process)
 - [Conventions](#conventions)
+- [Releases (maintainers)](#releases-maintainers)
 - [Source mirror (maintainers)](#source-mirror-maintainers)
 
 ---
@@ -385,6 +386,20 @@ chore: bump @inkform/framework to 0.4.1
 - `node_modules/`
 - `*.tsbuildinfo`
 - `.env.local` or any file containing secrets/API keys
+
+---
+
+## Releases (maintainers)
+
+`@inkform/framework` and `@inkform/cli` are published to npm by
+`.github/workflows/release.yml`, triggered by pushing a version tag
+(`framework-v0.5.0`, `cli-v0.5.0`). It re-runs the full CI gate against the
+tagged commit, then publishes with npm Trusted Publishing — a short-lived
+OIDC token, no npm secret stored in this repository, and a provenance
+attestation on every release.
+
+Nobody publishes from a laptop. Full procedure and the one-time npm/GitHub
+setup: [`packages/framework/PUBLISHING.md`](packages/framework/PUBLISHING.md).
 
 ---
 

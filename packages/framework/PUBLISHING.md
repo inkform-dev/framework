@@ -1,84 +1,116 @@
 # Publishing — `@inkform/framework` + `@inkform/cli`
 
-Two packages in this monorepo are actually published to public npm under the
-`@inkform` org (org already exists on npmjs.com):
+Two packages in this monorepo are published to public npm under the
+`@inkform` org:
 
-- **`packages/framework`** → `@inkform/framework` (MIT, `private: false`,
-  `publishConfig.access: public`). Ships TypeScript source directly;
-  consumers add `transpilePackages: ['@inkform/framework']` (no build step).
-- **`packages/cli`** → `@inkform/cli` (MIT, `private: false`), bin command
-  `inkform-docs`. Scaffolds new projects by fetching a template directly from
-  GitHub (`github:inkform-dev/framework/templates/<theme>` via `giget`) — it
-  does **not** fetch the 5 themes or 2 examples as npm packages. Those
-  (`templates/*`, `examples/*`) are `private: true` and stay that way; they
-  are not meant to be installed from npm at all, only copied by the CLI or
-  cloned directly.
+- **`packages/framework`** → [`@inkform/framework`](https://www.npmjs.com/package/@inkform/framework)
+  (MIT, `publishConfig.access: public`). Ships TypeScript source directly;
+  consumers add `transpilePackages: ['@inkform/framework']`. No build step,
+  so there is nothing to compile before publishing.
+- **`packages/cli`** → [`@inkform/cli`](https://www.npmjs.com/package/@inkform/cli),
+  bin command `inkform-docs`. Scaffolds projects by fetching a template
+  from GitHub (`github:inkform-dev/framework/templates/<theme>` via `giget`),
+  not from npm.
 
-This is the only publish blocker left from earlier passes (tracked as "the
-temporary dependency bridge" — every consumer today declares
-`"@inkform/framework": "npm:@freewrite-cms/framework@^0.2.0"`, an alias to
-the last real published snapshot, since `@inkform/framework` itself has never
-been published). Publishing closes that out permanently.
+`templates/*` and `examples/*` are `private: true` and stay that way — they
+are copied by the CLI or cloned directly, never installed from npm.
 
-## Prerequisites (one-time, needs your own npm login — not something an
-## agent session can do; publishing to public npm is a real, hard-to-reverse
-## action)
+Releases run through
+[`.github/workflows/release.yml`](../../.github/workflows/release.yml).
+**Nobody publishes from a laptop, and no npm token exists anywhere in this
+repo.**
 
-```bash
-npm whoami            # confirm you're logged in as an @inkform org member
-# if not:
-npm login
-```
+---
 
-## Release — do framework first, then cli (cli doesn't depend on framework
-## at publish time, but framework going out first means anyone testing cli
-## against a fresh `npm install` immediately gets a real, resolvable
-## `@inkform/framework`)
+## How authentication works (npm Trusted Publishing)
 
-```bash
-cd packages/framework
-npm version <patch|minor|major>   # bumps package.json, no git tag pushed automatically
-npm publish
-```
+The release workflow authenticates to npm with a short-lived OIDC token that
+GitHub mints for that workflow run. npm accepts it because each package's
+"Trusted publisher" settings on npmjs.com name this repository *and this
+exact workflow filename*. There is no `NPM_TOKEN` secret to leak, rotate, or
+scope, and a fork cannot publish: a fork's OIDC claim carries the fork's own
+repository name and npm rejects it.
 
-```bash
-cd ../cli
-npm version <patch|minor|major>
-npm publish
-```
+Two consequences worth knowing before you touch anything:
 
-Both commands run from a clean `git status` (commit first) so the published
-`package.json` version matches what's in git.
+- **Renaming or moving `.github/workflows/release.yml` breaks publishing**
+  until the filename is updated on npmjs.com to match. That coupling is the
+  security property.
+- Every publish made this way carries a **provenance attestation** — the
+  "Built and signed on GitHub Actions" badge on the npm page, linking the
+  tarball back to the exact commit and workflow run that produced it.
 
-## After publishing — retire the dependency-alias bridge
+---
 
-Every consumer currently pins the OLD published snapshot under the new name:
+## Cutting a release
 
-```json
-"@inkform/framework": "npm:@freewrite-cms/framework@^0.2.0"
-```
+Framework first, then CLI. They version independently; there is no
+requirement that their numbers match.
 
-Once the real `@inkform/framework` is live on npm, change this in every
-`package.json` that has it (all 5 themes, both examples, and — in the
-**separate** `cms/` repo — `apps/blog`, `apps/docs`, and
-`packages/templates/{blog-only,docs-only,unified}`) to a plain version range
-matching whatever you just published:
+1. **Bump the version** in `packages/<framework|cli>/package.json`. Published
+   versions are immutable, so this must be a version that has never been
+   published — the workflow checks and refuses otherwise.
+2. **Update `CHANGELOG.md`** at the repo root (it tracks
+   `packages/framework`'s version).
+3. **Commit and push to `main`.** The tag must point at a commit that is
+   actually on the branch.
+4. **Tag and push the tag:**
 
-```json
-"@inkform/framework": "^0.3.0"
-```
+   ```bash
+   git tag -a framework-v0.5.0 -m "@inkform/framework 0.5.0"
+   git push origin framework-v0.5.0
+   ```
 
-Then, in each repo:
+   The prefix selects the package: `framework-v*` → `packages/framework`,
+   `cli-v*` → `packages/cli`. The version in the tag must equal the version
+   in that package's `package.json`; the workflow refuses to guess.
 
-```bash
-npm install          # re-resolves the lockfile against the real package
-npm run build         # confirm nothing broke
-```
+5. **Approve the deployment** if the `npm-publish` environment has required
+   reviewers configured (recommended — see below).
 
-This is a mechanical find-and-replace across ~10 `package.json` files plus a
-lockfile regeneration in each of the two repos (`framework/` and `cms/`) —
-safe to do in one pass once the npm publish itself has happened, since it's
-just pointing at the real thing instead of the alias.
+The workflow re-runs the full CI gate (`lint`, `typecheck`, `test`, `build`,
+`npm audit --audit-level=high`) against the tagged commit before publishing.
+A green PR check is not proof the tagged commit is green.
+
+### Rehearsing without publishing
+
+Actions → Release → *Run workflow* → pick the package, leave **Dry run**
+checked. Everything runs including `npm pack --dry-run`, and the publish step
+is skipped. Useful for confirming the tarball contents after changing
+`files` or `exports`.
+
+---
+
+## One-time setup
+
+Already done once per package, recorded here for whoever has to redo it:
+
+**On npmjs.com** — package page → Settings → Trusted Publisher → GitHub Actions:
+
+| Field | Value |
+| --- | --- |
+| Organization or user | `inkform-dev` |
+| Repository | `framework` |
+| Workflow filename | `release.yml` |
+| Environment name | `npm-publish` |
+
+Then, on the same settings page, set publishing access to **"Require
+two-factor authentication and disallow tokens."** That kills classic
+automation tokens as a publish path entirely; trusted publishing is
+unaffected by it.
+
+**On GitHub** — Settings → Environments → `npm-publish` → add yourself as a
+required reviewer. This is a second, independent gate: even someone who can
+push a tag cannot ship without a human approving the run.
+
+---
+
+## Versioning
+
+Versions are bumped by hand, and `CHANGELOG.md` is written by hand. If that
+becomes a chore across more than these two packages,
+[Changesets](https://github.com/changesets/changesets) automates both — but
+it earns its keep at four or five packages, not two.
 
 ## Optional: ship compiled JS instead of source
 
@@ -87,25 +119,10 @@ To let consumers skip `transpilePackages`, add a build step and point
 
 ```bash
 npm i -D tsup
-# package.json
 # "scripts": { "build": "tsup src/*.ts src/*.tsx --format esm --dts --external next,react,react-dom" }
 # "files": ["dist"], exports → ./dist/*.js
 ```
 
-Not required — TS-source-direct + `transpilePackages` works fine and is what
-every template/example already does. Only worth it if a consumer outside
-this monorepo's own conventions complains about build times or wants to
-avoid the `transpilePackages` requirement.
-
-## Versioning across the monorepo
-
-For coordinated releases of `@inkform/framework` + `@inkform/cli`,
-[Changesets](https://github.com/changesets/changesets) is recommended:
-
-```bash
-npm i -D @changesets/cli && npx changeset init
-# per change: npx changeset → npx changeset version → npx changeset publish
-```
-
-See the repository `CONTRIBUTING.md` for the dev workflow and the source-mirror
-arrangement.
+Not required — TS-source-direct works fine and is what every template and
+example already does. Only worth it if a consumer outside this monorepo's
+conventions wants to avoid `transpilePackages`.
