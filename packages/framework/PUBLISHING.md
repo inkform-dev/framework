@@ -68,6 +68,15 @@ requirement that their numbers match.
 5. **Approve the deployment** if the `npm-publish` environment has required
    reviewers configured (recommended — see below).
 
+> **Tag promptly after merging a release PR.** `templates/*` declare a real
+> npm range (`"@inkform/framework": "^<current>"`), and the CLI scaffolds
+> straight from GitHub `main` via giget — it does not pin a ref. Between
+> merging a version bump and the tag actually publishing, `npx @inkform/cli
+> init` hands users a `package.json` asking for a version npm doesn't have
+> yet, and their `npm install` fails. The window is however long the
+> `npm-publish` approval sits unattended, so don't merge a release PR you
+> aren't around to approve.
+
 The workflow re-runs the full CI gate (`lint`, `typecheck`, `test`, `build`,
 `npm audit --audit-level=high`) against the tagged commit before publishing.
 A green PR check is not proof the tagged commit is green.
