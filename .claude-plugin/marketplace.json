@@ -1,0 +1,20 @@
+{
+  "name": "inkform-framework",
+  "owner": {
+    "name": "Inkform",
+    "url": "https://github.com/inkform-dev"
+  },
+  "plugins": [
+    {
+      "name": "inkform-framework",
+      "source": "./",
+      "description": "Add MDX-powered docs, a blog, or a changelog to a Next.js site with @inkform/framework.",
+      "author": {
+        "name": "Inkform"
+      },
+      "repository": "https://github.com/inkform-dev/framework",
+      "license": "MIT",
+      "keywords": ["inkform", "mdx", "nextjs", "docs", "blog", "changelog", "openapi"]
+    }
+  ]
+}

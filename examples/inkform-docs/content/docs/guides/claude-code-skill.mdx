@@ -1,0 +1,65 @@
+---
+title: Claude Code Skill
+description: Let Claude Code add the framework to a site for you, and open the PR.
+---
+
+# Claude Code skill
+
+If you're integrating the framework across several sites, there's an agent skill that does
+the work: it picks the right approach, wires the pages, verifies the build, and opens a PR.
+
+It's a plain markdown file — [`skills/inkform-framework/SKILL.md`](https://github.com/inkform-dev/framework/blob/main/skills/inkform-framework/SKILL.md)
+in the repo. Nothing is hidden in it, and you can read the whole thing in a couple of minutes.
+
+## Install
+
+Three ways, pick whichever fits.
+
+**As a plugin** — one command, then it's available in every repo:
+
+```
+/plugin marketplace add inkform-dev/framework
+/plugin install inkform-framework@inkform-framework
+```
+
+**As a copied file** — for you everywhere, or committed to one repo for the team:
+
+```bash
+mkdir -p ~/.claude/skills/inkform-framework
+curl -o ~/.claude/skills/inkform-framework/SKILL.md \
+  https://raw.githubusercontent.com/inkform-dev/framework/main/skills/inkform-framework/SKILL.md
+```
+
+**Not at all** — just point Claude at these docs in a prompt:
+
+```
+Add a blog to this Next.js site following
+https://framework.inkform.dev/guides/blog-in-existing-site — then open a PR.
+```
+
+## Using it
+
+Ask for the outcome; the skill triggers on its own:
+
+```
+Add an MDX blog to this site at /blog and open a PR.
+```
+
+## What it knows that a link doesn't
+
+The published guides tell you how it works. The skill additionally carries the things that
+go wrong:
+
+- `transpilePackages: ['@inkform/framework']` is mandatory — the package ships TS/JSX source,
+  and omitting it causes most "unexpected token" build failures.
+- The framework needs **Next ≥ 16** and **React 19**. On an older site the skill stops and
+  says so, rather than quietly bumping a major version inside a content PR.
+- Adding a blog to an existing site should not transplant the docs shell over that site's
+  own layout and design system.
+- Every docs page must be registered in `docs.json` — a file on disk that isn't listed
+  won't route.
+
+<Callout type="info">
+  Newsletter signup forms and the hosted platform API are a separate skill in the platform
+  repo: `/plugin marketplace add inkform-dev/cms`.
+</Callout>
