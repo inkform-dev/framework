@@ -1,0 +1,160 @@
+name: Release
+
+# Publishes @inkform/framework or @inkform/cli to public npm.
+#
+# Authentication is npm Trusted Publishing (OIDC) — there is NO npm token
+# stored in this repository's secrets. GitHub mints a short-lived OIDC token
+# for this specific workflow file, and npm accepts it only because the
+# package's "Trusted publisher" settings on npmjs.com name this repo AND
+# this exact filename (.github/workflows/release.yml). Renaming this file
+# breaks publishing until the npm-side config is updated to match — that is
+# the security property, not an accident. Publishes made this way also carry
+# a provenance attestation automatically (the "Built and signed on GitHub
+# Actions" badge on npm), with no --provenance flag needed.
+#
+# Trigger: push an annotated tag naming the package and its version.
+#
+#   framework-v0.5.0   →  publishes packages/framework
+#   cli-v0.5.0         →  publishes packages/cli
+#
+# The tag's version MUST equal the version already committed in that
+# package's package.json — the job refuses to guess. Bump, commit, push,
+# THEN tag. workflow_dispatch runs the whole thing in --dry-run mode by
+# default so you can rehearse a release without publishing anything.
+
+on:
+  push:
+    tags:
+      - 'framework-v*'
+      - 'cli-v*'
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Which package to release'
+        required: true
+        type: choice
+        options: [framework, cli]
+      dry_run:
+        description: 'Dry run (pack and validate, publish nothing)'
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  id-token: write # required: this is what lets npm verify the OIDC claim
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    # Second gate, independent of npm. Add required reviewers to the
+    # "npm-publish" environment in Settings → Environments and every publish
+    # pauses for a human approval, so a tag push alone can never ship.
+    # Referencing an environment that doesn't exist yet is harmless.
+    environment: npm-publish
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
+
+      # setup-node ships npm 10.x with Node 22; trusted publishing needs
+      # npm >= 11.5.1. Without this the publish falls back to looking for an
+      # auth token and fails with a confusing ENEEDAUTH.
+      - name: Use an npm that supports trusted publishing
+        run: |
+          npm install -g npm@latest
+          npm --version
+
+      # Every ${{ }} value below is passed through `env:` and read as a
+      # shell variable, never expanded into the script body. GitHub splices
+      # expansions in as raw text before bash ever sees the file, so an
+      # inline `'${{ github.ref_name }}'` in a run block is a script-injection
+      # sink — a tag name containing a quote and a semicolon would execute.
+      # Only maintainers can push tags here, but a workflow holding npm
+      # publish rights shouldn't rely on that as its only defense.
+      - name: Resolve target package
+        id: target
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_PACKAGE: ${{ inputs.package }}
+          REF: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" = 'workflow_dispatch' ]; then
+            SLUG="$INPUT_PACKAGE"
+            TAG_VERSION=''
+          else
+            SLUG="${REF%%-v*}"
+            TAG_VERSION="${REF#*-v}"
+          fi
+
+          case "$SLUG" in
+            framework) DIR='packages/framework' ;;
+            cli)       DIR='packages/cli' ;;
+            *) echo "::error::Unrecognized release target '$SLUG'"; exit 1 ;;
+          esac
+
+          NAME=$(node -p "require('./$DIR/package.json').name")
+          VERSION=$(node -p "require('./$DIR/package.json').version")
+
+          if [ -n "$TAG_VERSION" ] && [ "$TAG_VERSION" != "$VERSION" ]; then
+            echo "::error::Tag says v$TAG_VERSION but $DIR/package.json says $VERSION. Commit the version bump before tagging."
+            exit 1
+          fi
+
+          echo "dir=$DIR"         >> "$GITHUB_OUTPUT"
+          echo "name=$NAME"       >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Releasing $NAME@$VERSION from $DIR"
+
+      # npm rejects a re-publish of an existing version with a bare 403.
+      # Failing here instead says what actually went wrong.
+      - name: Refuse to republish an existing version
+        env:
+          NAME: ${{ steps.target.outputs.name }}
+          VERSION: ${{ steps.target.outputs.version }}
+        run: |
+          set -euo pipefail
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "::error::$NAME@$VERSION is already on npm. Bump the version — published versions are immutable."
+            exit 1
+          fi
+          echo "$NAME@$VERSION is unpublished. Proceeding."
+
+      - run: npm ci
+
+      # Same gates as ci.yml, re-run here on the exact commit being shipped.
+      # A green PR check is not proof that the tagged commit is green.
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm audit --audit-level=high
+
+      - name: Preview tarball contents
+        env:
+          DIR: ${{ steps.target.outputs.dir }}
+        run: npm pack --dry-run --workspace "$DIR"
+
+      - name: Publish to npm
+        if: ${{ github.event_name == 'push' || !inputs.dry_run }}
+        env:
+          DIR: ${{ steps.target.outputs.dir }}
+        run: npm publish --workspace "$DIR"
+
+      - name: Dry run only — nothing published
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        env:
+          NAME: ${{ steps.target.outputs.name }}
+          VERSION: ${{ steps.target.outputs.version }}
+        run: echo "Dry run complete for $NAME@$VERSION. Re-run with dry_run unchecked, or push a tag, to publish."

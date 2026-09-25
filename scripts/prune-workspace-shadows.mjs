@@ -1,13 +1,24 @@
 #!/usr/bin/env node
 /**
- * npm workspaces occasionally materializes a real, physical copy of a
- * `@inkform/*` internal package inside a consuming workspace's own
- * node_modules (e.g. `examples/pokeapi-docs/node_modules/@inkform/framework`)
- * instead of relying on the root-level symlink to `packages/framework`. When
- * that happens, Node's module resolution finds the nested copy FIRST — which
- * can be an arbitrarily stale snapshot (observed: frozen at an old version,
- * missing exports and fields added since) — silently shadowing the real,
- * live workspace source and breaking typecheck/build in confusing ways.
+ * Safety net against a `@inkform/*` internal package being materialized as a
+ * real, physical copy inside a consuming workspace's own node_modules (e.g.
+ * `examples/pokeapi-docs/node_modules/@inkform/framework`) instead of
+ * resolving through the root-level symlink to `packages/framework`. When that
+ * happens, Node's module resolution finds the nested copy FIRST — an
+ * arbitrarily stale snapshot, missing exports and fields added since —
+ * silently shadowing the live workspace source and breaking typecheck/build
+ * in confusing ways.
+ *
+ * This is NOT an npm quirk, which is what this comment used to claim. The
+ * cause was a version range: every template and example declared
+ * `"@inkform/framework": "^0.3.0"` while `packages/framework` had moved to
+ * 0.4.0. For a 0.x package `^0.3.0` means `>=0.3.0 <0.4.0`, so the local
+ * workspace no longer satisfied it and npm correctly went to the registry
+ * for a real 0.3.0 — in all six workspaces, recorded in the lockfile. Those
+ * ranges now track the current major, so nothing should be pruned. Kept
+ * because the failure is silent and confusing when it does happen; if this
+ * script starts reporting again, suspect a range that has drifted out of
+ * step with `packages/framework`'s version rather than npm.
  *
  * Every internal `@inkform/*` package is workspace-local; there is never a
  * reason to keep a nested copy. Runs automatically via `postinstall` so

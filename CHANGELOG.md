@@ -4,6 +4,63 @@ All notable changes to this project are documented here. Format loosely
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions
 track `packages/framework`'s own `package.json`.
 
+## [0.5.0] — 2026-08-30
+
+### Added
+
+- **Every page is served as Markdown at its own URL** — append `.md` to any
+  docs page (or content-negotiate) and get the source back as clean Markdown.
+  Makes the whole site directly consumable by agents and LLM tooling without
+  scraping rendered HTML.
+- **`@inkform/framework/markdown`** — a structural MDX-to-Markdown converter
+  that preserves link URLs and component labels instead of flattening them
+  away, plus `@inkform/framework/page-actions` (`<PageActions>`): a per-page
+  *Copy Markdown* / *Open in…* control rendered above the page title.
+- **Expanded AI tool menu** — a two-column menu driven by a single data
+  registry (`ai-tools.ts`) rather than hardcoded links: ChatGPT, Claude,
+  Google (AI Overview), and copy-the-command entries for Claude Code,
+  OpenCode, Codex, and Antigravity. Monochrome brand icons throughout.
+- **`@inkform/framework/secondary-top-nav` and `/scrollable-top-nav`** —
+  unified secondary navigation with mobile scroll hints and de-duplicated
+  anchors/navbar links.
+
+### Changed
+
+- Copy actions give real feedback — copied-state on the button, with a
+  confetti flourish on success (tokenized colors, no hardcoded hex).
+- Glyph and clipboard helpers deduplicated into shared modules.
+
+### Fixed
+
+- The VS Code MCP install link pointed at the wrong handler.
+- The ChatGPT share link now uses the `prompt` parameter.
+- Mobile *Open* menu is capped at `80vw` instead of overflowing the viewport.
+- The left column of the AI menu now shares the right column's gutter off the
+  divider.
+- **`@inkform/framework/reactions` resolves again.** The subpath export was
+  dropped from the exports map in 0.4.0's development while
+  `src/reactions.tsx` kept shipping, so the export documented in the package
+  README and in the guides resolved to nothing. Every export present in 0.4.0
+  is present in 0.5.0 — this release is purely additive.
+- **Scaffolded projects get the current framework.** Every template and
+  example declared `"@inkform/framework": "^0.3.0"`. For a 0.x package that
+  range means `>=0.3.0 <0.4.0`, so `npx @inkform/cli init` followed by
+  `npm install` resolved to 0.3.0 — no native API reference renderer, no MCP
+  server, no AI ask-box, no `llms.txt`. The CLI rewrites a scaffolded
+  project's `name` and `version` but never touched this range. Now `^0.5.0`.
+- **Workspace shadowing fixed at the root.** The same stale range meant the
+  local `packages/framework` no longer satisfied what the templates and
+  examples asked for, so npm fetched a real 0.3.0 from the registry into each
+  of the six workspaces' own `node_modules` — shadowing the live source. This
+  is what `scripts/prune-workspace-shadows.mjs` had been deleting on every
+  `postinstall`; the lockfile is 139 lines lighter without those entries. The
+  script stays as a safety net, with its root-cause note corrected.
+
+### Security
+
+- 4 lockfile advisories patched (3 high, 1 moderate); archived templates
+  bumped to Next 16.2.12, clearing 54 Dependabot alerts.
+
 ## [0.4.0] — 2026-07-21
 
 ### Added

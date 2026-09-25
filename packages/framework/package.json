@@ -1,6 +1,6 @@
 {
   "name": "@inkform/framework",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Standalone Next.js + MDX framework for documentation, API reference (OpenAPI), blog, and changelog sites. The rendering engine behind the inkform docs themes — usable on its own.",
   "license": "MIT",
   "author": "Charan",
@@ -57,6 +57,7 @@
     "./theme-toggle": "./src/theme-toggle.tsx",
     "./subscribe-form": "./src/subscribe-form.tsx",
     "./analytics-script": "./src/analytics-script.tsx",
+    "./reactions": "./src/reactions.tsx",
     "./secondary-top-nav": "./src/secondary-top-nav.tsx",
     "./scrollable-top-nav": "./src/scrollable-top-nav.tsx",
     "./comments": "./src/comments.tsx"
