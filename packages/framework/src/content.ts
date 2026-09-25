@@ -56,6 +56,19 @@ export function readingTimeMinutes(content: string): number {
   return Math.max(1, Math.round(words / 200));
 }
 
+/**
+ * Frontmatter `date` as `YYYY-MM-DD`. YAML parses an unquoted date like
+ * `date: 2026-01-25` as a `Date` at UTC midnight, not a string — gray-matter
+ * passes that through as-is, so a plain `typeof === 'string'` check drops it
+ * to `''` (sorts last, renders "Invalid Date"). Read it off the `Date` in UTC
+ * so the day doesn't shift for authors west of UTC.
+ */
+function toDateString(v: unknown): string {
+  if (typeof v === 'string') return v.slice(0, 10);
+  if (v instanceof Date && !Number.isNaN(v.getTime())) return v.toISOString().slice(0, 10);
+  return '';
+}
+
 function plainExcerpt(content: string, max = 200): string {
   const text = content
     .replace(/^---[\s\S]*?---/, '')
@@ -91,7 +104,7 @@ function toBlogPost(fileSlug: string, data: Record<string, unknown>, content: st
   return {
     slug: str(data.slug) ?? fileSlug,
     title: str(data.title) ?? 'Untitled',
-    date: typeof data.date === 'string' ? data.date.slice(0, 10) : '',
+    date: toDateString(data.date),
     author: str(data.author),
     tags: Array.isArray(data.tags) ? (data.tags.filter((t) => typeof t === 'string') as string[]) : [],
     status: str(data.status) ?? 'published',
@@ -166,7 +179,7 @@ export function loadChangelogEntries(dir = 'changelog', includeDrafts = false): 
       if (!parsed) return null;
       const d = parsed.data;
       const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v : null);
-      const date = typeof d.date === 'string' ? d.date.slice(0, 10) : '';
+      const date = toDateString(d.date);
       const status = str(d.status) ?? 'published';
       return {
         slug: f.replace(/\.mdx$/, '').replace(/^\d{4}-\d{2}-\d{2}-/, ''),
