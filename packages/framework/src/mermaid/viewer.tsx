@@ -24,6 +24,8 @@ interface ViewerProps {
 const PAD = { inline: 16, fullscreen: 32 };
 const MAX_SCALE = 12;
 const MINIMAP = { width: 184, height: 132 };
+/** Fullscreen never opens with labels smaller than this fraction of mermaid's own size. */
+const READABLE = 0.75;
 
 const isMac = () => typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.userAgent);
 const reducedMotion = () =>
@@ -89,8 +91,9 @@ export function DiagramViewer({ svg, mode, label, apiRef, onScale, minimap = fal
       svgEl.setAttribute('width', String(w));
       svgEl.setAttribute('height', String(h));
       if (mode === 'inline') frame.style.height = `${Math.round(h + pad * 2)}px`;
+      return s;
     };
-    fit();
+    let fitScale = fit();
 
     const pz = Panzoom(stage, {
       canvas: true,
@@ -102,6 +105,14 @@ export function DiagramViewer({ svg, mode, label, apiRef, onScale, minimap = fal
       touchAction: mode === 'inline' ? 'pan-y' : 'none',
     });
     pzRef.current = pz;
+
+    // A wide diagram fitted to a phone screen shrinks its labels to a few
+    // pixels. Fullscreen opens zoomed to readable text instead (centered);
+    // the fit button still shows the whole thing.
+    const openReadable = () => {
+      if (mode === 'fullscreen' && fitScale < READABLE) pz.zoom(READABLE / fitScale, { animate: false, force: true });
+    };
+    openReadable();
 
     // Minimap: visible region of the stage, in stage-local coordinates. The
     // transform is `scale(s) translate(x, y)` about the stage's center, so a
@@ -187,9 +198,10 @@ export function DiagramViewer({ svg, mode, label, apiRef, onScale, minimap = fal
       const changed = mode === 'inline' ? w !== lastW : w !== lastW || h !== lastH;
       lastW = w;
       if (!changed) return;
-      fit();
+      fitScale = fit();
       lastH = frame.clientHeight;
       pz.reset({ animate: false });
+      openReadable();
       paintMinimap();
     });
     ro.observe(frame);
@@ -209,7 +221,7 @@ export function DiagramViewer({ svg, mode, label, apiRef, onScale, minimap = fal
     };
     paintMinimapRef.current = paintMinimap;
     centerOnRef.current = centerOn;
-    onScaleRef.current(1);
+    onScaleRef.current(pz.getScale());
     requestAnimationFrame(paintMinimap);
 
     return () => {
