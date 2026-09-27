@@ -26,6 +26,14 @@ track `packages/framework`'s own `package.json`.
 
 - Templates and examples now depend on `@inkform/framework@^0.6.0`.
 
+### Fixed
+
+- **Inline colons no longer vanish.** remark-directive read any `:word` in
+  running text ("re:Work", "Note:this") as a text directive, which `<Mdx>`
+  rendered as an empty `<div>` inside the paragraph: the text after the colon
+  disappeared and React threw a hydration error. Unknown text directives now go
+  back to literal text, in both `<Mdx>` and the per-page Markdown output.
+
 ## [0.5.0] — 2026-08-30
 
 ### Added

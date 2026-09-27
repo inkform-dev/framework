@@ -107,7 +107,8 @@ const mdxTextHandler = mdxJsxHandlers.mdxJsxTextElement!;
  * toMarkdown handlers:
  * - drop `mdxjsEsm` (imports/exports are machinery, not content)
  * - `:::callout` directives → blockquote
- * - leaf/text directives → their children (or drop when empty)
+ * - leaf directives → their children (or drop when empty); inline `:name`
+ *   text directives → back to the literal text
  */
 function remarkPlainMarkdown() {
   return (tree: Root) => {
@@ -128,8 +129,15 @@ function remarkPlainMarkdown() {
           delete directive.attributes;
           return;
         }
-        case 'leafDirective':
         case 'textDirective': {
+          // Inline `:word` is almost always prose ("re:Work"), not a directive:
+          // put the colon and name back rather than dropping them.
+          const name = (n as { name?: string }).name ?? '';
+          const restored = [{ type: 'text', value: `:${name}` } as Node, ...((n.children ?? []) as Node[])];
+          (parent.children as Node[]).splice(index, 1, ...restored);
+          return;
+        }
+        case 'leafDirective': {
           const children = (n.children ?? []) as Node[];
           // Replace the directive node with its children (or drop it). Spliced
           // in place so `visit`'s index stays valid for the remaining siblings.
