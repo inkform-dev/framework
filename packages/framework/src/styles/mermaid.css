@@ -69,6 +69,16 @@
   max-width: none;
 }
 
+/* Mermaid sizes each node from labels measured outside the page, then
+   renders them as HTML (<p>, <span>) inside the SVG — where the host's prose
+   rules (`.prose p { font-size: … }`, margins) would otherwise reach them and
+   overflow the box. Pin them to what mermaid measured. */
+.fw-mermaid .fw-mermaid-stage svg :is(p, li, span, div) {
+  font-size: inherit;
+  margin: 0;
+  letter-spacing: normal;
+}
+
 /* Toolbar: floats top-right, revealed on hover / keyboard focus; always
    visible where there's no hover (touch). */
 .fw-mermaid-toolbar {
