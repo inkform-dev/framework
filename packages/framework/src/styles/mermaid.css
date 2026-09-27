@@ -1,0 +1,401 @@
+/* ─────────────────────────────────────────────────────────────
+   mermaid.css — <Mermaid> diagrams: the static fallback block, the
+                 interactive inline viewer, and the fullscreen dialog.
+   Uses only --fw-* tokens (plus the callout error hue).
+───────────────────────────────────────────────────────────── */
+
+.fw-mermaid {
+  margin: 1.75em 0;
+}
+
+.fw-mermaid .fw-mermaid-caption {
+  text-align: center;
+  color: var(--fw-muted);
+  font-size: 0.85em;
+  margin-top: 0.6em;
+}
+
+/* Static fallback (no interactive renderer registered) — reads as a code block. */
+.fw-mermaid-static pre,
+.fw-mermaid-error pre,
+.fw-mermaid-placeholder pre {
+  margin: 0;
+  padding: 1em 1.25em;
+  overflow-x: auto;
+  background: var(--fw-code-bg);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  font-family: var(--fw-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INLINE
+═══════════════════════════════════════════════════════════════ */
+
+.fw-mermaid-body {
+  position: relative;
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  background: var(--fw-bg);
+  overflow: hidden;
+}
+
+.fw-mermaid-viewport {
+  position: relative;
+}
+
+.fw-mermaid-frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.fw-mermaid-frame:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--fw-primary);
+}
+
+.fw-mermaid-stage {
+  line-height: 0;
+}
+
+.fw-mermaid-stage svg {
+  display: block;
+  max-width: none;
+}
+
+/* Mermaid sizes each node from labels measured outside the page, then
+   renders them as HTML (<p>, <span>) inside the SVG — where the host's prose
+   rules (`.prose p { font-size: … }`, margins) would otherwise reach them and
+   overflow the box. Pin them to what mermaid measured. */
+.fw-mermaid .fw-mermaid-stage svg :is(p, li, span, div) {
+  font-size: inherit;
+  margin: 0;
+  letter-spacing: normal;
+}
+
+/* Toolbar: floats top-right, revealed on hover / keyboard focus; always
+   visible where there's no hover (touch). */
+.fw-mermaid-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: var(--fw-card);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius-sm);
+  box-shadow: var(--fw-shadow);
+}
+
+.fw-mermaid-body > .fw-mermaid-toolbar {
+  position: absolute;
+  top: var(--fw-space-2);
+  right: var(--fw-space-2);
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.fw-mermaid-body:hover > .fw-mermaid-toolbar,
+.fw-mermaid-body:focus-within > .fw-mermaid-toolbar {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: none) {
+  .fw-mermaid-body > .fw-mermaid-toolbar {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fw-mermaid-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--fw-radius-sm) - 2px);
+  background: transparent;
+  color: var(--fw-muted);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.fw-mermaid-btn:hover {
+  background: var(--fw-bg-subtle);
+  color: var(--fw-fg);
+}
+
+.fw-mermaid-btn:focus-visible {
+  outline: 2px solid var(--fw-primary);
+  outline-offset: -1px;
+}
+
+.fw-mermaid-zoom {
+  min-width: 3.1rem;
+  padding: 0 0.3rem;
+  font-family: var(--fw-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.fw-mermaid-sep {
+  width: 1px;
+  height: 16px;
+  margin: 0 3px;
+  background: var(--fw-border);
+}
+
+/* On narrow screens, keep zoom + fullscreen; copy/download live in fullscreen. */
+@media (max-width: 480px) {
+  .fw-mermaid-body > .fw-mermaid-toolbar .fw-mermaid-sep,
+  .fw-mermaid-body > .fw-mermaid-toolbar .fw-mermaid-sep ~ .fw-mermaid-btn:not(:last-child) {
+    display: none;
+  }
+}
+
+/* "Hold Ctrl and scroll to zoom" — shown when a plain wheel passes over. */
+.fw-mermaid-wheel-hint {
+  position: absolute;
+  left: 50%;
+  bottom: var(--fw-space-3);
+  transform: translate(-50%, 4px);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fw-fg) 88%, transparent);
+  color: var(--fw-bg);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.fw-mermaid-wheel-hint[data-show] {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.fw-mermaid-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Reserved space while mermaid loads. */
+.fw-mermaid-placeholder {
+  min-height: 12rem;
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  background: linear-gradient(
+    100deg,
+    var(--fw-bg-subtle) 30%,
+    color-mix(in srgb, var(--fw-border) 45%, var(--fw-bg-subtle)) 50%,
+    var(--fw-bg-subtle) 70%
+  );
+  background-size: 250% 100%;
+  animation: fw-mermaid-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes fw-mermaid-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -50% 0; }
+}
+
+.fw-mermaid-error {
+  padding: var(--fw-space-4);
+  border: 1px solid color-mix(in srgb, var(--fw-callout-error-hue) 40%, var(--fw-border));
+  border-radius: var(--fw-radius);
+  background: color-mix(in srgb, var(--fw-callout-error-hue) 5%, var(--fw-bg));
+}
+
+.fw-mermaid-error p {
+  margin: 0;
+}
+
+.fw-mermaid-error-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.fw-mermaid-error-message {
+  margin: 0.25rem 0 0.75rem !important;
+  color: var(--fw-muted);
+  font-family: var(--fw-mono);
+  font-size: 0.78rem;
+  white-space: pre-wrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FULLSCREEN
+═══════════════════════════════════════════════════════════════ */
+
+.fw-mermaid-dialog {
+  width: min(96vw, 1600px);
+  height: min(92dvh, 1100px);
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  background: var(--fw-bg);
+  color: var(--fw-fg);
+  box-shadow: var(--fw-shadow-lg);
+  overflow: hidden;
+}
+
+.fw-mermaid-dialog::backdrop {
+  background: rgba(11, 15, 23, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.fw-mermaid-dialog-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.fw-mermaid-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fw-space-3);
+  padding: var(--fw-space-2) var(--fw-space-2) var(--fw-space-2) var(--fw-space-4);
+  border-bottom: 1px solid var(--fw-border);
+}
+
+.fw-mermaid-dialog-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.fw-mermaid-dialog-header .fw-mermaid-toolbar {
+  flex-shrink: 0;
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+}
+
+.fw-mermaid-dialog .fw-mermaid-viewport {
+  flex: 1;
+  min-height: 0;
+}
+
+.fw-mermaid-dialog .fw-mermaid-frame {
+  height: 100%;
+  background-color: var(--fw-bg-subtle);
+  background-image: radial-gradient(color-mix(in srgb, var(--fw-border-strong) 70%, transparent) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.fw-mermaid-dialog-hint {
+  margin: 0;
+  padding: var(--fw-space-2) var(--fw-space-4);
+  border-top: 1px solid var(--fw-border);
+  color: var(--fw-muted);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* Minimap: the whole diagram in miniature, with the visible region boxed and
+   everything outside it dimmed. Appears once the view is zoomed past fit;
+   click or drag in it to move the view. */
+.fw-mermaid-minimap {
+  position: absolute;
+  right: var(--fw-space-3);
+  bottom: var(--fw-space-3);
+  box-sizing: content-box;
+  padding: 6px;
+  background: var(--fw-bg);
+  border: 1px solid var(--fw-border-strong);
+  border-radius: var(--fw-radius-sm);
+  box-shadow: var(--fw-shadow-lg);
+  cursor: pointer;
+  touch-action: none;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.fw-mermaid-minimap[data-idle] {
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+}
+
+.fw-mermaid-minimap-clip {
+  position: relative;
+  overflow: hidden;
+}
+
+.fw-mermaid-minimap img {
+  display: block;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  pointer-events: none;
+  filter: contrast(1.35);
+}
+
+.fw-mermaid-minimap-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1.5px solid var(--fw-primary);
+  border-radius: 2px;
+  box-shadow: 0 0 0 999px color-mix(in srgb, var(--fw-bg) 55%, transparent);
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .fw-mermaid-dialog {
+    width: 100vw;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+  .fw-mermaid-minimap {
+    display: none;
+  }
+}
+
+@media (hover: none) {
+  .fw-mermaid-dialog-hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-mermaid-placeholder {
+    animation: none;
+  }
+  .fw-mermaid-body > .fw-mermaid-toolbar,
+  .fw-mermaid-wheel-hint {
+    transition: none;
+  }
+}
+
+@media print {
+  .fw-mermaid-toolbar,
+  .fw-mermaid-wheel-hint {
+    display: none;
+  }
+  .fw-mermaid-stage {
+    transform: none !important;
+  }
+}

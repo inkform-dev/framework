@@ -1,4 +1,5 @@
 import { mdxComponents } from '@inkform/framework/components';
+import { Mermaid } from '@inkform/framework/mermaid';
 import widgets from '@/widgets';
 
 /**
@@ -7,5 +8,9 @@ import widgets from '@/widgets';
  * Tabs, CodeGroup, Accordion, ParamField, …). Custom widgets registered in
  * widgets/index.ts are merged in here, so <YourWidget /> in MDX/CMS content
  * resolves to the real component instead of the unknown-component fallback.
+ *
+ * Mermaid makes ```mermaid fences interactive diagrams (pan, zoom,
+ * fullscreen). Not drawing diagrams? Drop this import and the `mermaid`
+ * dependency — fences then render as a plain source block.
  */
-export const siteMdxComponents = mdxComponents(widgets);
+export const siteMdxComponents = mdxComponents({ Mermaid, ...widgets });

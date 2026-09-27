@@ -98,6 +98,24 @@ tags: [engineering]
 Body starts here.
 ```
 
+### Diagrams (only if the content has ` ```mermaid ` fences)
+
+Fences render as a plain source block until the interactive viewer is registered. It's opt-in
+because `mermaid` is a large install:
+
+```bash
+npm install mermaid
+```
+
+```ts
+// mdx-components.tsx
+import { mdxComponents } from '@inkform/framework/components';
+import { Mermaid } from '@inkform/framework/mermaid';
+export const blogMdxComponents = mdxComponents({ Mermaid });
+```
+
+Pass that map to `<Mdx components={...} />`. Captions go in the fence meta: ` ```mermaid title="…" `.
+
 ### 3. Pages that match the host site
 
 Write these in the site's **own** layout and components. The point is that a reader can't tell

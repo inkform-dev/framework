@@ -1,0 +1,182 @@
+---
+title: Diagrams
+description: Mermaid diagrams in any MDX page — written as a fenced code block, rendered as a zoomable, pannable figure.
+---
+
+# Diagrams
+
+Write a fenced code block with the language set to `mermaid` and it renders as a diagram:
+
+````md
+```mermaid
+flowchart LR
+  Draft --> Review --> Publish
+```
+````
+
+```mermaid title="The smallest useful diagram"
+flowchart LR
+  Draft --> Review --> Publish
+```
+
+Hover a diagram (or tab to it) for the toolbar: zoom, copy the source, download an SVG, or open it fullscreen. In fullscreen there's a minimap for finding your way around large graphs.
+
+## Setup
+
+Diagrams are opt-in, because `mermaid` is a large install and plenty of docs sites never draw one. The scaffolded templates already have it on. For an existing site:
+
+```bash
+npm i mermaid
+```
+
+```ts
+// mdx-components.tsx
+import { mdxComponents } from '@inkform/framework/components';
+import { Mermaid } from '@inkform/framework/mermaid';
+
+export const siteMdxComponents = mdxComponents({ Mermaid });
+```
+
+Without that registration, `mermaid` fences still build — they render as a plain block of source, so nothing breaks while you decide.
+
+Readers only download mermaid on pages that have a diagram, and only when one is about to scroll into view. Pages without diagrams ship none of it.
+
+## Captions
+
+Put `title="…"` (or `caption="…"`) after the language. It shows under the diagram, names the fullscreen view and the downloaded file, and is what screen readers announce.
+
+````md
+```mermaid title="Request lifecycle"
+sequenceDiagram
+  ...
+```
+````
+
+```mermaid title="Request lifecycle"
+sequenceDiagram
+  participant B as Browser
+  participant E as Edge
+  participant A as App
+  participant D as Database
+  B->>E: GET /docs/quickstart
+  E->>E: Cache lookup
+  alt cache hit
+    E-->>B: 200 (cached HTML)
+  else cache miss
+    E->>A: Render page
+    A->>D: Load content
+    D-->>A: MDX source
+    A-->>E: HTML
+    E-->>B: 200
+  end
+```
+
+The JSX form works too, if you're building the source in an expression:
+
+```mdx
+<Mermaid caption="Build pipeline" chart={`flowchart LR
+  A --> B`} />
+```
+
+## Moving around
+
+| Where | Zoom | Pan |
+| --- | --- | --- |
+| In the page | <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + scroll, trackpad pinch, double-click, or `+` / `-` | Drag once zoomed in, or arrow keys |
+| Fullscreen | Scroll, pinch, double-click | Drag, arrow keys, or click the minimap |
+| Touch | Pinch | One finger once zoomed in |
+
+A plain scroll over an inline diagram scrolls the page, not the diagram, so long posts don't trap the reader. `0` resets to fit.
+
+## Theming
+
+Diagrams take their colors from the site's `--fw-*` tokens, so they match whichever theme you run, and they redraw when the reader switches between light and dark. Styles written in the diagram itself (`style A fill:#111,color:#fff`) still win.
+
+## Big graphs
+
+Large diagrams are where the viewer earns its keep. Open this one fullscreen and use the minimap:
+
+```mermaid title="Content pipeline, end to end"
+flowchart TD
+  subgraph Authoring
+    A1[Write MDX] --> A2[Preview locally]
+    A2 --> A3{Looks right?}
+    A3 -- no --> A1
+    A3 -- yes --> A4[Open PR]
+  end
+  subgraph Review
+    A4 --> R1[CI: typecheck + tests]
+    R1 --> R2[CI: link check]
+    R2 --> R3[Preview deploy]
+    R3 --> R4{Approved?}
+    R4 -- changes --> A1
+  end
+  subgraph Build
+    R4 -- merge --> B1[Load content]
+    B1 --> B2[Parse frontmatter]
+    B2 --> B3[Compile MDX]
+    B3 --> B4[Highlight code]
+    B3 --> B5[Collect headings]
+    B5 --> B6[Build TOC]
+    B1 --> B7[Parse OpenAPI]
+    B7 --> B8[Operation pages]
+    B4 --> B9[Static HTML]
+    B6 --> B9
+    B8 --> B9
+  end
+  subgraph Ship
+    B9 --> S1[Pagefind index]
+    B9 --> S2[llms.txt]
+    B9 --> S3[Per-page .md]
+    S1 --> S4[Deploy]
+    S2 --> S4
+    S3 --> S4
+    S4 --> S5((Live))
+  end
+```
+
+## Other diagram types
+
+Anything Mermaid supports renders — state machines, ER diagrams, Gantt charts, mindmaps, and more.
+
+```mermaid title="Subscription states"
+stateDiagram-v2
+  [*] --> Trial
+  Trial --> Active: pays
+  Trial --> Expired: 14 days
+  Active --> PastDue: card fails
+  PastDue --> Active: retry succeeds
+  PastDue --> Canceled: 3 failures
+  Active --> Canceled: cancels
+  Canceled --> [*]
+```
+
+```mermaid title="What a docs site needs"
+mindmap
+  root((Docs site))
+    Content
+      Guides
+      API reference
+      Changelog
+    Discovery
+      Search
+      llms.txt
+      Per-page Markdown
+    Trust
+      Versioning
+      Examples that run
+```
+
+```mermaid title="Where the time goes"
+pie
+  "Writing" : 45
+  "Review" : 25
+  "Diagrams" : 20
+  "Deploy" : 10
+```
+
+## Writing diagrams with AI
+
+Mermaid is plain text, and it's the diagram format language models write most reliably — ask for "a Mermaid flowchart of …" and paste the result into a fence. The source stays in your MDX, so it diffs, reviews, and renders on GitHub too. The per-page Markdown (any URL + `.md`) and `llms.txt` output keep the fence as-is, so agents reading your docs see the diagram source rather than an image.
+
+If the source has a syntax error, the page shows mermaid's error message next to the source instead of an empty box.

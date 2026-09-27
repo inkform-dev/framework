@@ -7,6 +7,11 @@ const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..
 const POKEAPI_CONTENT_ROOT = path.join(REPO_ROOT, 'examples', 'pokeapi-docs', 'content');
 
 describe('processMarkdown', () => {
+  it('keeps inline colons that remark-directive would read as text directives', () => {
+    const md = processMarkdown('Google studied teams ([re:Work](https://example.com)).\n');
+    expect(md).toContain('[re:Work](https://example.com)');
+  });
+
   it('strips imports/exports but keeps the body', () => {
     const md = processMarkdown(
       `import { Playground } from '@/widgets';

@@ -4,6 +4,36 @@ All notable changes to this project are documented here. Format loosely
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions
 track `packages/framework`'s own `package.json`.
 
+## [0.6.0] — 2026-09-27
+
+### Added
+
+- **Mermaid diagrams** (`@inkform/framework/mermaid`) — ` ```mermaid ` fences
+  (or `<Mermaid chart="…" />`) render as interactive diagrams: Ctrl/⌘ + scroll,
+  pinch, double-click, or keyboard to zoom; drag to pan; a fullscreen view with a
+  minimap for large graphs; copy source and SVG download. Colors come from the
+  `--fw-*` tokens and follow light/dark switches. A caption goes in the fence
+  meta: ` ```mermaid title="…" `.
+- **Opt-in by design** — `mermaid` is an optional peer dependency. Sites that
+  never draw diagrams don't install it; unregistered fences render as a plain
+  source block. The scaffolded templates ship with it on. Readers only download
+  mermaid (and the viewer) on pages that have a diagram, when it nears the
+  viewport.
+- `remarkMermaid`, exported from `@inkform/framework/mdx`, for hosts with their
+  own MDX pipeline.
+
+### Changed
+
+- Templates and examples now depend on `@inkform/framework@^0.6.0`.
+
+### Fixed
+
+- **Inline colons no longer vanish.** remark-directive read any `:word` in
+  running text ("re:Work", "Note:this") as a text directive, which `<Mdx>`
+  rendered as an empty `<div>` inside the paragraph: the text after the colon
+  disappeared and React threw a hydration error. Unknown text directives now go
+  back to literal text, in both `<Mdx>` and the per-page Markdown output.
+
 ## [0.5.0] — 2026-08-30
 
 ### Added
