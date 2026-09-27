@@ -4,6 +4,16 @@ All notable changes to this project are documented here. Format loosely
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions
 track `packages/framework`'s own `package.json`.
 
+## [0.6.1] — 2026-09-27
+
+### Changed
+
+- **Fullscreen diagrams open readable.** When fitting the whole diagram would
+  shrink its labels below ~75% of mermaid's own size (a wide flowchart on a
+  phone, a 30-node graph on a laptop), the fullscreen view now opens zoomed to
+  readable text, centered, with the minimap for orientation. The fit button
+  still shows the whole diagram.
+
 ## [0.6.0] — 2026-09-27
 
 ### Added
