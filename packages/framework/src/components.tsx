@@ -331,6 +331,32 @@ export function Frame({ caption, children }: FrameProps) {
 }
 
 /* ---------------------------------------------------------------------------
+ * Mermaid (static fallback)
+ * -------------------------------------------------------------------------*/
+
+export interface MermaidSourceProps {
+  chart?: string;
+  caption?: string;
+}
+
+/**
+ * What ```mermaid fences render as by default: the diagram source as a plain
+ * block. The interactive renderer is opt-in so sites that never draw diagrams
+ * don't install mermaid — register it with
+ * `mdxComponents({ Mermaid })` from `@inkform/framework/mermaid`.
+ */
+export function MermaidSource({ chart = '', caption }: MermaidSourceProps) {
+  return (
+    <figure className="fw-mermaid fw-mermaid-static">
+      <pre>
+        <code className="language-mermaid">{chart.trim()}</code>
+      </pre>
+      {caption && <figcaption className="fw-mermaid-caption">{caption}</figcaption>}
+    </figure>
+  );
+}
+
+/* ---------------------------------------------------------------------------
  * Tooltip
  * -------------------------------------------------------------------------*/
 
@@ -528,6 +554,7 @@ const BUILTINS: Record<string, React.ComponentType<Record<string, unknown>>> = {
   // Misc
   Expandable: Expandable as React.ComponentType<Record<string, unknown>>,
   Frame: Frame as React.ComponentType<Record<string, unknown>>,
+  Mermaid: MermaidSource as React.ComponentType<Record<string, unknown>>,
   Tooltip: Tooltip as unknown as React.ComponentType<Record<string, unknown>>,
   // Media / embeds
   Embed: Embed as React.ComponentType<Record<string, unknown>>,

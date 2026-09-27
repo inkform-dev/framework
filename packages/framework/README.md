@@ -17,6 +17,8 @@ anywhere Next.js runs (Vercel, AWS Amplify, a Node server, a container).
 
 - **MDX rendering** with GFM, `:::callout` directives, and Shiki syntax
   highlighting (`<Mdx>`).
+- **Mermaid diagrams** — ` ```mermaid ` fences render as zoomable, pannable
+  figures with a fullscreen view and minimap (`./mermaid`, opt-in: `npm i mermaid`).
 - **A `docs.json` content model** — Mintlify-style tabs → groups → pages, with
   anchors, navbar links, nested pages, and versioning hints. Pure, no IO.
 - **OpenAPI → API Reference** — parse a JSON/YAML spec into a normalized model,
@@ -77,7 +79,8 @@ Content lives under `content/{docs,blog,changelog}` (override the root with
 | `./content` | filesystem loaders: `loadDocsConfig`, `loadDocPage`, `loadBlogPosts`, `loadOpenApiSpec`, `extractHeadings` |
 | `./nav` | `DocsConfig`, `docTabs`, `listDocPages`, `docNeighbours` |
 | `./openapi` | `parseOpenApi`, `normalizeOperations`, `operationNavGroups`, `curlExample`, `sampleFromSchema` |
-| `./mdx` | `<Mdx>` |
+| `./mdx` | `<Mdx>`, `remarkMermaid` |
+| `./mermaid` | `<Mermaid>` — interactive diagram viewer (needs the optional `mermaid` peer) |
 | `./components` | the MDX component kit + `mdxComponents()` |
 | `./docs-shell` | `<DocsShell>`, `<Sidebar>`, `<TocList>`, `<Pagination>`, `<Breadcrumbs>` — also mounts the Pagefind highlight effect, see below |
 | `./api-reference` | `<ApiReferenceView>`, `<ApiPlayground>` |

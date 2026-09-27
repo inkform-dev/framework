@@ -66,7 +66,8 @@ Types: `OpenApiModel`, `ApiOperation`, `ApiParam`, `ApiBody`, `ApiResponse`,
 
 | Export | Notes |
 | --- | --- |
-| `Mdx({ source, components? })` | Async server component. Renders an MDX string with GFM, `:::callout` directives, Shiki-highlighted code, heading slugs, and all built-in blocks. Self-wraps output in `.fw-prose`. |
+| `Mdx({ source, components? })` | Async server component. Renders an MDX string with GFM, `:::callout` directives, Shiki-highlighted code, ` ```mermaid ` fences as `<Mermaid>`, heading slugs, and all built-in blocks. Self-wraps output in `.fw-prose`. |
+| `remarkMermaid` | The remark plugin behind the fence → `<Mermaid chart="…" caption="…">` conversion, for hosts running their own MDX pipeline. |
 
 ## `@inkform/framework/docs-shell`
 
@@ -86,9 +87,19 @@ The built-in MDX block library — `Note`, `Tip`, `Info`, `Warning`, `Danger`,
 `Check` (callout variants), `Card`, `CardGroup`, `Columns`, `Steps`/`Step`,
 `Tabs`/`Tab`, `CodeGroup`, `Accordion`/`AccordionGroup`, `ParamField`,
 `ResponseField`, `Expandable`, `Frame`, `Tooltip`, `Embed`, `Hero`,
-`AuthorBio`, `RelatedPosts`, `NewsletterCTA`, and `ApiLink`. Also exports
+`AuthorBio`, `RelatedPosts`, `NewsletterCTA`, `ApiLink`, and `Mermaid` (the static
+source-block fallback — see `./mermaid` below). Also exports
 `mdxComponents(customWidgets)` — merges your `widgets/index.ts` registry with
 every built-in block into the map `<Mdx components={...} />` expects.
+
+## `@inkform/framework/mermaid`
+
+Opt-in; needs the `mermaid` package installed (an optional peer dependency). See
+[Diagrams](/guides/diagrams).
+
+| Export | Notes |
+| --- | --- |
+| `Mermaid({ chart, caption? })` | Client component. Register with `mdxComponents({ Mermaid })`. Lazy-loads mermaid and the viewer when the diagram nears the viewport; themed from `--fw-*` tokens; pan/zoom, fullscreen with minimap, copy source, SVG download. |
 
 ## `@inkform/framework/scalar-theme`
 

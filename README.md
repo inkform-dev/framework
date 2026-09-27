@@ -79,6 +79,7 @@ To embed the engine in an existing Next.js app or build a custom theme from scra
 | **AI ask-box** | BYO model (Anthropic, OpenAI, or Google) and API key. Answers are grounded in your actual content with cited sources. |
 | **`/llms.txt` out of the box** | The [llms.txt](https://llmstxt.org) convention — a curated index and full-corpus export for LLMs and agentic tools. |
 | **Full-text search** | [Pagefind](https://pagefind.app/) indexes your built HTML at deploy time. Fast, client-side, no server required. |
+| **Diagrams** | ` ```mermaid ` fences become zoomable, pannable diagrams themed to your site — with a fullscreen view, minimap, and SVG download. Mermaid only loads on pages that have one. |
 | **Blog & changelog** | Drop files in `content/blog/` or `content/changelog/` — routes and nav links appear automatically. |
 | **Own your deployment** | A normal Next.js app. Ship to Vercel, AWS Amplify, a container, or a subpath on an existing site. |
 | **Genuinely open** | MIT licensed. No telemetry, no required account, no lock-in. |

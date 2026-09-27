@@ -1,6 +1,6 @@
 {
   "name": "@inkform/framework",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Standalone Next.js + MDX framework for documentation, API reference (OpenAPI), blog, and changelog sites. The rendering engine behind the inkform docs themes — usable on its own.",
   "license": "MIT",
   "author": "Charan",
@@ -27,7 +27,8 @@
     "api-reference",
     "changelog",
     "blog",
-    "static-site"
+    "static-site",
+    "mermaid"
   ],
   "main": "./src/index.ts",
   "exports": {
@@ -45,6 +46,7 @@
     "./ai": "./src/ai/index.ts",
     "./llms-txt": "./src/llms-txt.ts",
     "./mdx": "./src/mdx.tsx",
+    "./mermaid": "./src/mermaid/index.tsx",
     "./markdown": "./src/markdown.ts",
     "./components": "./src/components.tsx",
     "./docs-shell": "./src/docs-shell.tsx",
@@ -76,13 +78,20 @@
   "peerDependencies": {
     "next": ">=16",
     "react": ">=19",
-    "react-dom": ">=19"
+    "react-dom": ">=19",
+    "mermaid": ">=11"
+  },
+  "peerDependenciesMeta": {
+    "mermaid": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.16",
     "@ai-sdk/google": "^4.0.18",
     "@ai-sdk/openai": "^4.0.16",
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@panzoom/panzoom": "^4.6.2",
     "@scalar/json-magic": "^0.12.19",
     "@scalar/openapi-parser": "^0.28.10",
     "@scalar/openapi-types": "^0.9.3",
@@ -102,6 +111,7 @@
   },
   "devDependencies": {
     "@types/react": "^19",
+    "mermaid": "^12.0.0",
     "tsx": "^4.23.1",
     "typescript": "^5",
     "vitest": "^3.2.4"
