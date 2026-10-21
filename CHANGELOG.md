@@ -4,6 +4,28 @@ All notable changes to this project are documented here. Format loosely
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions
 track `packages/framework`'s own `package.json`.
 
+## [Unreleased]
+
+### Added
+
+- **`loadCollection(dir, parse?)`** in `@inkform/framework/content` loads any
+  folder of MDX (`content/<dir>/*.mdx`, sorted by file name) for collections
+  beyond blog and changelog: podcast episodes, course notes, case studies.
+  Files starting with `_` are skipped, so examples and drafts can sit next to
+  real entries. Pass `parse`, for example a zod schema's `.parse`, to type and
+  validate the frontmatter. When it throws, the error names the file, so a bad
+  field fails the build with a pointer to it.
+- **`@inkform/framework/prose.css`**: MDX content styles only (`.fw-prose`,
+  callouts, cards, steps, tabs, subscribe, mermaid) for sites that bring their
+  own layout and design system. It has no global reset, so it never restyles the
+  host's `html`, `body` or bare elements.
+
+### Changed
+
+- The global reset moved out of `styles/tokens.css` into `styles/base.css`.
+  `styles.css` imports both in the same order as before, so its output is
+  unchanged.
+
 ## [0.6.1] — 2026-09-27
 
 ### Changed

@@ -35,6 +35,8 @@ anywhere Next.js runs (Vercel, AWS Amplify, a Node server, a container).
   **feature-flagged Ask-AI widget** (`./search-dialog`, `./pagefind-highlight`,
   `./ask-ai`) — see "Search (Pagefind)" below for the required postbuild step.
 - **Standalone CSS** (`./styles.css`) — no Tailwind required in the host app.
+  Sites with their own design import `./prose.css` instead: MDX content styles
+  only, with no global reset.
 
 ## Install
 
@@ -76,7 +78,7 @@ Content lives under `content/{docs,blog,changelog}` (override the root with
 | Export | What |
 | --- | --- |
 | `.` | nav model, slug redirects, OpenAPI types/helpers, `FRAMEWORK_VERSION` |
-| `./content` | filesystem loaders: `loadDocsConfig`, `loadDocPage`, `loadBlogPosts`, `loadOpenApiSpec`, `extractHeadings` |
+| `./content` | filesystem loaders: `loadDocsConfig`, `loadDocPage`, `loadBlogPosts`, `loadCollection`, `loadOpenApiSpec`, `extractHeadings` |
 | `./nav` | `DocsConfig`, `docTabs`, `listDocPages`, `docNeighbours` |
 | `./openapi` | `parseOpenApi`, `normalizeOperations`, `operationNavGroups`, `curlExample`, `sampleFromSchema` |
 | `./mdx` | `<Mdx>`, `remarkMermaid` |
@@ -89,6 +91,7 @@ Content lives under `content/{docs,blog,changelog}` (override the root with
 | `./ask-ai` | `<AskAi>` (feature-flagged AI assistant) |
 | `./theme-toggle` | `<ThemeToggle>` |
 | `./styles.css` | base structural CSS + design-token defaults |
+| `./prose.css` | MDX content styles only (`.fw-prose` + the component kit), no global reset, for hosts with their own layout |
 
 ## Search (Pagefind)
 

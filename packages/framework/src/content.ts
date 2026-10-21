@@ -197,6 +197,63 @@ export function loadChangelogEntries(dir = 'changelog', includeDrafts = false): 
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+// ── collections ─────────────────────────────────────────────────────────
+
+export type CollectionEntry<T> = {
+  /** File name without `.mdx`: `episodes/ep-01-intro.mdx` → `ep-01-intro`. */
+  slug: string;
+  /** Path relative to the content root, for error messages: `podcast/episodes/ep-01-intro.mdx`. */
+  file: string;
+  /** Frontmatter, as returned by `parse` (raw gray-matter data when no parser is given). */
+  data: T;
+  content: string;
+  excerpt: string;
+  readingTime: number;
+};
+
+/**
+ * Load any folder of MDX files: `content/<dir>/*.mdx`, sorted by file name.
+ * Files starting with `_` are skipped, so drafts and examples can live next to
+ * real entries. Pass `parse` to validate and type the frontmatter — for
+ * example a zod schema's `.parse`. When it throws, the error names the file,
+ * so a bad field fails the build with a pointer to where it is.
+ *
+ * Frontmatter arrives as gray-matter parses it: an unquoted YAML date is a
+ * `Date` (at UTC midnight), not a string. Schemas such as `z.coerce.date()`
+ * accept both; note that they turn YAML `null` into 1970, so treat empty
+ * values as missing first.
+ */
+export function loadCollection<T = Record<string, unknown>>(
+  dir: string,
+  parse?: (data: Record<string, unknown>, file: string) => T,
+): CollectionEntry<T>[] {
+  const base = path.join(contentRoot(), dir);
+  return listMdx(base)
+    .filter((f) => !f.startsWith('_'))
+    .flatMap((f) => {
+      const parsed = readMdx(path.join(base, f));
+      if (!parsed) return [];
+      const file = path.posix.join(dir, f);
+      let data: T;
+      try {
+        data = parse ? parse(parsed.data, file) : (parsed.data as T);
+      } catch (err) {
+        const reason = err instanceof Error ? err.message : String(err);
+        throw new Error(`Invalid frontmatter in content/${file}:\n${reason}`, { cause: err });
+      }
+      return [
+        {
+          slug: f.replace(/\.mdx$/, ''),
+          file,
+          data,
+          content: parsed.content,
+          excerpt: plainExcerpt(parsed.content),
+          readingTime: readingTimeMinutes(parsed.content),
+        },
+      ];
+    });
+}
+
 // ── docs ──────────────────────────────────────────────────────────────────
 
 export function loadDocsConfig(dir = 'docs'): DocsConfig | null {

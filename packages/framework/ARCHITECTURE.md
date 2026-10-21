@@ -90,7 +90,9 @@ parsed spec is needed inside the Next.js build itself, e.g. `ApiLink` and the
 native renderer), `resolveOpenApiSource(openapi, dir?)` (resolves to whichever
 shape Scalar's own client-side config expects: `{ url }` or `{ content }`),
 `loadBlogPosts`, `loadBlogPost`, `loadSeries`, `loadChangelogEntries`,
-`loadSlugHistory`, `readingTimeMinutes`, `extractHeadings(content)` →
+`loadCollection(dir, parse?)` (any `content/<dir>/*.mdx`, `_` files skipped,
+frontmatter typed and validated by an optional `parse` such as a zod schema's
+`.parse`; errors name the file), `loadSlugHistory`, `readingTimeMinutes`, `extractHeadings(content)` →
 `Heading[] = { depth, text, slug }`, `slugify(text)`.
 
 ---
@@ -559,6 +561,13 @@ used by SearchDialog), `fw-reactions*`, `fw-comments*`, `fw-subscribe*`.
 
 Dark theme: scope overrides under `html.dark` (the ThemeToggle toggles `dark` on
 `<html>`).
+
+`styles.css` = `styles/tokens.css` (variables only) + `styles/base.css` (global
+reset: box model, `html`/`body` background and font, media max-width) + the
+structural files. `./prose.css` (file: `src/prose.css`) is the subset for host
+sites with their own layout and design system: tokens, `prose.css`,
+`components.css` and `mermaid.css`, and no `base.css`, so every rule stays inside
+`.fw-*` classes and nothing restyles the host's `html`, `body` or bare elements.
 
 ---
 

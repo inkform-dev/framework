@@ -34,6 +34,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./styles.css": "./src/styles.css",
+    "./prose.css": "./src/prose.css",
     "./content": "./src/content.ts",
     "./nav": "./src/nav.ts",
     "./openapi": "./src/openapi.ts",
