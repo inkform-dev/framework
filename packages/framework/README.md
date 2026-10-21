@@ -104,7 +104,7 @@ every consuming app needs a postbuild step:
 {
   "scripts": {
     "build": "next build",
-    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
+    "postbuild": "node scripts/pagefind.mjs"
   },
   "devDependencies": {
     "pagefind": "^1.5.0"
@@ -112,10 +112,17 @@ every consuming app needs a postbuild step:
 }
 ```
 
-`.next/server/app` is where Next.js writes fully-rendered static HTML for every
-statically-generated route (this works even though these apps are NOT using
-`output: 'export'` — they can't, because of the `/api/ask` route handler — as
-long as every doc/blog/changelog route is covered by `generateStaticParams`).
+`scripts/pagefind.mjs` ships with every template (copy it from
+`templates/canopy/scripts/`). It reads the fully-rendered static HTML Next.js
+writes for every statically-generated route and indexes each page under its
+real, extensionless URL through Pagefind's Node API. That HTML lives in
+`.next/server/app/<route>.html` after a plain `next build`, and in
+`.next/server/route-cache/APP_PAGE/<hash>/$/<route>.html` when a deployment
+adapter is active (Vercel's, from Next.js 16.3.8), where
+`pagefind --site .next/server/app` finds nothing. The script handles both.
+This works even though these apps are NOT using `output: 'export'` (they
+can't, because of the `/api/ask` route handler), as long as every
+doc/blog/changelog route is covered by `generateStaticParams`.
 Add `public/_pagefind/` to `.gitignore`; the index is a build artifact, not
 source. `<DocsShell>` marks its content region with `data-pagefind-body` so
 only real article content is indexed, not nav/sidebar/header chrome.

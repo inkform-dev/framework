@@ -77,7 +77,7 @@ by default.
 
 Cmd/Ctrl+K search works out of the box via
 [Pagefind](https://pagefind.app/), indexed at build time
-(`postbuild: pagefind --site .next/server/app --output-path public/_pagefind`).
+(`postbuild: node scripts/pagefind.mjs`).
 No third-party search service, no API keys, no separate indexing step to
 remember.
 

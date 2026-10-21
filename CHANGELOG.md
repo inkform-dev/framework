@@ -20,8 +20,21 @@ track `packages/framework`'s own `package.json`.
   own layout and design system. It has no global reset, so it never restyles the
   host's `html`, `body` or bare elements.
 
+### Fixed
+
+- **Search index on Vercel with Next.js 16.3.8.** Built with a deployment
+  adapter, Next.js 16.3.8 writes prerendered HTML to `.next/server/route-cache/`
+  instead of `.next/server/app/`, so `pagefind --site .next/server/app` found
+  nothing and failed the build. Templates and examples now run
+  `node scripts/pagefind.mjs`, which reads both layouts and indexes each page
+  under its real URL (`/docs/intro`, not `/docs/intro.html`). Existing sites:
+  copy `templates/canopy/scripts/pagefind.mjs` and point `postbuild` at it.
+
 ### Changed
 
+- Templates and examples pin `next` 16.3.8 (security release), `vitest` is on
+  4.x, and the `sharp`, `vite` and `@modelcontextprotocol/sdk` floors are raised
+  to clear new npm audit advisories.
 - The global reset moved out of `styles/tokens.css` into `styles/base.css`.
   `styles.css` imports both in the same order as before, so its output is
   unchanged.
