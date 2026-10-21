@@ -42,7 +42,7 @@ a database, a build service, or any external API to render.
 
 ## Search indexing
 
-Every theme runs Pagefind as a `postbuild` step
-(`pagefind --site .next/server/app --output-path public/_pagefind`), so
+Every theme runs Pagefind as a `postbuild` step (`node scripts/pagefind.mjs`,
+which indexes the prerendered HTML into `public/_pagefind`), so
 Cmd/Ctrl+K search works out of the box on the very first production build —
 no separate indexing service, no third-party search SaaS.

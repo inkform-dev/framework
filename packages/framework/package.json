@@ -34,6 +34,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./styles.css": "./src/styles.css",
+    "./prose.css": "./src/prose.css",
     "./content": "./src/content.ts",
     "./nav": "./src/nav.ts",
     "./openapi": "./src/openapi.ts",
@@ -90,7 +91,7 @@
     "@ai-sdk/anthropic": "^4.0.16",
     "@ai-sdk/google": "^4.0.18",
     "@ai-sdk/openai": "^4.0.16",
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "@panzoom/panzoom": "^4.6.2",
     "@scalar/json-magic": "^0.12.19",
     "@scalar/openapi-parser": "^0.28.10",
@@ -114,6 +115,6 @@
     "mermaid": "^12.0.0",
     "tsx": "^4.23.1",
     "typescript": "^5",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.12"
   }
 }

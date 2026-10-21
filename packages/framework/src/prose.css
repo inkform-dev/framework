@@ -1,0 +1,11 @@
+/* @inkform/framework/prose.css — MDX content styles only, for sites that bring
+   their own layout and design system. Same .fw-prose typography and component
+   kit (callouts, cards, steps, tabs, subscribe, mermaid) as styles.css, but no
+   global reset: nothing here touches html, body or bare elements outside
+   .fw-* classes. Every rule is keyed off the --fw-* tokens, so a host maps its
+   own palette onto them. */
+
+@import './styles/tokens.css';
+@import './styles/prose.css';
+@import './styles/components.css';
+@import './styles/mermaid.css';

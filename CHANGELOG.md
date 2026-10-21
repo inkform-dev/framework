@@ -4,6 +4,41 @@ All notable changes to this project are documented here. Format loosely
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions
 track `packages/framework`'s own `package.json`.
 
+## [Unreleased]
+
+### Added
+
+- **`loadCollection(dir, parse?)`** in `@inkform/framework/content` loads any
+  folder of MDX (`content/<dir>/*.mdx`, sorted by file name) for collections
+  beyond blog and changelog: podcast episodes, course notes, case studies.
+  Files starting with `_` are skipped, so examples and drafts can sit next to
+  real entries. Pass `parse`, for example a zod schema's `.parse`, to type and
+  validate the frontmatter. When it throws, the error names the file, so a bad
+  field fails the build with a pointer to it.
+- **`@inkform/framework/prose.css`**: MDX content styles only (`.fw-prose`,
+  callouts, cards, steps, tabs, subscribe, mermaid) for sites that bring their
+  own layout and design system. It has no global reset, so it never restyles the
+  host's `html`, `body` or bare elements.
+
+### Fixed
+
+- **Search index on Vercel with Next.js 16.3.8.** Built with a deployment
+  adapter, Next.js 16.3.8 writes prerendered HTML to `.next/server/route-cache/`
+  instead of `.next/server/app/`, so `pagefind --site .next/server/app` found
+  nothing and failed the build. Templates and examples now run
+  `node scripts/pagefind.mjs`, which reads both layouts and indexes each page
+  under its real URL (`/docs/intro`, not `/docs/intro.html`). Existing sites:
+  copy `templates/canopy/scripts/pagefind.mjs` and point `postbuild` at it.
+
+### Changed
+
+- Templates and examples pin `next` 16.3.8 (security release), `vitest` is on
+  4.x, and the `sharp`, `vite` and `@modelcontextprotocol/sdk` floors are raised
+  to clear new npm audit advisories.
+- The global reset moved out of `styles/tokens.css` into `styles/base.css`.
+  `styles.css` imports both in the same order as before, so its output is
+  unchanged.
+
 ## [0.6.1] — 2026-09-27
 
 ### Changed
