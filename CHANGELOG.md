@@ -41,6 +41,11 @@ track `packages/framework`'s own `package.json`.
 - `slugify` lives in a pure `./slug` module; `./content` re-exports it.
 - The root `vite` override now applies to `vitest` only (`^7.3.7`), since
   Astro 7 needs Vite 8.
+- Templates and examples move to Next.js 16.4.2, for the critical advisories
+  in 16.0.0–16.4.0 (GHSA-2464-fhr4-w9xw, GHSA-673q-mjm6-r5xr) and the Server
+  Actions denial of service (GHSA-p3m5-59mp-jv5r). Lockfile fixes for
+  DOMPurify (GHSA-cg2g-xh64-v4q7 and two more) and `ip-address`
+  (GHSA-rxp7-6hxx-x8q5). `npm audit --audit-level=high` is clean again.
 
 ## [0.7.0] — 2026-10-22
 
