@@ -1,6 +1,6 @@
 name: Release
 
-# Publishes @inkform/framework or @inkform/cli to public npm.
+# Publishes @inkform/framework, @inkform/cli or @inkform/astro to public npm.
 #
 # Authentication is npm Trusted Publishing (OIDC) — there is NO npm token
 # stored in this repository's secrets. GitHub mints a short-lived OIDC token
@@ -16,6 +16,7 @@ name: Release
 #
 #   framework-v0.5.0   →  publishes packages/framework
 #   cli-v0.5.0         →  publishes packages/cli
+#   astro-v0.1.0       →  publishes packages/astro
 #
 # The tag's version MUST equal the version already committed in that
 # package's package.json — the job refuses to guess. Bump, commit, push,
@@ -27,13 +28,14 @@ on:
     tags:
       - 'framework-v*'
       - 'cli-v*'
+      - 'astro-v*'
   workflow_dispatch:
     inputs:
       package:
         description: 'Which package to release'
         required: true
         type: choice
-        options: [framework, cli]
+        options: [framework, cli, astro]
       dry_run:
         description: 'Dry run (pack and validate, publish nothing)'
         required: true
@@ -101,6 +103,7 @@ jobs:
           case "$SLUG" in
             framework) DIR='packages/framework' ;;
             cli)       DIR='packages/cli' ;;
+            astro)     DIR='packages/astro' ;;
             *) echo "::error::Unrecognized release target '$SLUG'"; exit 1 ;;
           esac
 

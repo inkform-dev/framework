@@ -42,6 +42,7 @@ npm install
 packages/
   framework/          @inkform/framework — the MDX + OpenAPI engine (published)
   cli/                @inkform/cli — the npx scaffolder (published)
+  astro/              @inkform/astro — Astro 7 integration (published)
 
 templates/
   canopy/             @inkform/theme-canopy — dark, green accent (default)
@@ -52,13 +53,15 @@ examples/
   pokeapi-docs/       Full PokéAPI docs site + Playwright e2e tests
   markdown-docs/      Markdown/MDX feature reference
   inkform-docs/       This framework's own documentation (dogfooded)
+  astro-docs/         An Astro host app using @inkform/astro + Playwright tests
 
 archive/templates/    Legacy themes (aurora, fern, cedar, mono, base, galley)
                       preserved for reference — not scaffoldable via CLI
 ```
 
-Only `@inkform/framework` and `@inkform/cli` are published to npm. Themes and
-examples are private workspace packages used for development and demos.
+Only `@inkform/framework`, `@inkform/cli` and `@inkform/astro` are published
+to npm. Themes and examples are private workspace packages used for
+development and demos.
 
 ---
 
@@ -67,7 +70,7 @@ examples are private workspace packages used for development and demos.
 ```bash
 npm install                 # install every workspace + run postinstall prune
 npm run typecheck           # typecheck all packages
-npm test                    # framework unit tests (Vitest)
+npm test                    # framework + Astro integration unit tests (Vitest)
 npm run build               # next build across every theme + example
 npm run build:examples      # build the three demo sites only
 ```
@@ -100,15 +103,17 @@ cd /tmp/test-docs && npm install && npm run dev
 Override the GitHub ref the CLI downloads from with `INKFORM_DOCS_REF=<branch>`
 when testing against a fork or feature branch.
 
-**End-to-end tests** (manual — deliberately excluded from CI):
+**End-to-end tests:**
 
 ```bash
-npm run test:e2e --workspace=@inkform/example-pokeapi
+npm run test:e2e --workspace=@inkform/example-pokeapi     # manual, not in CI
+npm run test:e2e --workspace=@inkform/example-astro-docs  # also runs in CI
 ```
 
-The e2e suite makes one real request to the live PokéAPI per run. Fine for a
+The PokéAPI suite makes one real request to the live PokéAPI per run. Fine for a
 developer running it locally once, but not wired into CI to avoid hammering a
-free, community-funded API on every push.
+free, community-funded API on every push. The Astro suite builds and serves its
+own example and blocks every request that leaves it, so CI runs it.
 
 ---
 
