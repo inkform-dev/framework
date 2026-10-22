@@ -1,0 +1,42 @@
+---
+/** Every changelog entry, newest first, each with an anchor (`#<slug>`). */
+import Layout from '../Layout.astro';
+import PageHeader from '../PageHeader.astro';
+import Prose from '../Prose.astro';
+import type { Site } from '../../runtime/site';
+
+export interface Props {
+  site: Site;
+}
+
+const { site } = Astro.props;
+const renderer = site.renderer();
+const entries = await Promise.all(
+  site.changelog.map(async (entry) => ({ entry, html: await renderer.mdx(entry.content) })),
+);
+const toc = site.changelog.map((e) => ({ depth: 2, text: e.title, slug: e.slug }));
+---
+
+<Layout
+  site={site}
+  title="Changelog"
+  active={{ kind: 'changelog' }}
+  sidebar={null}
+  toc={toc}
+  contentType="changelog"
+  pageCss={renderer.styles.css}
+  diagrams={entries.some(({ html }) => html.includes('data-fw-mermaid'))}
+>
+  <PageHeader title="Changelog" />
+  {
+    entries.map(({ entry, html }) => (
+      <article class="fw-changelog-entry">
+        <p class="fw-page-meta">{[entry.date, entry.version ? `v${entry.version}` : null].filter(Boolean).join(' · ')}</p>
+        <h2 class="fw-changelog-title" id={entry.slug}>
+          {entry.title}
+        </h2>
+        <Prose html={html} />
+      </article>
+    ))
+  }
+</Layout>

@@ -1,0 +1,58 @@
+---
+/**
+ * Sidebar groups, in the framework Sidebar's markup. API Reference entries
+ * carry their method pill, as the framework's ReferenceSidebar draws them.
+ */
+import type { NavGroup } from '../runtime/nav';
+
+export interface Props {
+  groups: NavGroup[];
+  /** Optional heading above the groups, e.g. the active tab's label. */
+  title?: string | undefined;
+}
+
+const { groups, title } = Astro.props;
+---
+
+<aside class="fw-sidebar">
+  {
+    title ? (
+      <div class="fw-sidebar-header">
+        <p class="fw-sidebar-title">{title}</p>
+      </div>
+    ) : null
+  }
+  <nav class="fw-sidebar-nav" aria-label="Documentation navigation">
+    {
+      groups.map((g) => (
+        <div class="fw-sidebar-group">
+          <p class="fw-sidebar-group-label">{g.group}</p>
+          <ul class="fw-sidebar-items">
+            {g.items.map((item) => (
+              <li class:list={['fw-sidebar-item', item.active && 'fw-sidebar-item--active', item.depth > 0 && `fw-sidebar-depth-${item.depth}`]}>
+                <a
+                  href={item.href}
+                  class="fw-sidebar-link"
+                  aria-current={item.active ? 'page' : undefined}
+                  {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  {item.method ? (
+                    <span class="fw-sidebar-item-icon" aria-hidden="true">
+                      <span class:list={['fw-method-pill', 'fw-sidebar-method', `fw-method-${item.method}`]}>{item.method}</span>
+                    </span>
+                  ) : null}
+                  <span class="fw-sidebar-item-title">{item.title}</span>
+                  {item.external ? (
+                    <span class="fw-sidebar-item-ext" aria-hidden="true">
+                      ↗
+                    </span>
+                  ) : null}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </nav>
+</aside>

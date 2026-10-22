@@ -1,0 +1,149 @@
+---
+/**
+ * The Try It console for one operation, rendered closed. Same `fw-playground-*`
+ * markup as the framework's TryItConsole modal; ../client/api.ts opens it from
+ * the operation's "Try it" button, sends the request with the framework's
+ * request executor, and shows the response.
+ */
+import type { ApiOperation, ApiParam, OpenApiServer } from '@inkform/framework/openapi';
+import { sampleFromSchema } from '@inkform/framework/openapi-render/sample';
+
+export interface Props {
+  operation: ApiOperation;
+  servers: OpenApiServer[];
+}
+
+const { operation, servers } = Astro.props;
+const groups: { label: string; kind: 'path' | 'query' | 'header'; params: ApiParam[] }[] = [
+  { label: 'Path Parameters', kind: 'path', params: operation.parameters.filter((p) => p.in === 'path') },
+  { label: 'Query Parameters', kind: 'query', params: operation.parameters.filter((p) => p.in === 'query') },
+  { label: 'Header Parameters', kind: 'header', params: operation.parameters.filter((p) => p.in === 'header') },
+];
+const body = operation.requestBody;
+const isMultipart = body?.contentType === 'multipart/form-data';
+const bodyFields = isMultipart ? Object.entries(body?.schema?.properties ?? {}) : [];
+const isFile = (schema: unknown) => {
+  const format = (schema as { format?: string } | undefined)?.format;
+  return format === 'binary' || format === 'byte';
+};
+const bodySample = body?.schema && !isMultipart ? JSON.stringify(sampleFromSchema(body.schema), null, 2) : '';
+const placeholderFor = (p: ApiParam) => (p.example !== undefined ? String(p.example) : (p.description ?? p.name));
+const titleId = `fw-tryit-title-${operation.operationId}`;
+---
+
+<div
+  class="fw-playground-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby={titleId}
+  hidden
+  data-fw-tryit
+  data-operation={JSON.stringify(operation)}
+>
+  <div class="fw-playground-backdrop" aria-hidden="true" data-fw-tryit-close></div>
+  <div class="fw-playground-panel">
+    <div class="fw-playground-header">
+      <span class="fw-playground-title" id={titleId}>
+        <span class:list={['fw-method-pill', `fw-method-${operation.method}`]}>{operation.method.toUpperCase()}</span>
+        <code class="fw-playground-path">{operation.path}</code>
+      </span>
+      <button type="button" class="fw-playground-close" aria-label="Close" data-fw-tryit-close>✕</button>
+    </div>
+
+    <div class="fw-playground-body">
+      <div class="fw-playground-form">
+        {
+          servers.length > 1 ? (
+            <label class="fw-playground-field">
+              <span class="fw-playground-label">Server</span>
+              <select class="fw-playground-select" data-fw-tryit-server>
+                {servers.map((s) => (
+                  <option value={s.url}>{s.description ? `${s.description} (${s.url})` : s.url}</option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <input type="hidden" value={servers[0]?.url ?? '/'} data-fw-tryit-server />
+          )
+        }
+
+        {
+          operation.security.length > 0 ? (
+            <div class="fw-playground-group">
+              <p class="fw-playground-group-label">Authorization</p>
+              {operation.security.map((scheme) => (
+                <label class="fw-playground-field">
+                  <span class="fw-playground-label">
+                    {scheme.key} <span class="fw-playground-ct">{scheme.type === 'http' ? `http, ${scheme.scheme}` : scheme.type}</span>
+                  </span>
+                  <input
+                    class="fw-playground-input"
+                    type={scheme.type === 'http' && scheme.scheme === 'bearer' ? 'password' : 'text'}
+                    placeholder={scheme.scheme === 'basic' ? 'username:password' : 'value'}
+                    autocomplete="off"
+                    data-fw-tryit-auth={scheme.key}
+                  />
+                </label>
+              ))}
+            </div>
+          ) : null
+        }
+
+        {
+          groups.map((group) =>
+            group.params.length > 0 ? (
+              <div class="fw-playground-group">
+                <p class="fw-playground-group-label">{group.label}</p>
+                {group.params.map((p) => (
+                  <label class="fw-playground-field">
+                    <span class="fw-playground-label">
+                      {p.name}
+                      {p.required ? <span class="fw-param-required">required</span> : null}
+                    </span>
+                    <input
+                      class="fw-playground-input"
+                      type="text"
+                      placeholder={placeholderFor(p)}
+                      data-fw-tryit-param={group.kind}
+                      data-name={p.name}
+                    />
+                  </label>
+                ))}
+              </div>
+            ) : null,
+          )
+        }
+
+        {
+          body ? (
+            <div class="fw-playground-group">
+              <p class="fw-playground-group-label">
+                Request Body <code class="fw-playground-ct">{body.contentType}</code>
+              </p>
+              {isMultipart ? (
+                bodyFields.map(([name, schema]) => (
+                  <label class="fw-playground-field">
+                    <span class="fw-playground-label">{name}</span>
+                    {isFile(schema) ? (
+                      <input class="fw-playground-input" type="file" data-fw-tryit-file={name} />
+                    ) : (
+                      <input class="fw-playground-input" type="text" data-fw-tryit-field={name} />
+                    )}
+                  </label>
+                ))
+              ) : (
+                <textarea class="fw-playground-textarea" rows={6} placeholder='{ "key": "value" }' spellcheck="false" data-fw-tryit-body set:text={bodySample} />
+              )}
+            </div>
+          ) : null
+        }
+
+        <button type="button" class="fw-playground-send" data-fw-tryit-send>Send Request</button>
+      </div>
+
+      <div class="fw-playground-result" aria-live="polite" data-fw-tryit-result>
+        <p class="fw-playground-result-placeholder">Send a request to see the response here.</p>
+      </div>
+    </div>
+  </div>
+</div>

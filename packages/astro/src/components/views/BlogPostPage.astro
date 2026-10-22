@@ -1,0 +1,35 @@
+---
+/** One blog post. */
+import Layout from '../Layout.astro';
+import PageHeader from '../PageHeader.astro';
+import Prose from '../Prose.astro';
+import { BLOG_PATH } from '../../runtime/routes';
+import { ContentError, type Site } from '../../runtime/site';
+
+export interface Props {
+  site: Site;
+  slug: string;
+}
+
+const { site, slug } = Astro.props;
+const post = site.blog.find((p) => p.slug === slug);
+if (!post) throw new ContentError(`No blog post "${slug}".`);
+
+const renderer = site.renderer();
+const html = await renderer.mdx(post.content);
+const meta = [post.date, `${post.readingTime} min read`, post.author].filter(Boolean).join(' · ');
+---
+
+<Layout
+  site={site}
+  title={post.ogTitle ?? post.title}
+  description={post.description}
+  active={{ kind: 'blog' }}
+  sidebar={null}
+  contentType="blog"
+  pageCss={renderer.styles.css}
+  diagrams={html.includes('data-fw-mermaid')}
+>
+  <PageHeader title={post.title} meta={meta} trail={[{ label: 'Blog', href: site.link(BLOG_PATH) }, { label: post.title }]} />
+  <Prose html={html} />
+</Layout>

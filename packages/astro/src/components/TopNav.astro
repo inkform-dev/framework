@@ -1,0 +1,39 @@
+---
+/**
+ * The header's tab row: docs.json tabs, anchors and navbar links, Blog and
+ * Changelog. Same markup as the framework's SecondaryTopNav inside its
+ * ScrollableTopNav; ../client/shell.ts shows the edge hints on narrow screens.
+ */
+import type { TopNavLink } from '../runtime/nav';
+
+export interface Props {
+  links: TopNavLink[];
+}
+
+const { links } = Astro.props;
+---
+
+<div class="fw-topnav-scroll" data-fw-topnav-scroll>
+  <div class="fw-topnav-scroll-track">
+    <div class="fw-topnav-tabs">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class:list={['fw-topnav-tab', l.active && 'fw-topnav-tab--active']}
+            aria-current={l.active ? 'page' : undefined}
+            {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+  <div class="fw-topnav-scroll-hint fw-topnav-scroll-hint--left" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+  </div>
+  <div class="fw-topnav-scroll-hint fw-topnav-scroll-hint--right" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+  </div>
+</div>

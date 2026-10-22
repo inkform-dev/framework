@@ -1,0 +1,23 @@
+---
+// The host site's own home page: rendered on demand, with a React island.
+// The docs integration adds nothing here.
+import Counter from '../components/Counter';
+
+export const prerender = false;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Host site</title>
+  </head>
+  <body>
+    <main>
+      <h1>Host site</h1>
+      <p>This page belongs to the Astro app. The docs are at <a href="/docs">/docs</a>.</p>
+      <Counter client:load />
+    </main>
+  </body>
+</html>

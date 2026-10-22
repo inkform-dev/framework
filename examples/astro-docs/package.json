@@ -1,0 +1,34 @@
+{
+  "name": "@inkform/example-astro-docs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A minimal Astro site serving Inkform docs, API reference, llms.txt and search through @inkform/astro.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node dist/server/entry.mjs",
+    "typecheck": "astro check",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/node": "11.1.9",
+    "@astrojs/react": "7.1.1",
+    "@inkform/astro": "^0.1.0",
+    "astro": "7.4.2",
+    "cookie": "^2.0.1",
+    "mermaid": "^12.0.0",
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}

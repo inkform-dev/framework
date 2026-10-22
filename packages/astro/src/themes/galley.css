@@ -1,0 +1,206 @@
+/*
+ * Galley — Inkform's own design system, as an @inkform/astro theme. Ported
+ * from templates/galley/app/theme.css: warm opaque paper and ink, one
+ * editorial proof-red accent (#C24E3D in both schemes), depth from paper
+ * layers and hairlines rather than shadow. Loaded after the framework's
+ * styles, so these declarations win.
+ *
+ * Fonts: Galley's voices are General Sans (UI), Newsreader (headings) and
+ * JetBrains Mono (code). This file names them but loads none, so a page
+ * under a strict CSP fetches nothing from a font CDN; without them the
+ * system fallbacks below are used. To load them, add their @font-face
+ * files through the integration's `customCss` option.
+ */
+
+/* ── Fonts ───────────────────────────────────────────────────────────────── */
+:root {
+  --fw-font: 'General Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --fw-font-heading: 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Georgia, 'Times New Roman', serif;
+  --fw-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* ── Light mode (default) — paper: canvas → raised → well ───────────────── */
+:root {
+  --fw-bg: #fcfbf7;
+  --fw-bg-subtle: #f6f4ed;
+  --fw-fg: #191813;
+  --fw-muted: #8b8779;
+  --fw-border: #e4e0d4;
+  --fw-border-strong: #d8d3c5;
+  --fw-card: #f6f4ed;
+  --fw-card-hover: #efebe1;
+  --fw-code-bg: #efebe1;
+  --fw-kbd-bg: #efebe1;
+
+  --fw-primary: #c24e3d;
+  --fw-primary-fg: #fcfbf7;
+  --fw-primary-subtle: #f7e9e6;
+
+  --fw-radius: 10px;
+  --fw-radius-sm: 6px;
+
+  --fw-shadow: 0 1px 2px rgba(40, 30, 20, 0.05), 0 2px 4px rgba(40, 30, 20, 0.04);
+  --fw-shadow-lg: 0 4px 8px rgba(40, 30, 20, 0.06), 0 14px 34px rgba(40, 30, 20, 0.1);
+  --fw-ring: 0 0 0 3px #f7e9e6;
+
+  /* Method pills lean on the palette's git-semantic and warning hues, not
+     cool blues that would clash with the warm paper. */
+  --fw-method-get: #4c9a5c;
+  --fw-method-post: #c24e3d;
+  --fw-method-put: #a9762a;
+  --fw-method-patch: #8a5a78;
+  --fw-method-delete: #97392c;
+  --fw-method-head: #4f7a78;
+  --fw-method-options: #8b8779;
+}
+
+/* ── Dark mode — warm ink, never blue-grey ───────────────────────────────── */
+html.dark {
+  --fw-bg: #131210;
+  --fw-bg-subtle: #1b1a17;
+  --fw-fg: #f2efe6;
+  --fw-muted: #7b776b;
+  --fw-border: #2f2d28;
+  --fw-border-strong: #3b3833;
+  --fw-card: #1b1a17;
+  --fw-card-hover: #242320;
+  --fw-code-bg: #242320;
+  --fw-kbd-bg: #242320;
+
+  --fw-primary: #c24e3d;
+  --fw-primary-fg: #fcfbf7;
+  --fw-primary-subtle: #33201d;
+
+  --fw-shadow: 0 1px 2px rgba(0, 0, 0, 0.34), 0 2px 4px rgba(0, 0, 0, 0.28);
+  --fw-shadow-lg: 0 6px 14px rgba(0, 0, 0, 0.46), 0 18px 40px rgba(0, 0, 0, 0.52);
+  --fw-ring: 0 0 0 3px #33201d;
+
+  --fw-method-get: #74be84;
+  --fw-method-post: #d6796b;
+  --fw-method-put: #d3a45e;
+  --fw-method-patch: #b586a8;
+  --fw-method-delete: #d98379;
+  --fw-method-head: #7fa8a6;
+  --fw-method-options: #aba79a;
+}
+
+/* ── Header: two rows. Row 1 is logo · search · actions; row 2 the tabs,
+   left-aligned under the logo and underlined when active. --fw-header-h
+   grows to fit both rows, and every sticky offset reads it. ────────────── */
+
+:root {
+  --fw-header-h: 7rem;
+}
+
+.fw-shell-header {
+  height: auto;
+  min-height: var(--fw-header-h);
+  border-bottom: none;
+}
+
+.fw-shell-header-inner {
+  flex-wrap: wrap;
+  row-gap: 0.625rem;
+  align-items: center;
+  align-content: flex-start;
+  height: 100%;
+  min-height: var(--fw-header-h);
+  padding-top: 0.875rem;
+  padding-bottom: 0;
+}
+
+.fw-shell-header-start {
+  order: 1;
+}
+
+.fw-shell-actions {
+  order: 2;
+  flex: 1;
+  margin-left: 0;
+}
+
+.fw-shell-topnav {
+  order: 3;
+  flex-basis: 100%;
+  justify-content: flex-start;
+  margin-top: auto;
+  border-bottom: 1px solid var(--fw-border);
+}
+
+/* Search sits centered in the space between the logo and the other actions. */
+.fw-shell-actions > .fw-search-trigger {
+  flex: 1;
+  max-width: 26rem;
+  margin-inline: auto;
+  justify-content: space-between;
+  padding: 0.5rem 0.875rem;
+  background: var(--fw-bg-subtle);
+}
+
+.fw-shell-actions > .fw-search-trigger::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat center / contain;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+
+/* ── Tabs: underline indicator, not a pill background ───────────────────── */
+
+.fw-topnav-tabs {
+  gap: 1.5rem;
+}
+
+.fw-topnav-tab {
+  padding: 0.625rem 0.0625rem;
+  margin-bottom: -1px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  font-weight: 600;
+}
+
+.fw-topnav-tab:hover {
+  background: none;
+  color: var(--fw-fg);
+}
+
+.fw-topnav-tab--active {
+  background: none;
+  margin-bottom: -2px;
+  border-bottom-color: var(--fw-primary);
+  color: var(--fw-fg);
+  position: relative;
+  z-index: 1;
+}
+
+/* The drawer stacks the same tabs vertically: no underline there. */
+.fw-drawer-nav .fw-topnav-tab,
+.fw-drawer-nav .fw-topnav-tab--active {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.fw-drawer-nav .fw-topnav-tab--active {
+  background: var(--fw-primary-subtle);
+  color: var(--fw-primary);
+}
+
+/* ── Sidebar: plain (not uppercase) group labels ────────────────────────── */
+
+.fw-sidebar-group-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--fw-fg);
+}
+
+/* Media frames get a moderate rounded corner. */
+.fw-frame,
+.fw-hero {
+  border-radius: 1rem;
+  overflow: hidden;
+}

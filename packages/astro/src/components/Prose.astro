@@ -1,0 +1,24 @@
+---
+/**
+ * HTML rendered from MDX (see ../runtime/render.ts), plus the scripts its
+ * interactive kit components need: tabs and code groups always, the diagram
+ * renderer only when the page has a diagram and the `mermaid` option is on.
+ */
+import config from 'virtual:@inkform/astro/config';
+import MermaidScript from './MermaidScript.astro';
+
+export interface Props {
+  html: string;
+}
+
+const { html } = Astro.props;
+const hasDiagram = config.mermaid && html.includes('data-fw-mermaid');
+---
+
+<Fragment set:html={html} />
+{hasDiagram ? <MermaidScript /> : null}
+
+<script>
+  import { initKit } from '../client/kit';
+  initKit();
+</script>

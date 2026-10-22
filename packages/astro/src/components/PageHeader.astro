@@ -1,0 +1,21 @@
+---
+/** A page's title block: breadcrumbs, the title, and the frontmatter description. */
+import type { Crumb } from '../runtime/nav';
+import Breadcrumbs from './Breadcrumbs.astro';
+
+export interface Props {
+  title: string;
+  description?: string | null;
+  trail?: Crumb[];
+  meta?: string | null;
+}
+
+const { title, description, trail = [], meta } = Astro.props;
+---
+
+<Breadcrumbs trail={trail} />
+<header class="fw-page-actions">
+  {meta ? <p class="fw-page-meta">{meta}</p> : null}
+  <h1 class="fw-page-title">{title}</h1>
+  {description ? <p class="fw-page-description">{description}</p> : null}
+</header>

@@ -1,0 +1,31 @@
+---
+title: Host an Astro site
+description: How the docs fit into an Astro app that serves other things too.
+---
+
+# Host an Astro site
+
+The integration adds routes under its `base` and nothing else. Your pages,
+middleware and API routes keep working.
+
+## Routes
+
+| Path | What |
+| --- | --- |
+| `/docs/…` | Docs pages from `docs.json` |
+| `/docs/api-reference/…` | The API Reference |
+| `/docs/blog/…`, `/docs/changelog` | When those folders have entries |
+| `/docs/llms.txt`, `/docs/llms-full.txt` | For LLMs and agents |
+
+## Rendering
+
+Every docs route is prerendered, including in an `output: 'server'` app. React
+renders the framework's components at build time; the pages ship a few small
+scripts and no React.
+
+```mermaid title="Build"
+graph LR
+  A[content/docs] --> B[MDX + kit]
+  B --> C[Static HTML]
+  C --> D[Pagefind index]
+```

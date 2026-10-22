@@ -1,0 +1,37 @@
+---
+title: Introduction
+description: An Inkform content folder, served by an Astro site through @inkform/astro.
+---
+
+# Introduction
+
+This is a plain Astro site. Its home page is the site's own; everything under
+`/docs` comes from a folder of MDX and a `docs.json`, rendered by
+[`@inkform/astro`](https://github.com/inkform-dev/framework/tree/main/packages/astro).
+
+<Frame caption="Your docs, your repo, your deploy.">
+  ![Hero](/hero.svg)
+</Frame>
+
+## What's here
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Add the integration to an Astro site in three steps.
+  </Card>
+  <Card title="Components" icon="blocks" href="/essentials/components">
+    Every component in the kit, on one page.
+  </Card>
+  <Card title="API Reference" icon="terminal" href="/api-reference">
+    Generated from `openapi.json`, with a Try It console.
+  </Card>
+  <Card title="Content Security Policy" icon="shield" href="/guides/csp">
+    What the docs pages add to a site's policy, and why.
+  </Card>
+</CardGroup>
+
+<Note>
+  The links on this page are written from the site root, the way content for
+  a Next.js theme is. The integration adds `/docs` to the ones that point at
+  docs pages.
+</Note>

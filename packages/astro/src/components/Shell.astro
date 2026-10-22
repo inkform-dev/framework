@@ -1,0 +1,133 @@
+---
+/**
+ * The three-zone docs shell: header (logo, tabs, search, theme toggle, CTA),
+ * sidebar, article, on-this-page rail. Same markup and `fw-shell*` classes as
+ * the framework's DocsShell, so @inkform/framework/styles.css and theme
+ * tokens style it unchanged. The mobile drawer, TOC highlight and theme
+ * toggle are wired up by ../client/shell.ts.
+ */
+import type { Site } from '../runtime/site';
+import { topNav, type ActiveArea, type NavGroup } from '../runtime/nav';
+import type { TocHeading } from '../runtime/headings';
+import config from 'virtual:@inkform/astro/config';
+import Brand from './Brand.astro';
+import TopNav from './TopNav.astro';
+import Sidebar from './Sidebar.astro';
+import Toc from './Toc.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import SearchButton from './SearchButton.astro';
+
+export interface Props {
+  site: Site;
+  active: ActiveArea;
+  sidebar: NavGroup[] | null;
+  sidebarTitle?: string;
+  toc: TocHeading[] | null;
+  contentType: 'doc' | 'api' | 'blog' | 'changelog';
+}
+
+const { site, active, sidebar, sidebarTitle, toc, contentType } = Astro.props;
+const links = topNav(site.config, {
+  apiSlug: site.api?.slug ?? null,
+  hasBlog: site.blog.length > 0,
+  hasChangelog: site.changelog.length > 0,
+  active,
+  link: site.link,
+});
+const cta = site.config.cta;
+const ctaExternal = cta ? /^https?:\/\//.test(cta.href) : false;
+const hasSidebar = !!sidebar && sidebar.length > 0;
+const hasToc = !!toc && toc.length > 0;
+const showMenu = hasSidebar || links.length > 0 || !!cta;
+const TYPE_LABEL = { doc: 'Docs', api: 'API', changelog: 'Changelog', blog: 'Blog' } as const;
+---
+
+<div class:list={['fw-shell', !hasSidebar && 'fw-shell--no-sidebar', !hasToc && 'fw-shell--no-toc']}>
+  <header class="fw-shell-header">
+    <div class="fw-shell-header-inner">
+      <div class="fw-shell-header-start">
+        <div class="fw-shell-logo"><Brand site={site} /></div>
+        {
+          showMenu ? (
+            <>
+              <button
+                type="button"
+                class="fw-hamburger"
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="fw-drawer"
+                data-fw-drawer-toggle
+              >
+                <span class="fw-hamburger-bar" />
+                <span class="fw-hamburger-bar" />
+                <span class="fw-hamburger-bar" />
+              </button>
+              <div id="fw-drawer" class="fw-sidebar-drawer" aria-hidden="true" inert data-fw-drawer>
+                {links.length > 0 || cta ? (
+                  <nav class="fw-drawer-nav" aria-label="Primary">
+                    {links.length > 0 ? <TopNav links={links} /> : null}
+                    {cta ? (
+                      <a href={cta.href} class="fw-topnav-cta" {...(ctaExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                        {cta.label}
+                      </a>
+                    ) : null}
+                  </nav>
+                ) : null}
+                {hasSidebar ? <Sidebar groups={sidebar} title={sidebarTitle} /> : null}
+              </div>
+            </>
+          ) : null
+        }
+      </div>
+
+      {
+        links.length > 0 ? (
+          <nav class="fw-shell-topnav" aria-label="Top navigation">
+            <TopNav links={links} />
+          </nav>
+        ) : null
+      }
+
+      <div class="fw-shell-actions">
+        {config.search ? <SearchButton /> : null}
+        <ThemeToggle />
+        {
+          cta ? (
+            <a href={cta.href} class="fw-topnav-cta" {...(ctaExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+              {cta.label}
+            </a>
+          ) : null
+        }
+      </div>
+    </div>
+  </header>
+
+  <div class="fw-shell-body">
+    {
+      hasSidebar ? (
+        <div class="fw-shell-sidebar">
+          <Sidebar groups={sidebar} title={sidebarTitle} />
+        </div>
+      ) : null
+    }
+
+    <main class="fw-shell-main" id="main-content" data-pagefind-body data-pagefind-filter={`type:${TYPE_LABEL[contentType]}`}>
+      <div class="fw-shell-content">
+        <slot />
+      </div>
+    </main>
+
+    {
+      hasToc ? (
+        <div class="fw-shell-toc">
+          <Toc headings={toc} />
+        </div>
+      ) : null
+    }
+  </div>
+</div>
+
+<script>
+  import { initShell } from '../client/shell';
+  initShell();
+</script>

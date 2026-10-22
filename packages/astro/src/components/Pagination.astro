@@ -1,0 +1,34 @@
+---
+/** Previous / next page cards, in the framework Pagination's markup. */
+import type { PageLink } from '../runtime/nav';
+
+export interface Props {
+  prev: PageLink | null;
+  next: PageLink | null;
+}
+
+const { prev, next } = Astro.props;
+---
+
+{
+  prev || next ? (
+    <nav class="fw-pagination" aria-label="Page navigation">
+      {prev ? (
+        <a href={prev.href} class="fw-pagination-card fw-pagination-prev">
+          <span class="fw-pagination-dir">← Previous</span>
+          <span class="fw-pagination-title">{prev.title}</span>
+        </a>
+      ) : (
+        <span class="fw-pagination-spacer" />
+      )}
+      {next ? (
+        <a href={next.href} class="fw-pagination-card fw-pagination-next">
+          <span class="fw-pagination-dir">Next →</span>
+          <span class="fw-pagination-title">{next.title}</span>
+        </a>
+      ) : (
+        <span class="fw-pagination-spacer" />
+      )}
+    </nav>
+  ) : null
+}

@@ -1,0 +1,11 @@
+---
+/**
+ * Light/dark switch, with the framework ThemeToggle's markup and storage
+ * (`localStorage['fw-theme']`, the `dark` class and `data-theme` on <html>).
+ * ../client/shell.ts sets its icon and label once it knows the current scheme.
+ */
+---
+
+<button type="button" class="fw-theme-toggle" aria-label="Toggle theme" aria-pressed="false" data-fw-theme-toggle>
+  <span class="fw-theme-toggle-icon" aria-hidden="true">☀</span>
+</button>

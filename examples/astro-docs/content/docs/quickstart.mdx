@@ -1,0 +1,41 @@
+---
+title: Quickstart
+description: Serve an Inkform content folder from an Astro site.
+---
+
+# Quickstart
+
+<Steps>
+  <Step title="Install">
+    ```bash
+    npm install @inkform/astro react react-dom
+    ```
+  </Step>
+  <Step title="Add the integration">
+    ```ts astro.config.ts
+    import { defineConfig } from 'astro/config';
+    import inkform from '@inkform/astro';
+
+    export default defineConfig({
+      integrations: [inkform({ base: '/docs', contentRoot: './content' })],
+    });
+    ```
+  </Step>
+  <Step title="Write content">
+    Put `docs.json` and your MDX pages in `content/docs/`. Run `astro dev` and
+    open `/docs`.
+  </Step>
+</Steps>
+
+## Build
+
+`astro build` prerenders every docs page and then writes a
+[Pagefind](https://pagefind.app) index next to them, at `/docs/_pagefind/`.
+
+<Tip>Search needs a production build: in `astro dev` the dialog says the index is missing.</Tip>
+
+## Link to the API
+
+Inline links to an operation resolve at build time:
+<ApiLink operationId="create-plant">create a plant</ApiLink>. A link to an
+operation that doesn't exist fails the build.

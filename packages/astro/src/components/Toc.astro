@@ -1,0 +1,26 @@
+---
+/** On-this-page list, in the framework TocList's markup. ../client/shell.ts marks the heading in view. */
+import type { TocHeading } from '../runtime/headings';
+
+export interface Props {
+  headings: TocHeading[];
+  title?: string;
+}
+
+const { headings, title = 'On this page' } = Astro.props;
+---
+
+<nav class="fw-toc" aria-label="Table of contents" data-fw-toc-spy>
+  {title ? <p class="fw-toc-title">{title}</p> : null}
+  <ul class="fw-toc-list">
+    {
+      headings.map((h) => (
+        <li class:list={['fw-toc-item', `fw-toc-depth-${h.depth}`]}>
+          <a href={`#${h.slug}`} class="fw-toc-link">
+            {h.text}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
