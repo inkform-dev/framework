@@ -14,6 +14,7 @@
 import { loadBlogPosts, loadChangelogEntries, loadDocPage, loadDocsConfig } from './content';
 import { loadApiDocument } from './mcp/tools';
 import { listDocPages } from './nav';
+import { joinHref } from './routes';
 import { renderOpenApiMarkdown } from './openapi-engine/markdown';
 import { buildNavTree } from './openapi-engine/nav';
 
@@ -25,6 +26,13 @@ export interface LlmsTxtOptions {
    * "/api-reference", matching ai/ask.ts's convention.
    */
   apiBasePath?: string;
+  /**
+   * Prefix for doc, blog and changelog links, for a site that serves its docs
+   * under a path (e.g. "/docs" → `/docs/quickstart`, `/docs/blog/<slug>`).
+   * Defaults to "" (links from the site root). `apiBasePath` is separate and
+   * already absolute, so include this prefix in it yourself.
+   */
+  basePath?: string;
 }
 
 function section(title: string, lines: string[]): string {
@@ -43,11 +51,12 @@ export async function buildLlmsTxt(options: LlmsTxtOptions = {}): Promise<string
   if (!config) return '';
 
   const apiBasePath = options.apiBasePath ?? '/api-reference';
+  const basePath = options.basePath ?? '';
   const parts: string[] = [`# ${config.name}`, '', `> Documentation for ${config.name}.`];
 
   const docLines = listDocPages(config).map((page) => {
     const desc = pageDescription(page.file);
-    return `- [${page.title}](/${page.slug})${desc ? `: ${desc}` : ''}`;
+    return `- [${page.title}](${joinHref(basePath, page.slug)})${desc ? `: ${desc}` : ''}`;
   });
   parts.push(section('Docs', docLines));
 
@@ -64,11 +73,12 @@ export async function buildLlmsTxt(options: LlmsTxtOptions = {}): Promise<string
   }
 
   if (loadChangelogEntries().length > 0) {
-    parts.push(section('Changelog', ['- [Changelog](/changelog)']));
+    parts.push(section('Changelog', [`- [Changelog](${joinHref(basePath, 'changelog')})`]));
   }
 
   const blogLines = loadBlogPosts().map(
-    (post) => `- [${post.title}](/blog/${post.slug})${post.description ? `: ${post.description}` : ''}`,
+    (post) =>
+      `- [${post.title}](${joinHref(basePath, `blog/${post.slug}`)})${post.description ? `: ${post.description}` : ''}`,
   );
   parts.push(section('Blog', blogLines));
 

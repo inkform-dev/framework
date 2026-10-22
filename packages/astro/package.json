@@ -1,0 +1,85 @@
+{
+  "name": "@inkform/astro",
+  "version": "0.1.0",
+  "description": "Astro integration for @inkform/framework: serve a folder of MDX docs, a native OpenAPI reference, llms.txt and Pagefind search from any Astro 7 site.",
+  "license": "MIT",
+  "author": "Charan",
+  "type": "module",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inkform-dev/framework.git",
+    "directory": "packages/astro"
+  },
+  "homepage": "https://github.com/inkform-dev/framework/tree/main/packages/astro#readme",
+  "bugs": {
+    "url": "https://github.com/inkform-dev/framework/issues"
+  },
+  "keywords": [
+    "astro-integration",
+    "withastro",
+    "astro",
+    "mdx",
+    "docs",
+    "documentation",
+    "openapi",
+    "api-reference",
+    "pagefind",
+    "llms-txt"
+  ],
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "peerDependencies": {
+    "astro": "^7.0.0",
+    "mermaid": ">=11",
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "dependencies": {
+    "@inkform/framework": "^0.8.0",
+    "@panzoom/panzoom": "^4.6.2",
+    "hast-util-from-html": "^2.0.3",
+    "hast-util-to-html": "^9.0.5",
+    "pagefind": "^1.5.2",
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@types/hast": "^3.0.4",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "astro": "7.4.2",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "typescript": "^5",
+    "vitest": "^4.1.12"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./themes/galley.css": "./src/themes/galley.css",
+    "./package.json": "./package.json"
+  },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "files": [
+    "src",
+    "!src/**/*.test.ts",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit && astro check --root .",
+    "test": "vitest run"
+  },
+  "peerDependenciesMeta": {
+    "mermaid": {
+      "optional": true
+    }
+  }
+}

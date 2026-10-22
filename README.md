@@ -69,6 +69,14 @@ The binary is also available as `inkform-docs` when installed globally.
 
 To embed the engine in an existing Next.js app or build a custom theme from scratch, see [`packages/framework`](./packages/framework) and [`packages/framework/ARCHITECTURE.md`](./packages/framework/ARCHITECTURE.md).
 
+**On Astro?** [`@inkform/astro`](./packages/astro) serves the same content folder from any Astro 7 site, under a path like `/docs`, with no Next.js and no React in the browser:
+
+```ts
+// astro.config.ts
+import inkform from '@inkform/astro';
+export default defineConfig({ integrations: [inkform({ base: '/docs' })] });
+```
+
 ## Features
 
 | | |
@@ -106,12 +114,14 @@ This repository is an npm workspaces monorepo. Published packages ship to npm; e
 | --- | --- | :---: | --- |
 | [`packages/framework`](./packages/framework) | `@inkform/framework` | ✓ | The MDX + OpenAPI rendering engine |
 | [`packages/cli`](./packages/cli) | `@inkform/cli` | ✓ | `npx` scaffolder (`inkform-docs` binary) |
+| [`packages/astro`](./packages/astro) | `@inkform/astro` | ✓ (not yet released) | Astro 7 integration: the same content, served from an Astro site |
 | [`templates/canopy`](./templates/canopy) | `@inkform/theme-canopy` | | Canopy theme |
 | [`templates/shadcn`](./templates/shadcn) | `@inkform/theme-shadcn` | | Shadcn theme |
 | [`templates/galley`](./templates/galley) | `@inkform/theme-galley` | | Galley theme |
 | [`examples/pokeapi-docs`](./examples/pokeapi-docs) | `@inkform/example-pokeapi` | | Full PokéAPI docs site (OpenAPI + e2e tests) |
 | [`examples/markdown-docs`](./examples/markdown-docs) | `@inkform/example-markdown` | | Markdown/MDX feature reference |
 | [`examples/inkform-docs`](./examples/inkform-docs) | `@inkform/example-inkform-docs` | | This framework's own docs (dogfooded) |
+| [`examples/astro-docs`](./examples/astro-docs) | `@inkform/example-astro-docs` | | An Astro host app with docs under `/docs` (Playwright tests) |
 
 ## Develop in this repo
 
@@ -122,7 +132,7 @@ git clone https://github.com/inkform-dev/framework.git
 cd framework
 npm install                  # installs all workspaces
 npm run typecheck            # typecheck every package
-npm test                     # framework unit tests (Vitest)
+npm test                     # framework and Astro integration unit tests (Vitest)
 npm run build                # build all workspaces
 npm run build:examples       # build the three demo sites only
 ```

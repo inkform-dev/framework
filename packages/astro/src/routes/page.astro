@@ -1,0 +1,34 @@
+---
+/**
+ * The one route behind every docs URL (`<base>/[...slug]`). getStaticPaths
+ * lists the whole site from docs.json, the spec, and the blog and changelog
+ * folders (see ../runtime/routes.ts); each path renders its view.
+ */
+import type { GetStaticPaths } from 'astro';
+import DocPage from '../components/views/DocPage.astro';
+import ApiIndexPage from '../components/views/ApiIndexPage.astro';
+import ApiOperationPage from '../components/views/ApiOperationPage.astro';
+import BlogIndexPage from '../components/views/BlogIndexPage.astro';
+import BlogPostPage from '../components/views/BlogPostPage.astro';
+import ChangelogPage from '../components/views/ChangelogPage.astro';
+import { findRoute, slugParam } from '../runtime/routes';
+import { loadSite } from '../runtime/site';
+
+export const prerender = true;
+
+export const getStaticPaths = (async () => {
+  const site = await loadSite();
+  return site.routes.map((route) => ({ params: { slug: slugParam(route.path) } }));
+}) satisfies GetStaticPaths;
+
+const site = await loadSite();
+const route = findRoute(site.byPath, Astro.params.slug);
+if (!route) return new Response(null, { status: 404 });
+---
+
+{route.kind === 'doc' && <DocPage site={site} route={route} />}
+{route.kind === 'api-index' && site.api && <ApiIndexPage site={site} api={site.api} />}
+{route.kind === 'api-operation' && site.api && <ApiOperationPage site={site} api={site.api} operationId={route.operationId} />}
+{route.kind === 'blog-index' && <BlogIndexPage site={site} />}
+{route.kind === 'blog-post' && <BlogPostPage site={site} slug={route.slug} />}
+{route.kind === 'changelog' && <ChangelogPage site={site} />}

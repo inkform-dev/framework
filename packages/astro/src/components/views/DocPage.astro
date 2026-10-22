@@ -1,0 +1,46 @@
+---
+/** A docs.json page: its MDX rendered with the framework's kit, in the shell with sidebar, TOC and prev/next. */
+import { loadDocPage, stripLeadingH1 } from '@inkform/framework/content';
+import config from 'virtual:@inkform/astro/config';
+import Layout from '../Layout.astro';
+import PageHeader from '../PageHeader.astro';
+import Pagination from '../Pagination.astro';
+import Prose from '../Prose.astro';
+import { headingsFromHtml } from '../../runtime/headings';
+import { docBreadcrumbs, docPagination, docsSidebar } from '../../runtime/nav';
+import type { SiteRoute } from '../../runtime/routes';
+import { ContentError, type Site } from '../../runtime/site';
+
+export interface Props {
+  site: Site;
+  route: Extract<SiteRoute, { kind: 'doc' }>;
+}
+
+const { site, route } = Astro.props;
+const { page } = route;
+const loaded = loadDocPage(page.file);
+if (!loaded) {
+  throw new ContentError(`docs.json lists "${page.file}" for "${page.title}", but ${config.contentRoot}/docs/${page.file} doesn't exist.`);
+}
+
+const renderer = site.renderer();
+const html = await renderer.mdx(stripLeadingH1(loaded.content));
+const description = typeof loaded.data.description === 'string' ? loaded.data.description : null;
+const { prev, next } = docPagination(site.config, page.slug, site.link);
+---
+
+<Layout
+  site={site}
+  title={page.title}
+  description={description}
+  active={{ kind: 'docs', tab: page.tab }}
+  sidebar={docsSidebar(site.config, page.tab, page.slug, site.link)}
+  toc={headingsFromHtml(html)}
+  contentType="doc"
+  pageCss={renderer.styles.css}
+  diagrams={html.includes('data-fw-mermaid')}
+>
+  <PageHeader title={page.title} description={description} trail={docBreadcrumbs(site.config, page, site.link)} />
+  <Prose html={html} />
+  <Pagination prev={prev} next={next} />
+</Layout>

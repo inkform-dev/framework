@@ -1,0 +1,19 @@
+---
+title: Content Security Policy
+description: What docs pages add to Astro's security.csp, and why.
+---
+
+# Content Security Policy
+
+With `security.csp` on, Astro hashes the scripts and styles it bundles. Docs
+pages add these on their own pages only:
+
+- the hash of the inline script that sets light or dark mode before paint,
+- the hash of one `<style>` element holding the page's syntax colors,
+- `'wasm-unsafe-eval'` for Pagefind's search,
+- `'unsafe-inline'` styles, on pages with a Mermaid diagram.
+
+## No inline handlers
+
+Every interactive part (tabs, the drawer, search) is wired up by bundled
+scripts, never `onclick` attributes.

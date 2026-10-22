@@ -1,6 +1,6 @@
-# Publishing — `@inkform/framework` + `@inkform/cli`
+# Publishing — `@inkform/framework`, `@inkform/cli`, `@inkform/astro`
 
-Two packages in this monorepo are published to public npm under the
+Three packages in this monorepo are published to public npm under the
 `@inkform` org:
 
 - **`packages/framework`** → [`@inkform/framework`](https://www.npmjs.com/package/@inkform/framework)
@@ -11,6 +11,11 @@ Two packages in this monorepo are published to public npm under the
   bin command `inkform-docs`. Scaffolds projects by fetching a template
   from GitHub (`github:inkform-dev/framework/templates/<theme>` via `giget`),
   not from npm.
+- **`packages/astro`** → `@inkform/astro` (MIT, `publishConfig.access:
+  public`). The Astro integration. Ships TypeScript source and `.astro` files,
+  which Astro compiles; no build step. It depends on `@inkform/framework`, so
+  release the framework first and raise the range in the same commit as the
+  astro version bump.
 
 `templates/*` and `examples/*` are `private: true` and stay that way — they
 are copied by the CLI or cloned directly, never installed from npm.
@@ -62,7 +67,7 @@ requirement that their numbers match.
    ```
 
    The prefix selects the package: `framework-v*` → `packages/framework`,
-   `cli-v*` → `packages/cli`. The version in the tag must equal the version
+   `cli-v*` → `packages/cli`, `astro-v*` → `packages/astro`. The version in the tag must equal the version
    in that package's `package.json`; the workflow refuses to guess.
 
 5. **Approve the deployment** if the `npm-publish` environment has required
@@ -94,7 +99,9 @@ is skipped. Useful for confirming the tarball contents after changing
 
 Already done once per package, recorded here for whoever has to redo it:
 
-**On npmjs.com** — package page → Settings → Trusted Publisher → GitHub Actions:
+**On npmjs.com** — package page → Settings → Trusted Publisher → GitHub Actions
+(for a new package such as `@inkform/astro`, the package has to exist on npm
+before this page does; check npm's current docs for the first publish):
 
 | Field | Value |
 | --- | --- |
@@ -116,8 +123,9 @@ push a tag cannot ship without a human approving the run.
 
 ## Versioning
 
-Versions are bumped by hand, and `CHANGELOG.md` is written by hand. If that
-becomes a chore across more than these two packages,
+Versions are bumped by hand, and `CHANGELOG.md` is written by hand
+(`packages/astro/CHANGELOG.md` for the Astro integration). If that becomes a
+chore across these packages,
 [Changesets](https://github.com/changesets/changesets) automates both — but
 it earns its keep at four or five packages, not two.
 

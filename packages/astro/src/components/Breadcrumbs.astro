@@ -1,0 +1,41 @@
+---
+/** Breadcrumb trail, in the framework Breadcrumbs' markup. The last crumb is the current page. */
+import type { Crumb } from '../runtime/nav';
+
+export interface Props {
+  trail: Crumb[];
+}
+
+const { trail } = Astro.props;
+---
+
+{
+  trail.length > 1 ? (
+    <nav class="fw-breadcrumbs" aria-label="Breadcrumb">
+      <ol class="fw-breadcrumbs-list">
+        {trail.map((crumb, i) => (
+          <li class="fw-breadcrumbs-item">
+            {i < trail.length - 1 ? (
+              <>
+                {crumb.href ? (
+                  <a href={crumb.href} class="fw-breadcrumbs-link">
+                    {crumb.label}
+                  </a>
+                ) : (
+                  <span class="fw-breadcrumbs-link">{crumb.label}</span>
+                )}
+                <span class="fw-breadcrumbs-sep" aria-hidden="true">
+                  /
+                </span>
+              </>
+            ) : (
+              <span class="fw-breadcrumbs-current" aria-current="page">
+                {crumb.label}
+              </span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  ) : null
+}

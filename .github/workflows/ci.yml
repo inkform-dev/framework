@@ -29,7 +29,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - run: npm ci
@@ -49,3 +49,24 @@ jobs:
       # Transitive dep vulnerabilities (postcss, sharp, @hono/node-server)
       # are pinned via root package.json overrides — see commit history.
       - run: npm audit --audit-level=high
+
+  # The Astro example's Playwright suite: builds the example, serves it, and
+  # drives a real browser. Unlike the PokeAPI suite above it makes no outside
+  # requests (it blocks them), so it runs on every push.
+  astro-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+        working-directory: examples/astro-docs
+
+      - run: npm run test:e2e --workspace=@inkform/example-astro-docs
+

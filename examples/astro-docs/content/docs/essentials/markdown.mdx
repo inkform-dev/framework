@@ -1,0 +1,65 @@
+---
+title: Markdown Syntax
+description: Text, titles, and styling in standard Markdown.
+---
+
+# Markdown Syntax
+
+Write content in standard Markdown — the framework renders it with GitHub-flavored
+extensions, callouts, and syntax-highlighted code.
+
+## Titles
+
+Use `#` headings for sections. Second- and third-level headings (`##`, `###`)
+appear in the table of contents on the right.
+
+```md
+## Section title
+### Subsection title
+```
+
+## Text formatting
+
+We support most Markdown formatting. Wrap text to style it:
+
+| Style | How to write it | Result |
+| --- | --- | --- |
+| Bold | `**bold**` | **bold** |
+| Italic | `_italic_` | _italic_ |
+| Strikethrough | `~~struck~~` | ~~struck~~ |
+| Code | `` `code` `` | `code` |
+
+## Links
+
+Link to [another page](/quickstart) with relative paths, or to
+[an external site](https://example.com) with full URLs.
+
+## Blockquotes
+
+> The best way to predict the future is to invent it.
+
+## Lists
+
+- Unordered items
+- Nest them by indenting
+  - Like this
+
+1. Ordered items
+2. Count automatically
+
+## Callouts
+
+Use callouts to draw attention. They come in several flavors:
+
+<Note>This is a note — neutral, informational.</Note>
+<Tip>This is a tip — a helpful suggestion.</Tip>
+<Warning>This is a warning — proceed carefully.</Warning>
+<Check>This is a success message — all good.</Check>
+
+You can also write callouts as directives:
+
+```md
+:::info
+An info callout written as a directive.
+:::
+```

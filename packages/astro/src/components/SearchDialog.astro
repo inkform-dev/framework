@@ -1,0 +1,42 @@
+---
+/**
+ * The search dialog, closed until a SearchButton, ⌘K / Ctrl+K, or a `?q=` in
+ * the URL opens it. Same `fw-search-*` markup as the framework SearchDialog;
+ * ../client/search.ts loads the Pagefind index written at build time from
+ * `<base>/_pagefind/` and fills in the results.
+ */
+import { joinHref } from '@inkform/framework/routes';
+import config from 'virtual:@inkform/astro/config';
+import type { Site } from '../runtime/site';
+
+export interface Props {
+  site: Site;
+  placeholder?: string;
+}
+
+const { placeholder = 'Search…' } = Astro.props;
+const pagefindBase = joinHref(config.publicBase, '_pagefind');
+---
+
+<div class="fw-search-overlay" role="dialog" aria-modal="true" aria-label="Search" hidden data-fw-search data-pagefind-base={pagefindBase}>
+  <div class="fw-search-panel">
+    <input
+      class="fw-search-input"
+      type="search"
+      placeholder={placeholder}
+      aria-label="Search the docs"
+      aria-controls="fw-search-results"
+      autocomplete="off"
+      spellcheck="false"
+      data-fw-search-input
+    />
+    <ul class="fw-search-results" id="fw-search-results" aria-live="polite" data-fw-search-results>
+      <li class="fw-search-empty">Type to search…</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  import { initSearch } from '../client/search';
+  initSearch();
+</script>

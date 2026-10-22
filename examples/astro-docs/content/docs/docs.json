@@ -1,0 +1,46 @@
+{
+  "name": "Inkform on Astro",
+  "version": "1.0.0",
+  "logo": { "light": "/logo-light.svg", "dark": "/logo-dark.svg" },
+  "favicon": "/favicon.svg",
+  "colors": { "primary": "#c24e3d" },
+  "navbarLinks": [{ "name": "GitHub", "href": "https://github.com/inkform-dev/framework" }],
+  "cta": { "label": "Home", "href": "/" },
+  "tabs": [
+    {
+      "tab": "Guides",
+      "navigation": [
+        {
+          "group": "Get Started",
+          "pages": [
+            { "title": "Introduction", "slug": "", "file": "index.mdx", "icon": "book-open" },
+            { "title": "Quickstart", "slug": "quickstart", "file": "quickstart.mdx", "icon": "rocket" },
+            {
+              "title": "Host an Astro site",
+              "slug": "guides/astro",
+              "file": "guides/astro.mdx",
+              "icon": "layers",
+              "children": [
+                { "title": "Content Security Policy", "slug": "guides/csp", "file": "guides/csp.mdx", "icon": "shield" }
+              ]
+            }
+          ]
+        },
+        {
+          "group": "Essentials",
+          "pages": [
+            { "title": "Components", "slug": "essentials/components", "file": "essentials/components.mdx", "icon": "blocks" },
+            { "title": "Markdown Syntax", "slug": "essentials/markdown", "file": "essentials/markdown.mdx", "icon": "type" },
+            { "title": "Code Blocks", "slug": "essentials/code-blocks", "file": "essentials/code-blocks.mdx", "icon": "code" },
+            { "title": "Navigation", "slug": "essentials/navigation", "file": "essentials/navigation.mdx", "icon": "map" }
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "API Reference",
+      "openapi": "openapi.json",
+      "apiReference": { "renderer": "native" }
+    }
+  ]
+}

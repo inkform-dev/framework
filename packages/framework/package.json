@@ -1,6 +1,6 @@
 {
   "name": "@inkform/framework",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Standalone Next.js + MDX framework for documentation, API reference (OpenAPI), blog, and changelog sites. The rendering engine behind the inkform docs themes — usable on its own.",
   "license": "MIT",
   "author": "Charan",
@@ -37,17 +37,22 @@
     "./prose.css": "./src/prose.css",
     "./content": "./src/content.ts",
     "./nav": "./src/nav.ts",
+    "./routes": "./src/routes.ts",
     "./openapi": "./src/openapi.ts",
     "./openapi-engine/nav": "./src/openapi-engine/nav.ts",
     "./openapi-engine/parse": "./src/openapi-engine/parse.ts",
     "./openapi-engine/markdown": "./src/openapi-engine/markdown.ts",
     "./openapi-engine/breaking-changes": "./src/openapi-engine/breaking-changes.ts",
     "./openapi-render": "./src/openapi-render/index.ts",
+    "./openapi-render/sample": "./src/openapi-render/sample.ts",
+    "./openapi-render/try-it": "./src/openapi-render/TryIt/request-executor.ts",
     "./mcp": "./src/mcp/index.ts",
     "./ai": "./src/ai/index.ts",
     "./llms-txt": "./src/llms-txt.ts",
     "./mdx": "./src/mdx.tsx",
+    "./mdx-options": "./src/mdx-options.ts",
     "./mermaid": "./src/mermaid/index.tsx",
+    "./mermaid/render": "./src/mermaid/render.ts",
     "./markdown": "./src/markdown.ts",
     "./components": "./src/components.tsx",
     "./docs-shell": "./src/docs-shell.tsx",
@@ -83,6 +88,9 @@
     "mermaid": ">=11"
   },
   "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    },
     "mermaid": {
       "optional": true
     }

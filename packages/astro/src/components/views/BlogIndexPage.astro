@@ -1,0 +1,32 @@
+---
+/** Every published post, newest first. */
+import Layout from '../Layout.astro';
+import PageHeader from '../PageHeader.astro';
+import { BLOG_PATH } from '../../runtime/routes';
+import type { Site } from '../../runtime/site';
+
+export interface Props {
+  site: Site;
+}
+
+const { site } = Astro.props;
+const meta = (date: string, minutes: number, author: string | null) =>
+  [date, `${minutes} min read`, author].filter(Boolean).join(' · ');
+---
+
+<Layout site={site} title="Blog" active={{ kind: 'blog' }} sidebar={null} contentType="blog">
+  <PageHeader title="Blog" />
+  <ul class="fw-postlist">
+    {
+      site.blog.map((post) => (
+        <li class="fw-postlist-item">
+          <a class="fw-postlist-link" href={site.link(`${BLOG_PATH}/${post.slug}`)}>
+            <h2 class="fw-postlist-title">{post.title}</h2>
+          </a>
+          <p class="fw-page-meta">{meta(post.date, post.readingTime, post.author)}</p>
+          <p class="fw-postlist-desc">{post.description ?? post.excerpt}</p>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

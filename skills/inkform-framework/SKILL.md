@@ -24,6 +24,7 @@ the repo, read at build time.
 |---|---|
 | Greenfield — a whole new docs site | Scaffold with the CLI (§A) |
 | Existing Next.js site, wants `/blog` or `/docs` added | Bolt on the two standalone pieces (§B) |
+| Existing Astro 7 site, wants `/docs` added | Add the `@inkform/astro` integration (§C) |
 
 Getting this wrong is the main way this goes badly: **do not drop the full docs shell into
 someone's existing marketing site.** They asked for a blog, not a theme transplant. §B keeps
@@ -182,6 +183,26 @@ files sit on disk:
 
 Rename a slug and the framework 301-redirects the old URL, so published links keep working.
 Every page must be registered here — a file on disk that isn't in `docs.json` won't route.
+
+## §C — Astro sites
+
+On an Astro 7 site, don't add Next.js. `@inkform/astro` serves the same content folder from
+the Astro app, under one base path, and adds nothing outside it:
+
+```bash
+npm install @inkform/astro react react-dom
+```
+
+```ts
+// astro.config.ts: add to the existing integrations, don't replace the file
+import inkform from '@inkform/astro';
+// integrations: [...existing, inkform({ base: '/docs', contentRoot: './content' })]
+```
+
+React runs at build time only; no `@astrojs/react` needed. If the site has middleware that
+routes requests, let `/docs/*` through. With `security.csp` on, Try It needs the API's origin
+in `connect-src`. Options, theming and host-mode notes:
+`packages/astro/README.md` in the framework repo.
 
 ## Verify before opening the PR
 

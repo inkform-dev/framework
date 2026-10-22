@@ -1,0 +1,185 @@
+/*
+ * @inkform/astro — the few rules the Astro shell adds on top of
+ * @inkform/framework/styles.css. Token-only, like the framework's own CSS.
+ *
+ * The React components render closed dialogs conditionally; here they're in
+ * the HTML from the start with `hidden`, and these overlays set `display`,
+ * which would beat the browser's `[hidden] { display: none }`.
+ */
+
+.fw-search-overlay[hidden],
+.fw-playground-overlay[hidden] {
+  display: none;
+}
+
+/* ── Skip link: off-screen until focused ──────────────────────────────── */
+
+.fw-skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 70;
+  padding: 0.5rem 0.875rem;
+  background: var(--fw-bg);
+  color: var(--fw-fg);
+  border: 1px solid var(--fw-border-strong);
+  border-radius: var(--fw-radius-sm);
+  box-shadow: var(--fw-shadow);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.fw-skip-link:focus {
+  transform: none;
+  outline: none;
+  box-shadow: var(--fw-ring);
+}
+
+/* ── Logo per color scheme (docs.json `logo: { light, dark }`) ────────── */
+
+html.dark .fw-shell-brand-logo--light,
+html:not(.dark) .fw-shell-brand-logo--dark {
+  display: none;
+}
+
+/* ── Sidebar heading (the active tab's label) ─────────────────────────── */
+
+.fw-sidebar-title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--fw-fg);
+}
+
+/* ── Page header: description and date/version line ───────────────────── */
+
+.fw-page-description {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--fw-muted);
+}
+
+.fw-page-meta {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--fw-muted);
+}
+
+/* ── API Reference landing page: operations by tag ────────────────────── */
+
+.fw-oplist-group {
+  margin-top: var(--fw-space-8);
+}
+
+.fw-oplist-title {
+  margin: 0 0 var(--fw-space-1);
+  font-family: var(--fw-font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--fw-fg);
+}
+
+.fw-oplist-desc {
+  margin: 0 0 var(--fw-space-3);
+  color: var(--fw-muted);
+}
+
+.fw-oplist {
+  display: grid;
+  gap: var(--fw-space-2);
+  margin: var(--fw-space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fw-oplist-link {
+  display: flex;
+  align-items: center;
+  gap: var(--fw-space-3);
+  padding: var(--fw-space-3) var(--fw-space-4);
+  background: var(--fw-card);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  color: var(--fw-fg);
+  text-decoration: none;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.fw-oplist-link:hover {
+  background: var(--fw-card-hover);
+  border-color: var(--fw-border-strong);
+}
+
+.fw-oplist-summary {
+  flex: 1;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.fw-oplist-path {
+  font-family: var(--fw-mono);
+  font-size: 0.8125rem;
+  color: var(--fw-muted);
+  overflow-wrap: anywhere;
+}
+
+/* ── Blog index and changelog ─────────────────────────────────────────── */
+
+.fw-postlist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fw-postlist-item {
+  padding: var(--fw-space-6) 0;
+  border-bottom: 1px solid var(--fw-border);
+}
+
+.fw-postlist-item:first-child {
+  padding-top: 0;
+}
+
+.fw-postlist-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.fw-postlist-link:hover .fw-postlist-title {
+  color: var(--fw-primary);
+}
+
+.fw-postlist-title {
+  margin: 0 0 var(--fw-space-1);
+  font-family: var(--fw-font-heading);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  transition: color 0.12s;
+}
+
+.fw-postlist-desc {
+  margin: var(--fw-space-2) 0 0;
+  color: var(--fw-fg);
+  line-height: 1.6;
+}
+
+.fw-changelog-entry {
+  padding: var(--fw-space-8) 0;
+  border-bottom: 1px solid var(--fw-border);
+}
+
+.fw-changelog-entry:first-of-type {
+  padding-top: var(--fw-space-2);
+}
+
+.fw-changelog-title {
+  margin: var(--fw-space-1) 0 var(--fw-space-4);
+  font-family: var(--fw-font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  scroll-margin-top: calc(var(--fw-header-h) + 1rem);
+}

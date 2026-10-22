@@ -15,9 +15,9 @@
   "scripts": {
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "test": "npm run test --workspace=@inkform/framework",
+    "test": "npm run test --workspace=@inkform/framework --workspace=@inkform/astro",
     "build": "npm run build --workspaces --if-present",
-    "build:examples": "npm run build --workspace=@inkform/example-pokeapi --workspace=@inkform/example-markdown --workspace=@inkform/example-inkform-docs",
+    "build:examples": "npm run build --workspace=@inkform/example-pokeapi --workspace=@inkform/example-markdown --workspace=@inkform/example-inkform-docs --workspace=@inkform/example-astro-docs",
     "postinstall": "node scripts/prune-workspace-shadows.mjs"
   },
   "engines": {
@@ -34,7 +34,9 @@
     },
     "postcss": "8.5.23",
     "sharp": "0.35.5",
-    "vite": "^7.3.7",
+    "vitest": {
+      "vite": "^7.3.7"
+    },
     "@modelcontextprotocol/sdk": {
       "@hono/node-server": "2.0.12"
     },

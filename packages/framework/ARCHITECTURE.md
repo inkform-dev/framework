@@ -83,6 +83,13 @@ latter passed straight through to Scalar's own "Generate MCP" button when
 `docTabs(config)`, `tabNavigation(config, tab?)`, `listDocPages(config, tab?)`,
 `findDocPage(config, slug)`, `docNeighbours(config, slug)`.
 
+Already implemented in `./routes` (pure, no IO, for hosts that build their
+own route tables): `apiTab(config)` (the tab with an `openapi` spec),
+`apiTabSlug(config)` (its label slugified, `"API Reference"` →
+`api-reference`, the rule every theme's `apiBasePath()` uses),
+`docRouteSlugs(config)` (unique page slugs in nav order) and
+`joinHref(base, slug)` (`('/docs', '')` → `/docs`, `('', '')` → `/`).
+
 Already implemented in `./content`: `loadDocsConfig(dir?)`, `loadDocPage(file, dir?)`,
 `loadOpenApiSpec(file, dir?)` (sync, local file only), `loadOpenApiSpecForBuild(openapi, dir?)`
 (also handles a `https://` spec URL by fetching it at build time — used where the
@@ -316,6 +323,24 @@ browser design, not something a client-side console can work around.
 `extractHeadings`'s slugs, for TOC anchor links) + `rehype-pretty-code`
 (Shiki-based syntax highlighting).
 
+The plugin lists and options live in `./mdx-options` (file:
+`src/mdx-options.ts`), shared with hosts that don't render through a React
+Server Component:
+
+```ts
+export const prettyCodeOptions: { theme: { light: string; dark: string }; keepBackground: boolean };
+export const remarkPlugins: PluggableList; // gfm, directive, callouts, mermaid fences
+export const rehypePlugins: PluggableList; // slug, pretty-code
+export const mdxRemoteOptions: SerializeOptions; // what <Mdx> passes to next-mdx-remote
+export async function compileMdx(source: string, components: Record<string, ComponentType>): Promise<ReactElement>;
+//  Same pipeline as <Mdx>, returns the element to render (e.g. with
+//  react-dom/static's prerender). Capitalized components the source uses are
+//  looked up on the map before rendering, so mdxComponents()'s fallback
+//  renders unknown ones. (Compiled MDX copies `components` with an object
+//  spread, which can't see a Proxy's fallback; <Mdx> still passes the map
+//  straight through, so there an unknown component fails the render.)
+```
+
 ---
 
 ## 5. MDX component kit — `./components` (file: `src/components.tsx`)
@@ -494,7 +519,10 @@ Following the [llms.txt](https://llmstxt.org) convention: a plain-text entry
 point into a site's content for LLMs/agentic tools, without crawling HTML.
 
 ```ts
-export interface LlmsTxtOptions { apiBasePath?: string; } // same convention as ai/ask.ts — leading slash, defaults to '/api-reference'
+export interface LlmsTxtOptions {
+  apiBasePath?: string; // same convention as ai/ask.ts — leading slash, defaults to '/api-reference'
+  basePath?: string;    // prefix for doc, blog and changelog links, e.g. '/docs'; defaults to ''
+}
 
 export async function buildLlmsTxt(options?: LlmsTxtOptions): Promise<string>;
 //  Curated index: H1 title, blockquote summary, then Markdown links grouped
@@ -594,3 +622,35 @@ A theme is a standalone Next.js 16 app that:
 
 Themes differ by `theme.css` tokens + fonts + small layout accents — NOT by
 re-implementing the shell, the routing, or any of the above.
+
+---
+
+## 13. Hosts other than Next.js — `@inkform/astro`
+
+[`packages/astro`](../astro) serves a content folder from an Astro 7 site. It
+builds on the pieces above instead of copying them:
+
+- routes from `./routes` and `./nav`, content from `./content`, the API
+  Reference from `./openapi` + `./openapi-engine/*`, `llms.txt` from
+  `./llms-txt` (with `basePath`);
+- MDX through `compileMdx()` and `mdxComponents()`, and operation pages through
+  `OperationPage`, rendered to HTML with `react-dom/static` at build time, so
+  the markup is the kit's own;
+- the shell as Astro components with the `fw-shell*` / `fw-sidebar*` /
+  `fw-toc*` markup, styled by `./styles.css` and a token file;
+- browser behaviour as plain modules over that HTML, using these subpaths,
+  which have no React in them:
+
+```ts
+// ./mermaid/render
+export function themeConfig(el: Element, dark: boolean): MermaidConfig;
+export function renderDiagram(id: string, chart: string, config: MermaidConfig): Promise<{ svg: string }>;
+// ./openapi-render/try-it
+export function buildTryItRequest(input: TryItRequestInput): Request;
+export async function executeTryItRequest(request: Request, onChunk?: (accumulated: string) => void): Promise<TryItResult>;
+// ./openapi-render/sample
+export function sampleFromSchema(schema?: JsonSchema): unknown;
+```
+
+`next` is an optional peer dependency: nothing under `src/` imports it.
+

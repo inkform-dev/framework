@@ -1,0 +1,28 @@
+---
+/** The header logo: docs.json `logo` (one image, or `{ light, dark }`), else the site name. Links to the docs home. */
+import type { Site } from '../runtime/site';
+
+export interface Props {
+  site: Site;
+}
+
+const { site } = Astro.props;
+const { name, logo } = site.config;
+const lightPath = typeof logo === 'string' ? logo : (logo?.light ?? logo?.dark);
+const darkPath = typeof logo === 'string' ? undefined : logo?.dark && logo.dark !== lightPath ? logo.dark : undefined;
+const light = lightPath ? site.asset(lightPath) : undefined;
+const dark = darkPath ? site.asset(darkPath) : undefined;
+---
+
+<a href={site.link('')} class="fw-shell-brand" aria-label={`${name} home`}>
+  {
+    light ? (
+      <>
+        <img src={light} alt={name} height="24" class:list={['fw-shell-brand-logo', dark && 'fw-shell-brand-logo--light']} />
+        {dark ? <img src={dark} alt="" height="24" class="fw-shell-brand-logo fw-shell-brand-logo--dark" /> : null}
+      </>
+    ) : (
+      <span class="fw-shell-brand-name">{name}</span>
+    )
+  }
+</a>

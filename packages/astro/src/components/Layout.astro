@@ -1,0 +1,80 @@
+---
+/**
+ * The document every docs page renders into. Loads the framework's styles,
+ * the theme and any customCss (all bundled by Astro, so they're `'self'`
+ * under a CSP), sets the color scheme before first paint, and prints the
+ * page's moved inline styles. Both inline elements register their hashes
+ * with Astro's CSP when `security.csp` is on.
+ */
+import '@inkform/framework/styles.css';
+import '../styles/astro.css';
+import 'virtual:@inkform/astro/user-css';
+import config from 'virtual:@inkform/astro/config';
+import { themeInitScript } from '@inkform/framework/theme-toggle';
+import { cspHash } from '../runtime/csp';
+import type { Site } from '../runtime/site';
+import type { ActiveArea, NavGroup } from '../runtime/nav';
+import type { TocHeading } from '../runtime/headings';
+import Shell from './Shell.astro';
+import SearchDialog from './SearchDialog.astro';
+
+export interface Props {
+  site: Site;
+  /** Page title, without the site name. */
+  title: string;
+  description?: string | null;
+  active: ActiveArea;
+  sidebar: NavGroup[] | null;
+  sidebarTitle?: string;
+  toc?: TocHeading[] | null;
+  contentType: 'doc' | 'api' | 'blog' | 'changelog';
+  /** Rules for the inline styles moved out of this page's rendered HTML. */
+  pageCss?: string;
+  /** The page has a Mermaid diagram to draw (see Prose.astro). */
+  diagrams?: boolean;
+}
+
+const { site, title, description, active, sidebar, sidebarTitle, toc, contentType, pageCss = '', diagrams = false } = Astro.props;
+const name = site.config.name;
+const fullTitle = title && title !== name ? `${title} · ${name}` : name;
+
+// What this page needs from a CSP, on this page only:
+// - the hashes of its two inline elements;
+// - 'wasm-unsafe-eval' for Pagefind, which compiles WebAssembly ('self' with
+//   it, since adding any source replaces Astro's default 'self');
+// - 'unsafe-inline' styles where Mermaid draws, because its SVG carries its
+//   own <style> and style attributes ('self' again, for the stylesheets).
+if (config.csp) {
+  Astro.csp?.insertScriptHash(await cspHash(themeInitScript, config.cspAlgorithm));
+  if (pageCss) Astro.csp?.insertStyleHash(await cspHash(pageCss, config.cspAlgorithm));
+  if (config.search) {
+    Astro.csp?.insertScriptResource("'self'");
+    Astro.csp?.insertScriptResource("'wasm-unsafe-eval'");
+  }
+  if (diagrams && config.mermaid) {
+    Astro.csp?.insertStyleResource("'self'");
+    Astro.csp?.insertStyleResource("'unsafe-inline'");
+  }
+}
+---
+
+<!doctype html>
+<html lang="en" data-inkform>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description ? <meta name="description" content={description} /> : null}
+    {site.config.favicon ? <link rel="icon" href={site.asset(site.config.favicon)} /> : null}
+    <script is:inline set:html={themeInitScript} />
+    {pageCss ? <style is:inline set:html={pageCss} /> : null}
+  </head>
+  <body>
+    <a class="fw-skip-link" href="#main-content">Skip to content</a>
+    <Shell site={site} active={active} sidebar={sidebar} sidebarTitle={sidebarTitle} toc={toc ?? null} contentType={contentType}>
+      <slot />
+    </Shell>
+    {config.search ? <SearchDialog site={site} /> : null}
+    <slot name="after" />
+  </body>
+</html>

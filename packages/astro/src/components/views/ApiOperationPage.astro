@@ -1,0 +1,43 @@
+---
+/**
+ * One API operation: the framework's OperationPage rendered to HTML, with the
+ * Try It console (TryIt.astro) and ../client/api.ts for the sample switchers.
+ */
+import { findOperation } from '@inkform/framework/openapi';
+import Layout from '../Layout.astro';
+import TryIt from '../TryIt.astro';
+import { apiSidebar } from '../../runtime/nav';
+import { ContentError, type ApiReference, type Site } from '../../runtime/site';
+
+export interface Props {
+  site: Site;
+  api: ApiReference;
+  operationId: string;
+}
+
+const { site, api, operationId } = Astro.props;
+const operation = findOperation(api.model, operationId);
+if (!operation) throw new ContentError(`No operation "${operationId}" in the OpenAPI spec.`);
+
+const renderer = site.renderer();
+const html = await renderer.operation(operation, api.model.servers);
+---
+
+<Layout
+  site={site}
+  title={operation.summary || operation.operationId}
+  description={operation.description}
+  active={{ kind: 'api' }}
+  sidebar={apiSidebar(api.tree, api.slug, operation.operationId, site.link)}
+  sidebarTitle={api.tab.tab}
+  contentType="api"
+  pageCss={renderer.styles.css}
+>
+  <Fragment set:html={html} />
+  <TryIt slot="after" operation={operation} servers={api.model.servers} />
+</Layout>
+
+<script>
+  import { initApi } from '../../client/api';
+  initApi();
+</script>

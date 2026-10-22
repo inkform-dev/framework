@@ -1,0 +1,56 @@
+---
+/** The API Reference landing page: the spec's title and description, then every operation by tag. */
+import Layout from '../Layout.astro';
+import { apiSidebar } from '../../runtime/nav';
+import { operationPath } from '../../runtime/routes';
+import type { Site, ApiReference } from '../../runtime/site';
+
+export interface Props {
+  site: Site;
+  api: ApiReference;
+}
+
+const { site, api } = Astro.props;
+const { info } = api.model;
+const tagDescriptions = new Map(api.model.tags.map((t) => [t.name, t.description]));
+---
+
+<Layout
+  site={site}
+  title={api.tab.tab}
+  description={info.description}
+  active={{ kind: 'api' }}
+  sidebar={apiSidebar(api.tree, api.slug, null, site.link)}
+  sidebarTitle={api.tab.tab}
+  contentType="api"
+>
+  <div class="fw-apiref">
+    <div class="fw-apiref-header">
+      <p class="fw-apiref-eyebrow">{api.tab.tab}</p>
+      <div class="fw-apiref-title-row">
+        <h1 class="fw-apiref-title">{info.title}</h1>
+      </div>
+      {info.version ? <p class="fw-page-meta">Version {info.version}</p> : null}
+      {info.description ? <p class="fw-apiref-desc">{info.description}</p> : null}
+    </div>
+  </div>
+  {
+    api.tree.tagGroups.map((group) => (
+      <section class="fw-oplist-group">
+        <h2 class="fw-oplist-title">{group.tag}</h2>
+        {tagDescriptions.get(group.tag) ? <p class="fw-oplist-desc">{tagDescriptions.get(group.tag)}</p> : null}
+        <ul class="fw-oplist">
+          {group.operations.map((op) => (
+            <li>
+              <a class="fw-oplist-link" href={site.link(operationPath(api.slug, op.operationId))}>
+                <span class:list={['fw-method-pill', `fw-method-${op.method}`]}>{op.method}</span>
+                <span class="fw-oplist-summary">{op.summary || op.operationId}</span>
+                <code class="fw-oplist-path">{op.path}</code>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Layout>

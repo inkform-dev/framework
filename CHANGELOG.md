@@ -4,6 +4,51 @@ All notable changes to this project are documented here. Format loosely
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions
 track `packages/framework`'s own `package.json`.
 
+## [Unreleased]
+
+## [0.8.0] — 2026-10-23
+
+### Added
+
+- **`@inkform/astro`** (new package, 0.1.0): an Astro 7 integration that
+  serves a content folder from any Astro site under one base path: docs pages
+  from docs.json, the native API Reference, blog, changelog, `llms.txt`, and
+  Pagefind search. React renders the framework's components at build time
+  only. See [`packages/astro`](./packages/astro/README.md) and its
+  [CHANGELOG](./packages/astro/CHANGELOG.md).
+- **`@inkform/framework/mdx-options`**: the remark/rehype plugin lists and
+  next-mdx-remote options `<Mdx>` renders with, plus `compileMdx(source,
+  components)` for hosts that render MDX to a React element themselves. Unlike
+  passing the component map straight to compiled MDX, `compileMdx` resolves
+  every capitalized component the source uses through the map, so a
+  `mdxComponents()` map's fallback renders unknown components instead of
+  failing.
+- **`@inkform/framework/routes`**: `apiTab(config)`, `apiTabSlug(config)`
+  (`"API Reference"` → `api-reference`, the rule every theme's `apiBasePath()`
+  uses), `docRouteSlugs(config)` and `joinHref(base, slug)`. Pure, no IO.
+- **`basePath` option for `buildLlmsTxt()`**: prefixes doc, blog and changelog
+  links for a site that serves its docs under a path (`/docs/quickstart`).
+  Defaults to `''`, so existing output is unchanged.
+- Subpath exports for browser code outside React: `./mermaid/render`
+  (`renderDiagram`, `themeConfig`), `./openapi-render/try-it` (the Try It
+  request executor) and `./openapi-render/sample` (`sampleFromSchema`).
+
+### Changed
+
+- `next` is an optional peer dependency. Nothing in the framework imports it,
+  and npm no longer installs Next.js into a site that only uses the Astro
+  integration or the framework's loaders.
+- `<Mdx>` reads its plugins and options from `./mdx-options`; its output is
+  unchanged.
+- `slugify` lives in a pure `./slug` module; `./content` re-exports it.
+- The root `vite` override now applies to `vitest` only (`^7.3.7`), since
+  Astro 7 needs Vite 8.
+- Templates and examples move to Next.js 16.4.2, for the critical advisories
+  in 16.0.0–16.4.0 (GHSA-2464-fhr4-w9xw, GHSA-673q-mjm6-r5xr) and the Server
+  Actions denial of service (GHSA-p3m5-59mp-jv5r). Lockfile fixes for
+  DOMPurify (GHSA-cg2g-xh64-v4q7 and two more) and `ip-address`
+  (GHSA-rxp7-6hxx-x8q5). `npm audit --audit-level=high` is clean again.
+
 ## [0.7.0] — 2026-10-22
 
 ### Added
