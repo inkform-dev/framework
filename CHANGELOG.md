@@ -4,7 +4,7 @@ All notable changes to this project are documented here. Format loosely
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions
 track `packages/framework`'s own `package.json`.
 
-## [Unreleased]
+## [0.7.0] — 2026-10-22
 
 ### Added
 
@@ -35,6 +35,9 @@ track `packages/framework`'s own `package.json`.
 - Templates and examples pin `next` 16.3.8 (security release), `vitest` is on
   4.x, and the `sharp`, `vite` and `@modelcontextprotocol/sdk` floors are raised
   to clear new npm audit advisories.
+- Templates and examples depend on `@inkform/framework@^0.7.0`.
+- `FRAMEWORK_VERSION` reports the package version again (it had stayed at
+  `0.2.0`).
 - The global reset moved out of `styles/tokens.css` into `styles/base.css`.
   `styles.css` imports both in the same order as before, so its output is
   unchanged.
