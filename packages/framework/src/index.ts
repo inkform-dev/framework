@@ -20,4 +20,4 @@ export * from './nav';
 export * from './openapi';
 export { resolveSlugRedirect } from './slug-history';
 
-export const FRAMEWORK_VERSION = '0.7.0';
+export const FRAMEWORK_VERSION = '0.8.0';

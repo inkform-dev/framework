@@ -40,7 +40,7 @@
     "react-dom": ">=19"
   },
   "dependencies": {
-    "@inkform/framework": "^0.7.0",
+    "@inkform/framework": "^0.8.0",
     "@panzoom/panzoom": "^4.6.2",
     "hast-util-from-html": "^2.0.3",
     "hast-util-to-html": "^9.0.5",

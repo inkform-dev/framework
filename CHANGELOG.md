@@ -6,6 +6,8 @@ track `packages/framework`'s own `package.json`.
 
 ## [Unreleased]
 
+## [0.8.0] — 2026-10-23
+
 ### Added
 
 - **`@inkform/astro`** (new package, 0.1.0): an Astro 7 integration that

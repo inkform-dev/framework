@@ -13,7 +13,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@inkform/framework": "^0.7.0",
+    "@inkform/framework": "^0.8.0",
     "lucide-react": "^0.483.0",
     "next": "16.4.2",
     "react": "19.2.1",

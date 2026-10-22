@@ -5,11 +5,9 @@ Versions track `packages/astro/package.json`. Format loosely follows
 
 ## [0.1.0] — Unreleased
 
-First release. Needs the `@inkform/framework` release that adds
+First release. Needs `@inkform/framework` 0.8.0, which adds
 `./mdx-options`, `./routes`, `./mermaid/render`, `./openapi-render/try-it`,
-`./openapi-render/sample` and `buildLlmsTxt({ basePath })` (the
-`[Unreleased]` entry in the root CHANGELOG); raise this package's
-`@inkform/framework` range to that version in the release commit.
+`./openapi-render/sample` and `buildLlmsTxt({ basePath })`.
 
 ### Added
 
