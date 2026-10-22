@@ -12,6 +12,9 @@ anywhere Next.js runs (Vercel, AWS Amplify, a Node server, a container).
 > `npx @inkform/cli init my-docs`, pick a theme, and get a ready-to-deploy
 > project. This package is for building your own theme or wiring the engine into
 > an existing Next.js app.
+>
+> On an Astro site, use [`@inkform/astro`](../astro) instead: it serves the
+> same content folder through this engine, with no Next.js.
 
 ## What it gives you
 
@@ -80,9 +83,13 @@ Content lives under `content/{docs,blog,changelog}` (override the root with
 | `.` | nav model, slug redirects, OpenAPI types/helpers, `FRAMEWORK_VERSION` |
 | `./content` | filesystem loaders: `loadDocsConfig`, `loadDocPage`, `loadBlogPosts`, `loadCollection`, `loadOpenApiSpec`, `extractHeadings` |
 | `./nav` | `DocsConfig`, `docTabs`, `listDocPages`, `docNeighbours` |
+| `./routes` | `apiTab`, `apiTabSlug`, `docRouteSlugs`, `joinHref` — docs.json → URLs, pure |
 | `./openapi` | `parseOpenApi`, `normalizeOperations`, `operationNavGroups`, `curlExample`, `sampleFromSchema` |
 | `./mdx` | `<Mdx>`, `remarkMermaid` |
+| `./mdx-options` | the plugin lists `<Mdx>` uses, and `compileMdx()` for rendering MDX outside a React Server Component |
 | `./mermaid` | `<Mermaid>` — interactive diagram viewer (needs the optional `mermaid` peer) |
+| `./mermaid/render` | `renderDiagram`, `themeConfig` — the viewer's React-free rendering helpers |
+| `./openapi-render/try-it` · `./openapi-render/sample` | the Try It request executor and `sampleFromSchema`, React-free |
 | `./components` | the MDX component kit + `mdxComponents()` |
 | `./docs-shell` | `<DocsShell>`, `<Sidebar>`, `<TocList>`, `<Pagination>`, `<Breadcrumbs>` — also mounts the Pagefind highlight effect, see below |
 | `./api-reference` | `<ApiReferenceView>`, `<ApiPlayground>` |

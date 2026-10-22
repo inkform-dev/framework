@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import type { DocsConfig } from './nav';
+import { slugify } from './slug';
 
 /**
  * Build-time content loaders. Read your site's content from the deployed repo:
@@ -354,14 +355,7 @@ export function stripLeadingH1(content: string): string {
 }
 
 /** Slugify a heading the same way `rehype-slug`/GitHub do, for anchor links. */
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-}
+export { slugify } from './slug';
 
 /**
  * Extract `##`/`###` headings from MDX for the on-this-page table of contents.

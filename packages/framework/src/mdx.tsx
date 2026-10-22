@@ -1,19 +1,9 @@
 import * as React from 'react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import remarkGfm from 'remark-gfm';
-import remarkDirective from 'remark-directive';
-import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeSlug from 'rehype-slug';
 import { mdxComponents } from './components';
-import { remarkCallouts } from './remark-directives';
-import { remarkMermaid } from './remark-mermaid';
+import { mdxRemoteOptions } from './mdx-options';
 
 export { remarkMermaid } from './remark-mermaid';
-
-const prettyCodeOptions = {
-  theme: { light: 'github-light', dark: 'github-dark' },
-  keepBackground: false,
-};
 
 type MdxProps = {
   source: string;
@@ -35,18 +25,10 @@ export async function Mdx({ source, components }: MdxProps) {
       <MDXRemote
         source={source}
         components={mdxComponents(components)}
-        options={{
-          // next-mdx-remote v6 disables MDX `{expression}` evaluation by default
-          // (`blockJS: true`). Authored content rendered here may legitimately use
-          // expressions, so we restore the v5 behaviour by allowing JS while keeping
-          // the v6 RCE guard (`blockDangerousJS: true`, the secure default) in place.
-          blockJS: false,
-          mdxOptions: {
-            remarkPlugins: [remarkGfm, remarkDirective, remarkCallouts, remarkMermaid],
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            rehypePlugins: [rehypeSlug, [rehypePrettyCode as any, prettyCodeOptions]],
-          },
-        }}
+        // Plugins and options are shared with compileMdx() (./mdx-options), so
+        // hosts that render MDX outside a React Server Component get the same
+        // output. blockJS stays off there too: see mdxRemoteOptions.
+        options={mdxRemoteOptions}
       />
     </div>
   );

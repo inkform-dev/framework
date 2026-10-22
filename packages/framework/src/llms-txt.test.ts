@@ -47,6 +47,22 @@ describe('llms.txt / llms-full.txt (real pokeapi-docs content, via DOCS_CONTENT_
       expect(txt).toMatch(/- \[.+\]\(\/blog\/building-a-pokedex-with-nextjs\)/);
     });
 
+    it('prefixes doc, blog and changelog links with basePath, leaving apiBasePath as given', async () => {
+      const txt = await buildLlmsTxt({ basePath: '/docs', apiBasePath: '/docs/api-reference' });
+      expect(txt).toMatch(/- \[Quickstart\]\(\/docs\/quickstart\): .+/);
+      expect(txt).toContain('(/docs/api-reference/operations/get-pokemon): GET /pokemon/{name}');
+      expect(txt).toContain('- [Changelog](/docs/changelog)');
+      expect(txt).toMatch(/- \[.+\]\(\/docs\/blog\/building-a-pokedex-with-nextjs\)/);
+      expect(txt).not.toMatch(/\]\(\/quickstart\)/);
+    });
+
+    it('links the index page to the base path itself', async () => {
+      const root = await buildLlmsTxt();
+      const based = await buildLlmsTxt({ basePath: '/docs' });
+      expect(root).toMatch(/\]\(\/\)/);
+      expect(based).toMatch(/\]\(\/docs\)/);
+    });
+
     it('returns an empty string when no docs.json is configured', async () => {
       process.env.DOCS_CONTENT_ROOT = path.join(REPO_ROOT, 'this-directory-does-not-exist');
       expect(await buildLlmsTxt()).toBe('');
