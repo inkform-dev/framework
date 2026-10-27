@@ -16,7 +16,7 @@
   "dependencies": {
     "@astrojs/node": "11.1.9",
     "@astrojs/react": "7.1.1",
-    "@inkform/astro": "^0.1.0",
+    "@inkform/astro": "^0.2.0",
     "astro": "7.4.2",
     "cookie": "^2.0.1",
     "mermaid": "^12.0.0",
