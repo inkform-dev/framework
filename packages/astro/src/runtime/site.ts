@@ -6,6 +6,7 @@
  */
 
 import config from 'virtual:@inkform/astro/config';
+import siteComponentsModule from 'virtual:@inkform/astro/components';
 import type { BlogPost, ChangelogEntry } from '@inkform/framework/content';
 import { loadBlogPosts, loadChangelogEntries, loadDocsConfig, loadOpenApiSpecForBuild } from '@inkform/framework/content';
 import type { DocsConfig, DocsTab } from '@inkform/framework/nav';
@@ -15,7 +16,7 @@ import { parseOpenApiDocument } from '@inkform/framework/openapi-engine/parse';
 import { apiTab, apiTabSlug } from '@inkform/framework/routes';
 import { buildRoutes, createLinker, operationPath, routeIndex, type Linker, type SiteRoute } from './routes';
 import { assetRewriter, siteHrefRewriter } from './inline-styles';
-import type { OperationRef } from './mdx-components';
+import { userComponents, type OperationRef } from './mdx-components';
 import { PageRenderer } from './render';
 
 export interface ApiReference {
@@ -117,7 +118,8 @@ async function readSite(): Promise<Site> {
     trailingSlash: config.trailingSlash,
   });
   const rewriteSrc = assetRewriter(config.siteBase);
-  const renderer = () => new PageRenderer({ mermaid: config.mermaid, operation, rewriteHref, rewriteSrc });
+  const components = userComponents(siteComponentsModule);
+  const renderer = () => new PageRenderer({ mermaid: config.mermaid, operation, rewriteHref, rewriteSrc, components });
   const asset = (path: string) => rewriteSrc(path) ?? path;
   const href = (value: string) => rewriteHref(value) ?? value;
 

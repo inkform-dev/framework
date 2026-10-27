@@ -10,10 +10,13 @@
  * - `NewsletterCTA` prints its endpoint and project on the form, for
  *   ../client/kit.ts to submit without React.
  *
+ * The site's own components (the `components` option) are picked out of its
+ * module by `userComponents()` and merged over all of these.
+ *
  * Written with createElement, not JSX, so this file needs no JSX settings.
  */
 
-import { createElement as h, type ReactNode } from 'react';
+import { createElement as h, type ComponentType, type ReactNode } from 'react';
 
 export interface OperationRef {
   href: string;
@@ -84,4 +87,31 @@ export function siteComponents(options: SiteComponentOptions) {
     NewsletterCTA,
     ...(options.mermaid ? { Mermaid: MermaidFigure } : {}),
   };
+}
+
+export type MdxComponent = ComponentType<Record<string, unknown>>;
+
+/** A function component, a class, or one of React's wrapper objects (`memo`, `forwardRef`, `lazy`). */
+function isComponent(value: unknown): value is MdxComponent {
+  return typeof value === 'function' || (typeof value === 'object' && value !== null && '$$typeof' in value);
+}
+
+/**
+ * The MDX components in the site's `components` module: every export whose
+ * name starts with a capital letter and is a component, plus the same from a
+ * default export that is an object (`export default { Screenshot }`). Named
+ * exports win over the default object's entries. Anything else in the module
+ * (helpers, constants) is ignored.
+ */
+export function userComponents(mod: Record<string, unknown>): Record<string, MdxComponent> {
+  const out: Record<string, MdxComponent> = {};
+  const pick = (entries: Record<string, unknown>) => {
+    for (const [name, value] of Object.entries(entries)) {
+      if (/^[A-Z]/.test(name) && isComponent(value)) out[name] = value;
+    }
+  };
+  const fallback = mod.default;
+  if (typeof fallback === 'object' && fallback !== null && !isComponent(fallback)) pick(fallback as Record<string, unknown>);
+  pick(mod);
+  return out;
 }

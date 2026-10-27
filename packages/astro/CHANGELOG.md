@@ -27,6 +27,11 @@ Versions track `packages/astro/package.json`. Format loosely follows
 
 ### Added
 
+- `components` option: a module of the site's own MDX components. Every
+  capitalized export works in MDX without imports, next to the kit's, and a
+  kit name it reuses replaces the kit's component. A `.tsx`/`.jsx` module
+  works in a site without `@astrojs/react`: the integration has Vite compile
+  its JSX for React when no UI integration does.
 - `--fw-label-transform`, `--fw-label-letter-spacing` and
   `--fw-label-font-size` set the case, tracking and size of the sidebar's
   group names and the "On this page" title, which stay small uppercase by

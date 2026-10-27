@@ -176,6 +176,14 @@ test.describe('components', () => {
     }
   });
 
+  test('a component from the site’s components module renders in MDX', async ({ page }) => {
+    await page.goto('/docs/essentials/components');
+    const shot = page.locator('main .fw-prose .fw-frame .example-shot');
+    await expect(shot).toHaveAttribute('data-shot', 'settings-page.png');
+    await expect(shot).toHaveText('Screenshot coming');
+    await expect(page.locator('main .fw-prose .fw-frame-caption', { hasText: 'The settings page.' })).toBeVisible();
+  });
+
   test('tabs switch on click and with the arrow keys', async ({ page }) => {
     await page.goto('/docs/essentials/components');
     const tabs = page.locator('.fw-tabs').first();
