@@ -1,6 +1,6 @@
 {
   "name": "@inkform/astro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Astro integration for @inkform/framework: serve a folder of MDX docs, a native OpenAPI reference, llms.txt and Pagefind search from any Astro 7 site.",
   "license": "MIT",
   "author": "Charan",
