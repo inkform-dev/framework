@@ -33,8 +33,9 @@ const links = topNav(site.config, {
   hasChangelog: site.changelog.length > 0,
   active,
   link: site.link,
+  resolve: site.href,
 });
-const cta = site.config.cta;
+const cta = site.config.cta ? { ...site.config.cta, href: site.href(site.config.cta.href) } : undefined;
 const ctaExternal = cta ? /^https?:\/\//.test(cta.href) : false;
 const hasSidebar = !!sidebar && sidebar.length > 0;
 const hasToc = !!toc && toc.length > 0;

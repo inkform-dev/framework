@@ -30,8 +30,22 @@ export interface NavGroup {
 
 const isExternal = (href: string) => /^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('//');
 
-/** Sidebar groups for one docs tab. Nested `children` follow their parent, one depth level deeper. */
-export function docsSidebar(config: DocsConfig, tabName: string, activeSlug: string | null, link: Linker): NavGroup[] {
+/** Turns an href written in docs.json into the one readers follow (see Site.href). */
+export type HrefResolver = (href: string) => string;
+
+const asWritten: HrefResolver = (href) => href;
+
+/**
+ * Sidebar groups for one docs tab. Nested `children` follow their parent, one
+ * depth level deeper. A page with its own `href` goes through `resolve`.
+ */
+export function docsSidebar(
+  config: DocsConfig,
+  tabName: string,
+  activeSlug: string | null,
+  link: Linker,
+  resolve: HrefResolver = asWritten,
+): NavGroup[] {
   const tab = docTabs(config).find((t) => t.tab === tabName) ?? docTabs(config)[0];
   return (tab?.navigation ?? []).map((g) => {
     const items: NavItem[] = [];
@@ -40,8 +54,8 @@ export function docsSidebar(config: DocsConfig, tabName: string, activeSlug: str
         const external = !!p.href && isExternal(p.href);
         items.push({
           title: p.title,
-          // A page with its own `href` is a link out, used as written.
-          href: p.href ?? link(p.slug),
+          // A page with its own `href` is a link, not an MDX page.
+          href: p.href ? resolve(p.href) : link(p.slug),
           active: !p.href && p.slug === activeSlug,
           depth,
           external,
@@ -83,12 +97,20 @@ export type ActiveArea = { kind: 'docs'; tab: string } | { kind: 'api' } | { kin
  * The header row: one link per docs.json tab (a docs tab opens its first page,
  * the API tab its reference), then anchors and navbar links (anchors win when
  * both name the same URL), then Blog and Changelog when the site has them.
+ * Anchor and navbar hrefs go through `resolve`.
  */
 export function topNav(
   config: DocsConfig,
-  options: { apiSlug: string | null; hasBlog: boolean; hasChangelog: boolean; active: ActiveArea; link: Linker },
+  options: {
+    apiSlug: string | null;
+    hasBlog: boolean;
+    hasChangelog: boolean;
+    active: ActiveArea;
+    link: Linker;
+    resolve?: HrefResolver;
+  },
 ): TopNavLink[] {
-  const { apiSlug, hasBlog, hasChangelog, active, link } = options;
+  const { apiSlug, hasBlog, hasChangelog, active, link, resolve = asWritten } = options;
   const out: TopNavLink[] = [];
 
   for (const t of docTabs(config)) {
@@ -111,7 +133,7 @@ export function topNav(
     if (seen.has(l.href)) continue;
     seen.add(l.href);
     const external = isExternal(l.href);
-    out.push({ label: l.name, href: l.href, active: false, external });
+    out.push({ label: l.name, href: external ? l.href : resolve(l.href), active: false, external });
   }
 
   if (hasBlog) out.push({ label: 'Blog', href: link(BLOG_PATH), active: active.kind === 'blog', external: false });

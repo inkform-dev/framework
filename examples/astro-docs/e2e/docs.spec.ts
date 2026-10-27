@@ -110,6 +110,19 @@ test.describe('shell', () => {
     await expect(html).toHaveClass(/dark/);
   });
 
+  test('pages fit a 375px phone without scrolling sideways', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    for (const path of ['/docs', '/docs/quickstart', '/docs/api-reference/operations/create-plant', '/docs/changelog']) {
+      await page.goto(path);
+      const widths = await page.evaluate(() => ({
+        page: document.documentElement.scrollWidth,
+        header: document.querySelector('.fw-shell-header-inner')?.scrollWidth,
+      }));
+      expect(widths, path).toEqual({ page: 375, header: 375 });
+      await expect(page.locator('.fw-theme-toggle'), path).toBeInViewport({ ratio: 1 });
+    }
+  });
+
   test('the mobile drawer opens, closes on Escape, and holds the nav', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/docs/quickstart');

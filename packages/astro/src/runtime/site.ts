@@ -14,7 +14,7 @@ import { buildNavTree, type OpenApiNavTree } from '@inkform/framework/openapi-en
 import { parseOpenApiDocument } from '@inkform/framework/openapi-engine/parse';
 import { apiTab, apiTabSlug } from '@inkform/framework/routes';
 import { buildRoutes, createLinker, operationPath, routeIndex, type Linker, type SiteRoute } from './routes';
-import { assetRewriter, docsLinkRewriter } from './inline-styles';
+import { assetRewriter, siteHrefRewriter } from './inline-styles';
 import type { OperationRef } from './mdx-components';
 import { PageRenderer } from './render';
 
@@ -40,6 +40,12 @@ export interface Site {
   renderer: () => PageRenderer;
   /** A docs.json asset path (logo, favicon) as the browser should request it, under Astro's `base`. */
   asset: (path: string) => string;
+  /**
+   * A docs.json href (navbar link, anchor, CTA, sidebar link) as readers
+   * follow it: docs pages through `link`, other site-root paths under
+   * Astro's `base`, everything else as written.
+   */
+  href: (href: string) => string;
 }
 
 export class ContentError extends Error {
@@ -105,12 +111,17 @@ async function readSite(): Promise<Site> {
     : null;
 
   const byPath = routeIndex(routes);
-  const rewriteHref = docsLinkRewriter(new Set(byPath.keys()), link);
+  const rewriteHref = siteHrefRewriter(new Set(byPath.keys()), link, {
+    base: config.base,
+    siteBase: config.siteBase,
+    trailingSlash: config.trailingSlash,
+  });
   const rewriteSrc = assetRewriter(config.siteBase);
   const renderer = () => new PageRenderer({ mermaid: config.mermaid, operation, rewriteHref, rewriteSrc });
   const asset = (path: string) => rewriteSrc(path) ?? path;
+  const href = (value: string) => rewriteHref(value) ?? value;
 
-  return { config: docs, api, blog, changelog, routes, byPath, link, operation, renderer, asset };
+  return { config: docs, api, blog, changelog, routes, byPath, link, operation, renderer, asset, href };
 }
 
 let cached: Promise<Site> | null = null;

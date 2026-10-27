@@ -43,6 +43,66 @@ html:not(.dark) .fw-shell-brand-logo--dark {
   display: none;
 }
 
+/* ── Header on phones ─────────────────────────────────────────────────────
+   One row has to hold the logo, the menu button, search and the theme
+   toggle in 375px. The tab row moves out (the drawer lists the same links),
+   the ⌘K hint goes (no keyboard to press it on), and a long site name ends
+   in an ellipsis instead of pushing the actions off screen. Themes that
+   give the tabs a row of their own (galley) show it again. */
+
+@media (max-width: 40rem) {
+  .fw-shell-header-inner {
+    gap: var(--fw-space-2);
+  }
+
+  .fw-shell-header-start,
+  .fw-shell-logo,
+  .fw-shell-brand {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .fw-shell-brand-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .fw-shell-topnav {
+    display: none;
+  }
+
+  .fw-search-trigger kbd {
+    display: none;
+  }
+}
+
+/* ── API operation pages, stacked ────────────────────────────────────────
+   Below 80rem the docs and the code samples share one column. As `1fr` it
+   grows to the widest code sample; `minmax(0, 1fr)` keeps it to the screen
+   and lets each sample scroll inside its block. */
+
+@media (max-width: 80rem) {
+  .fw-apiref-body-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── Small-caps labels: sidebar group names and "On this page" ───────────
+   The framework sets these in tracked uppercase. A theme sets the three
+   variables to change that without restating the rules, for example
+   sentence case:
+     --fw-label-transform: none;
+     --fw-label-letter-spacing: normal;
+     --fw-label-font-size: 0.8125rem; */
+
+.fw-sidebar-group-label,
+.fw-toc-title {
+  font-size: var(--fw-label-font-size, 0.7rem);
+  letter-spacing: var(--fw-label-letter-spacing, 0.07em);
+  text-transform: var(--fw-label-transform, uppercase);
+}
+
 /* ── Sidebar heading (the active tab's label) ─────────────────────────── */
 
 .fw-sidebar-title {

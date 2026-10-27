@@ -127,6 +127,13 @@ html.dark {
   border-bottom: 1px solid var(--fw-border);
 }
 
+/* The tabs have a row of their own, so they stay on phones too. */
+@media (max-width: 40rem) {
+  .fw-shell-topnav {
+    display: flex;
+  }
+}
+
 /* Search sits centered in the space between the logo and the other actions. */
 .fw-shell-actions > .fw-search-trigger {
   flex: 1;

@@ -18,7 +18,7 @@ the browser gets plain HTML and a few small scripts, and no React.
 | `<base>/<api-tab>` and `<base>/<api-tab>/operations/<operationId>` | The API Reference, when a docs.json tab has `openapi` (`<api-tab>` is the tab's label, slugified: `api-reference`) |
 | `<base>/blog`, `<base>/blog/<slug>` | When `content/blog/` has published posts |
 | `<base>/changelog` | When `content/changelog/` has entries |
-| `<base>/llms.txt`, `<base>/llms-full.txt` | The [llms.txt](https://llmstxt.org) index and the full corpus |
+| `<base>/llms.txt`, `<base>/llms-full.txt` | The [llms.txt](https://llmstxt.org) index (its links match the pages', `base` and trailing slash included) and the full corpus |
 | `<base>/_pagefind/` | The search index, written after `astro build` |
 
 Every route is prerendered, including in an `output: 'server'` app, so the
@@ -101,7 +101,29 @@ build if the operation doesn't exist.
 
 Links in content written from the site root, the way content for a Next.js
 theme is (`[Quickstart](/quickstart)`), get the docs base added when they point
-at a docs page. Links to anything else are left as written.
+at a docs page. See [Astro's `base` and `trailingSlash`](#astros-base-and-trailingslash)
+for the rest.
+
+## Astro's `base` and `trailingSlash`
+
+Write links from the site root, as if the site were served from `/`, and the
+integration writes them for wherever it is served. With
+`base: '/my-project'` and `trailingSlash: 'always'` in `astro.config`, and the
+docs at `/docs`:
+
+| Written in docs.json or MDX | Becomes |
+| --- | --- |
+| `/quickstart` or `/docs/quickstart` (a docs page) | `/my-project/docs/quickstart/` |
+| `/` (the site's home) | `/my-project/` |
+| `/pricing`, `/screenshots/setup.png` (anything else on the site) | `/my-project/pricing`, `/my-project/screenshots/setup.png` |
+| `https://…`, `//cdn…`, `#section`, `../relative` | unchanged |
+
+This covers docs.json's `navbarLinks`, `anchors`, `cta`, `logo`, `favicon` and
+sidebar entries with an `href`, links and images in MDX, and the sidebar,
+breadcrumbs, prev/next, search results and `llms.txt`. A link that already
+starts with Astro's base is left alone. Docs-page links end in a slash when
+`trailingSlash` is `'always'`; other paths keep the slash you wrote, since
+they may be files.
 
 ## Theming
 
@@ -133,6 +155,22 @@ The full token list is in §11 of the framework's
 [ARCHITECTURE.md](../framework/ARCHITECTURE.md).
 Dark mode is the `dark` class on `<html>`, set before first paint and saved in
 `localStorage['fw-theme']`, as in the Next.js themes.
+
+The sidebar's group names and the "On this page" title are small tracked
+capitals, as in the Next.js themes. Three variables change that, for example
+to sentence case:
+
+```css
+:root {
+  --fw-label-transform: none;        /* default: uppercase */
+  --fw-label-letter-spacing: normal; /* default: 0.07em */
+  --fw-label-font-size: 0.8125rem;   /* default: 0.7rem */
+}
+```
+
+On screens 40rem wide and under, the header keeps one row: the tabs and
+navbar links move to the menu drawer, the ⌘K hint is hidden, and a long site
+name is cut with an ellipsis. Galley keeps its row of tabs under the logo.
 
 Galley names General Sans, Newsreader and JetBrains Mono but loads none of
 them, so nothing is fetched from a font CDN. To use them, add `@font-face`

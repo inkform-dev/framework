@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { DocsConfig } from '@inkform/framework/nav';
 import type { OpenApiNavTree } from '@inkform/framework/openapi-engine/nav';
+import { siteHrefRewriter } from './inline-styles';
 import { apiSidebar, docBreadcrumbs, docPagination, docsSidebar, topNav } from './nav';
 import { createLinker } from './routes';
 
@@ -95,6 +96,58 @@ describe('topNav', () => {
     expect(topNav(config, { apiSlug: null, hasBlog: false, hasChangelog: false, active: { kind: 'api' }, link }).map((l) => l.label)).not.toContain(
       'API Reference',
     );
+  });
+});
+
+describe('under an Astro base with trailing slashes', () => {
+  // Astro `base: '/sub'`, `trailingSlash: 'always'`: the docs are at /sub/docs/.
+  const subLink = createLinker('/sub/docs', 'always');
+  const rewrite = siteHrefRewriter(new Set(['', 'setup', 'setup/deep', 'recipes/bake']), subLink, { base: '/docs', siteBase: '/sub', trailingSlash: 'always' });
+  const resolve = (href: string) => rewrite(href) ?? href;
+  const based: DocsConfig = {
+    ...config,
+    navbarLinks: [
+      { name: 'Home', href: '/' },
+      { name: 'Setup', href: '/setup' },
+      { name: 'Status', href: '/status' },
+      { name: 'Already based', href: '/sub/pricing' },
+    ],
+  };
+
+  it('puts every navbar link under the base: docs pages through the linker, host pages after the base', () => {
+    const links = topNav(based, { apiSlug: 'api-reference', hasBlog: true, hasChangelog: true, active: { kind: 'api' }, link: subLink, resolve });
+    expect(links.map((l) => [l.label, l.href])).toEqual([
+      ['Guides', '/sub/docs/'],
+      ['Recipes', '/sub/docs/recipes/bake/'],
+      ['API Reference', '/sub/docs/api-reference/'],
+      ['GitHub', 'https://github.com/x'],
+      ['Home', '/sub/'],
+      ['Setup', '/sub/docs/setup/'],
+      ['Status', '/sub/status'],
+      ['Already based', '/sub/pricing'],
+      ['Blog', '/sub/docs/blog/'],
+      ['Changelog', '/sub/docs/changelog/'],
+    ]);
+  });
+
+  it('resolves sidebar links that carry their own href', () => {
+    const withLink: DocsConfig = {
+      ...config,
+      tabs: [{ tab: 'Guides', navigation: [{ group: 'Start', pages: [{ title: 'Pricing', slug: 'p', file: '', href: '/pricing' }] }] }],
+    };
+    const [group] = docsSidebar(withLink, 'Guides', null, subLink, resolve);
+    expect(group?.items.map((i) => [i.title, i.href, i.external])).toEqual([['Pricing', '/sub/pricing', false]]);
+    const [plain] = docsSidebar(config, 'Guides', null, subLink, resolve);
+    expect(plain?.items.map((i) => i.href)).toEqual(['/sub/docs/', '/sub/docs/setup/', '/sub/docs/setup/deep/', 'https://example.com/changes']);
+  });
+
+  it('writes breadcrumbs and prev/next with the base and the slash', () => {
+    const deep = { title: 'Deep', slug: 'setup/deep', file: 'setup/deep.mdx', depth: 2, group: 'Start', tab: 'Guides' };
+    expect(docBreadcrumbs(config, deep, subLink)[1]).toEqual({ label: 'Setup', href: '/sub/docs/setup/' });
+    expect(docPagination(config, 'setup', subLink)).toEqual({
+      prev: { title: 'Intro', href: '/sub/docs/' },
+      next: { title: 'Deep', href: '/sub/docs/setup/deep/' },
+    });
   });
 });
 

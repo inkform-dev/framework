@@ -19,7 +19,7 @@ import { InlineStyleSheet, type HrefRewriter } from './inline-styles';
 import { siteComponents, type SiteComponentOptions } from './mdx-components';
 
 export interface PageRendererOptions extends SiteComponentOptions {
-  /** Applied to every link in the rendered HTML (see docsLinkRewriter). */
+  /** Applied to every link in the rendered HTML (see siteHrefRewriter). */
   rewriteHref?: HrefRewriter;
   /** Applied to every image source (see assetRewriter). */
   rewriteSrc?: HrefRewriter;
