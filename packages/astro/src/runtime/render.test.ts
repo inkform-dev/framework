@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { headingsFromHtml } from './headings';
 import { docsLinkRewriter } from './inline-styles';
+import { createElement, forwardRef, memo, type ReactNode } from 'react';
+import { userComponents } from './mdx-components';
 import { PageRenderer } from './render';
 import { createLinker } from './routes';
 import type { ApiOperation } from '@inkform/framework/openapi';
@@ -140,6 +142,44 @@ describe('PageRenderer.mdx', () => {
       { depth: 3, text: 'Install', slug: 'install-1' },
       { depth: 2, text: 'Use it', slug: 'use-it' },
     ]);
+  });
+});
+
+describe('site components', () => {
+  function Screenshot({ file, caption }: { file?: string; caption?: string }) {
+    return createElement('figure', { className: 'shot', 'data-shot': file }, createElement('figcaption', null, caption));
+  }
+  function Frame({ children }: { children?: ReactNode }) {
+    return createElement('div', { className: 'my-frame' }, children);
+  }
+
+  it('picks capitalized components from the module, default object included, named exports first', () => {
+    const Wrapped = memo(Screenshot);
+    const Ref = forwardRef(function Ref() {
+      return null;
+    });
+    const fromDefault = () => null;
+    const picked = userComponents({
+      Screenshot,
+      Wrapped,
+      Ref,
+      helper: () => null,
+      SHOTS: ['a.png'],
+      default: { Badge: fromDefault, Screenshot: fromDefault, lower: fromDefault },
+    });
+    expect(Object.keys(picked).sort()).toEqual(['Badge', 'Ref', 'Screenshot', 'Wrapped']);
+    expect(picked.Screenshot).toBe(Screenshot);
+    expect(userComponents({})).toEqual({});
+  });
+
+  it('renders them in MDX without imports, over the kit’s own, with the fallback kept for unknown names', async () => {
+    const r = renderer({ components: userComponents({ Screenshot, Frame }) });
+    const html = await r.mdx('<Screenshot file="meta-01.png" caption="Create the app" />\n\n<Frame>inside</Frame>\n\n<Nope />\n\n<Note>kit</Note>');
+    expect(html).toContain('<figure class="shot" data-shot="meta-01.png"><figcaption>Create the app</figcaption></figure>');
+    expect(html).toContain('<div class="my-frame">inside</div>');
+    expect(html).not.toContain('fw-frame');
+    expect(html).toContain('fw-unknown');
+    expect(html).toContain('fw-callout');
   });
 });
 

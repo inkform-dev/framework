@@ -9,7 +9,17 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
-  integrations: [react(), inkform({ base: '/docs', contentRoot: './content', mermaid: true })],
+  integrations: [
+    react(),
+    inkform({
+      base: '/docs',
+      contentRoot: './content',
+      mermaid: true,
+      // The site's own MDX components, and the CSS they use.
+      components: './src/mdx-components.tsx',
+      customCss: ['./src/styles/docs.css'],
+    }),
+  ],
   // This site has no Markdown pages of its own. Docs code blocks are
   // highlighted by the integration, which keeps their colors CSP-safe.
   markdown: { syntaxHighlight: false },

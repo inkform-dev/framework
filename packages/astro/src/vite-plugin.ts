@@ -7,6 +7,8 @@
  * - `virtual:@inkform/astro/mermaid`: the diagram renderer when the `mermaid`
  *   option is on, an empty function when it's off, so a site without diagrams
  *   never resolves (or needs) the `mermaid` package.
+ * - `virtual:@inkform/astro/components`: the site's `components` module as a
+ *   namespace object, or an empty one without the option.
  */
 
 import path from 'node:path';
@@ -18,7 +20,8 @@ type VitePlugin = NonNullable<NonNullable<AstroConfig['vite']>['plugins']>[numbe
 export const VIRTUAL_CONFIG = 'virtual:@inkform/astro/config';
 export const VIRTUAL_USER_CSS = 'virtual:@inkform/astro/user-css';
 export const VIRTUAL_MERMAID = 'virtual:@inkform/astro/mermaid';
-const VIRTUAL_IDS = new Set([VIRTUAL_CONFIG, VIRTUAL_USER_CSS, VIRTUAL_MERMAID]);
+export const VIRTUAL_COMPONENTS = 'virtual:@inkform/astro/components';
+const VIRTUAL_IDS = new Set([VIRTUAL_CONFIG, VIRTUAL_USER_CSS, VIRTUAL_MERMAID, VIRTUAL_COMPONENTS]);
 
 export interface VitePluginInput {
   options: ResolvedOptions;
@@ -41,6 +44,10 @@ export function virtualModuleSource(id: string, { options, css, mermaidClient }:
       return options.mermaid
         ? `export { mountMermaid } from ${importPath(mermaidClient)};`
         : 'export function mountMermaid() {}';
+    case VIRTUAL_COMPONENTS:
+      return options.components
+        ? `import * as components from ${importPath(options.components)};\nexport default components;`
+        : 'export default {};';
     default:
       return undefined;
   }

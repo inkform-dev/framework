@@ -77,6 +77,7 @@ content/
 | `contentRoot` | `'./content'` | The folder holding `docs/docs.json`, relative to the project root. |
 | `theme` | `'galley'` | `'galley'`, `'plain'` (the framework's neutral tokens), or a path to your own CSS file of `--fw-*` overrides. |
 | `customCss` | `[]` | More CSS files to load on docs pages, after the theme. |
+| `components` | none | A module of your own MDX components, relative to the project root (see [Your own components](#your-own-components)). |
 | `search` | `true` | Build a Pagefind index after `astro build` and show the search dialog. |
 | `mermaid` | `false` | Draw ```` ```mermaid ```` fences as diagrams in the browser. Needs `npm install mermaid`. Off, they show their source. |
 | `llmsTxt` | `true` | Serve `llms.txt` and `llms-full.txt`. |
@@ -98,6 +99,53 @@ without JavaScript, search and view-source see all of it. Accordions and
 
 `<ApiLink operationId="…">` links to that operation's page and fails the
 build if the operation doesn't exist.
+
+### Your own components
+
+Point `components` at a module, and every export whose name starts with a
+capital letter works in MDX without imports, next to the kit's components:
+
+```ts
+inkform({
+  components: './src/mdx-components.tsx',
+  customCss: ['./src/styles/docs.css'], // styles for them, if they need any
+});
+```
+
+```tsx
+// src/mdx-components.tsx
+import { Frame } from '@inkform/framework/components';
+
+export function Screenshot({ file, caption }: { file: string; caption: string }) {
+  return (
+    <Frame caption={caption}>
+      <img src={`/screenshots/${file}`} alt={caption} />
+    </Frame>
+  );
+}
+```
+
+```mdx
+<Screenshot file="create-app.png" caption="Create the app." />
+```
+
+- They are React components, rendered to HTML at build time like the kit.
+  Props and children work; state and effects don't run in the browser.
+- A name the kit also has (`Frame`, `Card`) replaces the kit's component on
+  every page.
+- `export default { Screenshot }` works too. Exports that aren't components
+  (helpers, constants) are ignored.
+- The kit's components are exported from `@inkform/framework/components`,
+  which `@inkform/astro` installs, so yours can wrap them. With a strict
+  package manager (pnpm), add `@inkform/framework` to your dependencies.
+- A `.tsx` or `.jsx` module works without `@astrojs/react`: when the site has
+  no UI framework integration, the integration has Vite compile JSX for
+  React. With Preact, Solid or Vue installed, those compile JSX instead, so
+  write the module with `createElement` from `react` in a `.ts` file. For
+  type checking, set `"jsx": "react-jsx"` and `"jsxImportSource": "react"`
+  in `tsconfig.json`.
+- Image `src`s and links they render get Astro's `base` like the rest of the
+  content.
 
 Links in content written from the site root, the way content for a Next.js
 theme is (`[Quickstart](/quickstart)`), get the docs base added when they point

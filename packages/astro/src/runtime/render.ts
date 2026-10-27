@@ -9,23 +9,23 @@
  * framework's CSS styles) matches the Next.js themes exactly.
  */
 
-import { createElement, type ComponentType, type ReactNode } from 'react';
+import { createElement, type ReactNode } from 'react';
 import { prerender } from 'react-dom/static';
 import { mdxComponents } from '@inkform/framework/components';
 import { compileMdx } from '@inkform/framework/mdx-options';
 import type { ApiOperation, OpenApiServer } from '@inkform/framework/openapi';
 import { OperationPage } from '@inkform/framework/openapi-render';
 import { InlineStyleSheet, type HrefRewriter } from './inline-styles';
-import { siteComponents, type SiteComponentOptions } from './mdx-components';
+import { siteComponents, type MdxComponent, type SiteComponentOptions } from './mdx-components';
 
 export interface PageRendererOptions extends SiteComponentOptions {
+  /** The site's own MDX components, merged over the kit's (see userComponents). */
+  components?: Record<string, MdxComponent>;
   /** Applied to every link in the rendered HTML (see siteHrefRewriter). */
   rewriteHref?: HrefRewriter;
   /** Applied to every image source (see assetRewriter). */
   rewriteSrc?: HrefRewriter;
 }
-
-type MdxComponent = ComponentType<Record<string, unknown>>;
 
 /** Renders a React tree to an HTML string, waiting for async components (OperationPage, ApiLink). */
 export async function renderToHtml(node: ReactNode, idPrefix: string): Promise<string> {
@@ -42,7 +42,7 @@ export class PageRenderer {
 
   /** An MDX body (frontmatter already removed) as HTML, inside `.fw-prose`. */
   async mdx(source: string, extra: Record<string, MdxComponent> = {}): Promise<string> {
-    const components = mdxComponents({ ...siteComponents(this.options), ...extra });
+    const components = mdxComponents({ ...siteComponents(this.options), ...this.options.components, ...extra });
     const element = await compileMdx(source, components);
     const html = await renderToHtml(createElement('div', { className: 'fw-prose' }, element), this.nextPrefix());
     return this.styles.extract(html, { href: this.options.rewriteHref, src: this.options.rewriteSrc });

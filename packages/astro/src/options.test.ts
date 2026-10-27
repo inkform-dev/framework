@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { docsRoutePattern, normalizeBase, resolveOptions, type HostConfig } from './options';
+import { docsRoutePattern, needsReactJsx, normalizeBase, resolveOptions, type HostConfig } from './options';
 
 const host: HostConfig = { root: '/site', siteBase: '/', trailingSlash: 'ignore', csp: false };
 
@@ -58,6 +58,11 @@ describe('resolveOptions', () => {
     expect(r.customCss).toEqual([path.resolve('/site', 'fonts.css')]);
   });
 
+  it('resolves the components module against the project root, and has none by default', () => {
+    expect(resolveOptions({}, host).components).toBeNull();
+    expect(resolveOptions({ components: './src/mdx-components.tsx' }, host).components).toBe(path.resolve('/site', 'src/mdx-components.tsx'));
+  });
+
   it('keeps built-in theme names', () => {
     expect(resolveOptions({ theme: 'plain' }, host).theme).toBe('plain');
   });
@@ -71,5 +76,22 @@ describe('docsRoutePattern', () => {
   it('is a rest route under the base', () => {
     expect(docsRoutePattern('/docs')).toBe('/docs/[...slug]');
     expect(docsRoutePattern('')).toBe('/[...slug]');
+  });
+});
+
+describe('needsReactJsx', () => {
+  const tsx = '/site/src/mdx-components.tsx';
+
+  it('compiles JSX for a .jsx/.tsx components module when nothing else in the site does', () => {
+    expect(needsReactJsx(tsx, [{ name: '@inkform/astro' }], undefined)).toBe(true);
+    expect(needsReactJsx('/site/src/c.jsx', [], undefined)).toBe(true);
+  });
+
+  it('leaves it alone without a JSX module, beside a UI integration, or when the site sets it', () => {
+    expect(needsReactJsx(null, [], undefined)).toBe(false);
+    expect(needsReactJsx('/site/src/c.ts', [], undefined)).toBe(false);
+    expect(needsReactJsx(tsx, [{ name: '@astrojs/react' }], undefined)).toBe(false);
+    expect(needsReactJsx(tsx, [{ name: '@astrojs/preact' }], undefined)).toBe(false);
+    expect(needsReactJsx(tsx, [], 'preserve')).toBe(false);
   });
 });

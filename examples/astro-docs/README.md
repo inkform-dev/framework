@@ -18,6 +18,9 @@ npm run test:e2e --workspace=@inkform/example-astro-docs   # Playwright: builds,
   every component in the kit.
 - `content/blog/` and `content/changelog/` turn on `/docs/blog` and
   `/docs/changelog`.
+- [`src/mdx-components.tsx`](./src/mdx-components.tsx) is the site's own MDX
+  component (`<Screenshot>`), registered with the `components` option and
+  styled by `src/styles/docs.css` through `customCss`.
 - [`e2e/docs.spec.ts`](./e2e/docs.spec.ts) checks that every page renders with
   no CSP violation, that tabs, code groups, accordions, the TOC, the theme
   toggle, the drawer, diagrams, the API sample pickers and Try It work, that

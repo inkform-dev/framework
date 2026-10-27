@@ -36,6 +36,14 @@ export interface InkformOptions {
   theme?: 'galley' | 'plain' | (string & {});
   /** More CSS files to load on docs pages after the theme, relative to the project root. */
   customCss?: string[];
+  /**
+   * A module of your own MDX components, relative to the project root, e.g.
+   * `'./src/mdx-components.tsx'`. Every export whose name starts with a
+   * capital letter can be used in any MDX page without an import, next to
+   * the kit's components; a name the kit also has replaces the kit's. They
+   * are React components, rendered to HTML at build time.
+   */
+  components?: string;
   /** Build a Pagefind search index after `astro build`. Default `true`. */
   search?: boolean;
   /**
@@ -78,6 +86,8 @@ export interface ResolvedOptions {
   theme: string;
   /** Absolute paths. */
   customCss: string[];
+  /** Absolute path of the site's MDX components module, or null. */
+  components: string | null;
   search: boolean;
   mermaid: boolean;
   llmsTxt: boolean;
@@ -122,6 +132,7 @@ export function resolveOptions(options: InkformOptions, host: HostConfig): Resol
     contentRoot: path.resolve(host.root, options.contentRoot ?? './content'),
     theme: isBuiltIn ? theme : path.resolve(host.root, theme),
     customCss: (options.customCss ?? []).map((file) => path.resolve(host.root, file)),
+    components: options.components ? path.resolve(host.root, options.components) : null,
     search: options.search ?? true,
     mermaid: options.mermaid ?? false,
     llmsTxt: options.llmsTxt ?? true,
@@ -129,6 +140,22 @@ export function resolveOptions(options: InkformOptions, host: HostConfig): Resol
     csp: host.csp,
     cspAlgorithm: host.cspAlgorithm ?? 'SHA-256',
   };
+}
+
+/** Integrations that set up their own JSX compilation. */
+const JSX_INTEGRATIONS = ['@astrojs/react', '@astrojs/preact', '@astrojs/solid-js', '@astrojs/vue'];
+
+/**
+ * Whether the integration should have Vite compile `.jsx`/`.tsx` as React's
+ * automatic JSX, so a `components` module can be written in JSX. Astro's
+ * tsconfig preset leaves JSX uncompiled (`"jsx": "preserve"`) unless a UI
+ * integration sets it up, so a site without one fails to parse the module.
+ * Not done when another integration compiles JSX, or when the site sets
+ * `vite.oxc.jsx` itself.
+ */
+export function needsReactJsx(components: string | null, integrations: readonly { name: string }[], viteOxcJsx: unknown): boolean {
+  if (!components || !/\.[jt]sx$/.test(components) || viteOxcJsx !== undefined) return false;
+  return !integrations.some((i) => JSX_INTEGRATIONS.includes(i.name));
 }
 
 /** The catch-all route pattern every docs page is served from. */

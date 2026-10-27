@@ -15,7 +15,14 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { AstroIntegration } from 'astro';
-import { docsRoutePattern, InkformOptionsError, resolveOptions, type InkformOptions, type ResolvedOptions } from './options';
+import {
+  docsRoutePattern,
+  InkformOptionsError,
+  needsReactJsx,
+  resolveOptions,
+  type InkformOptions,
+  type ResolvedOptions,
+} from './options';
 import { buildSearchIndex } from './search-index';
 import { inkformVitePlugin } from './vite-plugin';
 
@@ -56,6 +63,9 @@ export default function inkform(options: InkformOptions = {}): AstroIntegration 
         for (const file of css) {
           if (!existsSync(file)) throw new InkformOptionsError(`${PACKAGE}: CSS file not found: ${file}`);
         }
+        if (resolved.components && !existsSync(resolved.components)) {
+          throw new InkformOptionsError(`${PACKAGE}: the \`components\` module was not found: ${resolved.components}`);
+        }
 
         injectRoute({
           pattern: docsRoutePattern(resolved.base),
@@ -71,9 +81,15 @@ export default function inkform(options: InkformOptions = {}): AstroIntegration 
           });
         }
 
+        const viteOxc = config.vite?.oxc;
+        const reactJsx = needsReactJsx(resolved.components, config.integrations, viteOxc ? viteOxc.jsx : undefined);
+
         updateConfig({
           vite: {
             plugins: [inkformVitePlugin({ options: resolved, css, mermaidClient: srcFile('client', 'mermaid.ts') })],
+            // A JSX components module in a site with no UI integration: compile
+            // its JSX for React, which renders it at build time.
+            ...(reactJsx ? { oxc: { jsx: { runtime: 'automatic' as const, importSource: 'react' } } } : {}),
             // Both packages ship TypeScript source for Vite to compile.
             ssr: { noExternal: ['@inkform/framework', PACKAGE] },
             // In dev, prebundle what the diagram script loads on demand, so
