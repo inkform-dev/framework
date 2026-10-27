@@ -1,8 +1,14 @@
 ---
-/** Every changelog entry, newest first, each with an anchor (`#<slug>`). */
+/**
+ * Every changelog entry, newest first, each with an anchor (`#<slug>`). The
+ * headings inside an entry get ids scoped to it (`#<slug>-added`), so two
+ * releases with an "Added" section don't share an id.
+ */
 import Layout from '../Layout.astro';
 import PageHeader from '../PageHeader.astro';
 import Prose from '../Prose.astro';
+import { changelogAnchors, versionLabel } from '../../runtime/changelog';
+import { scopeIds } from '../../runtime/headings';
 import type { Site } from '../../runtime/site';
 
 export interface Props {
@@ -11,10 +17,14 @@ export interface Props {
 
 const { site } = Astro.props;
 const renderer = site.renderer();
+const anchors = changelogAnchors(site.changelog.map((e) => e.slug));
 const entries = await Promise.all(
-  site.changelog.map(async (entry) => ({ entry, html: await renderer.mdx(entry.content) })),
+  site.changelog.map(async (entry, i) => {
+    const anchor = anchors[i] ?? entry.slug;
+    return { entry, anchor, version: versionLabel(entry.version), html: scopeIds(await renderer.mdx(entry.content), anchor) };
+  }),
 );
-const toc = site.changelog.map((e) => ({ depth: 2, text: e.title, slug: e.slug }));
+const toc = entries.map(({ entry, anchor }) => ({ depth: 2, text: entry.title, slug: anchor }));
 ---
 
 <Layout
@@ -29,10 +39,14 @@ const toc = site.changelog.map((e) => ({ depth: 2, text: e.title, slug: e.slug }
 >
   <PageHeader title="Changelog" />
   {
-    entries.map(({ entry, html }) => (
+    entries.map(({ entry, anchor, version, html }) => (
       <article class="fw-changelog-entry">
-        <p class="fw-page-meta">{[entry.date, entry.version ? `v${entry.version}` : null].filter(Boolean).join(' · ')}</p>
-        <h2 class="fw-changelog-title" id={entry.slug}>
+        <p class="fw-page-meta">
+          {entry.date ? <time datetime={entry.date}>{entry.date}</time> : null}
+          {entry.date && version ? ' · ' : null}
+          {version ? <span class="fw-changelog-version">{version}</span> : null}
+        </p>
+        <h2 class="fw-changelog-title" id={anchor}>
           {entry.title}
         </h2>
         <Prose html={html} />

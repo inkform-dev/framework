@@ -17,7 +17,7 @@ the browser gets plain HTML and a few small scripts, and no React.
 | `<base>` and `<base>/<slug>` | Every page listed in `content/docs/docs.json` |
 | `<base>/<api-tab>` and `<base>/<api-tab>/operations/<operationId>` | The API Reference, when a docs.json tab has `openapi` (`<api-tab>` is the tab's label, slugified: `api-reference`) |
 | `<base>/blog`, `<base>/blog/<slug>` | When `content/blog/` has published posts |
-| `<base>/changelog` | When `content/changelog/` has entries |
+| `<base>/changelog` | When `content/changelog/` has entries (see [Changelog](#changelog)) |
 | `<base>/llms.txt`, `<base>/llms-full.txt` | The [llms.txt](https://llmstxt.org) index (its links match the pages', `base` and trailing slash included) and the full corpus |
 | `<base>/_pagefind/` | The search index, written after `astro build` |
 
@@ -81,6 +81,7 @@ content/
 | `search` | `true` | Build a Pagefind index after `astro build` and show the search dialog. |
 | `mermaid` | `false` | Draw ```` ```mermaid ```` fences as diagrams in the browser. Needs `npm install mermaid`. Off, they show their source. |
 | `llmsTxt` | `true` | Serve `llms.txt` and `llms-full.txt`. |
+| `credits` | `false` | Show a small "Built with Inkform" link, to the [Inkform repository](https://github.com/inkform-dev/framework), under every docs page. |
 
 ## Components
 
@@ -151,6 +152,54 @@ Links in content written from the site root, the way content for a Next.js
 theme is (`[Quickstart](/quickstart)`), get the docs base added when they point
 at a docs page. See [Astro's `base` and `trailingSlash`](#astros-base-and-trailingslash)
 for the rest.
+
+## Changelog
+
+`content/changelog/` turns on `<base>/changelog`: one page with every entry,
+newest first, each under its date and version, and the entries listed in the
+on-this-page rail. Write one MDX file per release, named
+`YYYY-MM-DD-<slug>.mdx`:
+
+```
+content/changelog/
+  2026-10-23-v0-2-0.mdx
+  2026-09-02-v0-1-0.mdx
+```
+
+```mdx
+---
+title: Faster search
+date: 2026-10-23
+version: 0.2.0
+---
+
+### Added
+
+- Results highlight the words you searched for.
+
+### Fixed
+
+- Links under a base path.
+```
+
+| Frontmatter | What |
+| --- | --- |
+| `title` | The entry's heading. |
+| `date` | `YYYY-MM-DD`. Entries are sorted by it, newest first, and it's shown above the title. |
+| `version` | Optional. Shown after the date as `v0.2.0`; a `v` you write isn't doubled. |
+| `status` | Optional. `published` (the default); `draft` leaves the entry out; `scheduled` leaves it out of builds before its `date`. |
+| `tags` | Optional. Read by the framework's loader, not shown. |
+
+- The file name without its date is the entry's anchor:
+  `<base>/changelog#v0-2-0`. When two files share a name, the oldest entry
+  keeps it and newer ones get `-2`, `-3`.
+- Group changes under `###` headings (Added, Changed, Fixed). Their ids are
+  scoped to the entry (`#v0-2-0-fixed`), so every release can use the same
+  headings.
+- The body is MDX, with the kit's components and your own.
+- The header gets a Changelog link, `llms.txt` links the page, `llms-full.txt`
+  includes every entry, and search finds entries under the Changelog filter.
+- The folder and format are the same as the Next.js themes' `/changelog`.
 
 ## Astro's `base` and `trailingSlash`
 

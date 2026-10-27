@@ -7,6 +7,11 @@ Versions track `packages/astro/package.json`. Format loosely follows
 
 ### Fixed
 
+- Headings inside changelog entries no longer share ids across entries: each
+  entry's heading and footnote ids are scoped to it (`#v0-2-0-added`), and
+  two entries whose files share a name get distinct anchors. A `version`
+  written with its `v` (`v1.2.0`) no longer shows as `vv1.2.0`, and the date
+  is a `<time>` element.
 - Every link the integration prints respects Astro's `base`. Site-root links
   in docs.json (`navbarLinks`, `anchors`, `cta`, sidebar entries with an
   `href`) and in MDX that aren't docs pages (`/`, `/pricing`) get the base in
@@ -32,6 +37,9 @@ Versions track `packages/astro/package.json`. Format loosely follows
   kit name it reuses replaces the kit's component. A `.tsx`/`.jsx` module
   works in a site without `@astrojs/react`: the integration has Vite compile
   its JSX for React when no UI integration does.
+- `credits` option: a small "Built with Inkform" link to the Inkform repository
+  under every docs page. Off by default.
+- README: how to write changelog entries (file names, frontmatter, anchors).
 - `--fw-label-transform`, `--fw-label-letter-spacing` and
   `--fw-label-font-size` set the case, tracking and size of the sidebar's
   group names and the "On this page" title, which stay small uppercase by

@@ -237,6 +237,30 @@ test.describe('components', () => {
   });
 });
 
+test.describe('changelog', () => {
+  test('lists each version with its date, and every id on the page is unique', async ({ page }) => {
+    await page.goto('/docs/changelog');
+    await expect(page.locator('.fw-changelog-title')).toHaveText(['The Astro integration', 'First sketch']);
+    await expect(page.locator('.fw-changelog-entry .fw-page-meta')).toHaveText(['2026-10-23 · v0.1.0', '2026-10-01 · v0.0.1']);
+    await expect(page.locator('.fw-toc-link')).toHaveText(['The Astro integration', 'First sketch']);
+    await expect(page.locator('.fw-toc-link').first()).toHaveAttribute('href', '#v0-1-0');
+    // Both entries have an "Added" section; each keeps its own id.
+    await expect(page.locator('#v0-1-0-added')).toHaveText('Added');
+    await expect(page.locator('#v0-0-1-added')).toHaveText('Added');
+    const ids = await page.locator('[id]').evaluateAll((els) => els.map((el) => el.id));
+    expect(ids.filter((id, i) => ids.indexOf(id) !== i)).toEqual([]);
+  });
+});
+
+test.describe('credits', () => {
+  test('the "Built with Inkform" line links to the repository and stays out of search', async ({ page }) => {
+    await page.goto('/docs/quickstart');
+    const credit = page.locator('main .fw-credits');
+    await expect(credit.getByRole('link', { name: 'Built with Inkform' })).toHaveAttribute('href', 'https://github.com/inkform-dev/framework');
+    await expect(credit).toHaveAttribute('data-pagefind-ignore', 'all');
+  });
+});
+
 test.describe('API reference', () => {
   test('the sample picker and response tabs switch', async ({ page }) => {
     await page.goto('/docs/api-reference/operations/create-plant');

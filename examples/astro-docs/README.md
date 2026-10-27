@@ -21,6 +21,7 @@ npm run test:e2e --workspace=@inkform/example-astro-docs   # Playwright: builds,
 - [`src/mdx-components.tsx`](./src/mdx-components.tsx) is the site's own MDX
   component (`<Screenshot>`), registered with the `components` option and
   styled by `src/styles/docs.css` through `customCss`.
+- `credits: true` turns on the "Built with Inkform" line under each page.
 - [`e2e/docs.spec.ts`](./e2e/docs.spec.ts) checks that every page renders with
   no CSP violation, that tabs, code groups, accordions, the TOC, the theme
   toggle, the drawer, diagrams, the API sample pickers and Try It work, that

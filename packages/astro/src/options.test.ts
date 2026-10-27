@@ -24,7 +24,7 @@ describe('normalizeBase', () => {
 });
 
 describe('resolveOptions', () => {
-  it('defaults to /docs, ./content, galley, search on, mermaid off', () => {
+  it('defaults to /docs, ./content, galley, search on, mermaid and credits off', () => {
     const r = resolveOptions({}, host);
     expect(r).toMatchObject({
       base: '/docs',
@@ -36,6 +36,7 @@ describe('resolveOptions', () => {
       search: true,
       mermaid: false,
       llmsTxt: true,
+      credits: false,
       csp: false,
       cspAlgorithm: 'SHA-256',
     });
@@ -61,6 +62,10 @@ describe('resolveOptions', () => {
   it('resolves the components module against the project root, and has none by default', () => {
     expect(resolveOptions({}, host).components).toBeNull();
     expect(resolveOptions({ components: './src/mdx-components.tsx' }, host).components).toBe(path.resolve('/site', 'src/mdx-components.tsx'));
+  });
+
+  it('shows the credit only when asked', () => {
+    expect(resolveOptions({ credits: true }, host).credits).toBe(true);
   });
 
   it('keeps built-in theme names', () => {
