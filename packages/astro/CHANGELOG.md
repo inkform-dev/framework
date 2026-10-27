@@ -3,7 +3,36 @@
 Versions track `packages/astro/package.json`. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [0.1.0] — Unreleased
+## [Unreleased]
+
+### Fixed
+
+- Every link the integration prints respects Astro's `base`. Site-root links
+  in docs.json (`navbarLinks`, `anchors`, `cta`, sidebar entries with an
+  `href`) and in MDX that aren't docs pages (`/`, `/pricing`) get the base in
+  front, as images already did; docs-page links still go through the docs
+  base. Links already under the base are left alone, so sites that wrote it
+  out by hand keep working.
+- MDX links written with the docs base (`/docs/quickstart`) are recognized as
+  docs pages, so they get `publicBase` and the trailing slash too.
+- `llms.txt` links follow Astro's `trailingSlash`, like the pages. The index is
+  built from the site's own route table now, so operation links also match
+  the pages for specs without `operationId`s.
+- The header fits a 375px screen: on screens 40rem and under the tab row moves
+  to the drawer (galley keeps its own row), the ⌘K hint is hidden, and a long
+  site name gets an ellipsis.
+- API operation pages no longer scroll sideways on phones: the stacked
+  column stays the width of the screen and long code samples scroll inside
+  their block.
+
+### Added
+
+- `--fw-label-transform`, `--fw-label-letter-spacing` and
+  `--fw-label-font-size` set the case, tracking and size of the sidebar's
+  group names and the "On this page" title, which stay small uppercase by
+  default.
+
+## [0.1.0] — 2026-10-23
 
 First release. Needs `@inkform/framework` 0.8.0, which adds
 `./mdx-options`, `./routes`, `./mermaid/render`, `./openapi-render/try-it`,

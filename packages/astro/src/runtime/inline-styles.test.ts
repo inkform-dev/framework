@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { assetRewriter, docsLinkRewriter, InlineStyleSheet, splitDeclarations } from './inline-styles';
+import { assetRewriter, docsLinkRewriter, InlineStyleSheet, siteHrefRewriter, splitDeclarations } from './inline-styles';
+import { createLinker } from './routes';
 
 describe('splitDeclarations', () => {
   it('splits on top-level semicolons only', () => {
@@ -63,5 +64,57 @@ describe('assetRewriter', () => {
     expect(assetRewriter('/sub')('/logo.svg')).toBe('/sub/logo.svg');
     expect(assetRewriter('/sub')('/sub')).toBeNull();
     expect(assetRewriter('/sub')('//cdn/logo.svg')).toBeNull();
+  });
+});
+
+describe('siteHrefRewriter', () => {
+  const pages = new Set(['', 'quickstart', 'guides/setup']);
+
+  it('sends docs pages through the linker and puts the base in front of every other site-root path', () => {
+    const rewrite = siteHrefRewriter(pages, createLinker('/sub/docs', 'always'), { base: '/docs', siteBase: '/sub', trailingSlash: 'always' });
+    expect(rewrite('/quickstart')).toBe('/sub/docs/quickstart/');
+    expect(rewrite('/guides/setup#install')).toBe('/sub/docs/guides/setup/#install');
+    expect(rewrite('/')).toBe('/sub/');
+    expect(rewrite('/#top')).toBe('/sub/#top');
+    expect(rewrite('/pricing')).toBe('/sub/pricing');
+    expect(rewrite('/shots/a.png')).toBe('/sub/shots/a.png');
+  });
+
+  it('leaves absolute, relative, hash-only and already-based hrefs alone', () => {
+    const rewrite = siteHrefRewriter(pages, createLinker('/sub/docs', 'always'), { base: '/docs', siteBase: '/sub', trailingSlash: 'always' });
+    for (const href of ['https://example.com/', '//cdn.example.com/a', 'mailto:a@b.c', 'quickstart', '#install', '/sub', '/sub/', '/sub/pricing']) {
+      expect(rewrite(href), href).toBeNull();
+    }
+  });
+
+  it('finds docs pages written with the docs base already in front', () => {
+    const rewrite = siteHrefRewriter(pages, createLinker('/sub/docs', 'always'), { base: '/docs', siteBase: '/sub', trailingSlash: 'always' });
+    expect(rewrite('/docs/quickstart')).toBe('/sub/docs/quickstart/');
+    expect(rewrite('/docs')).toBe('/sub/docs/');
+    expect(rewrite('/docs/guides/setup?x=1')).toBe('/sub/docs/guides/setup/?x=1');
+    // Not a page: Astro's base only.
+    expect(rewrite('/docs/nope')).toBe('/sub/docs/nope');
+  });
+
+  it('writes the host home without a slash when Astro asks for none', () => {
+    const rewrite = siteHrefRewriter(pages, createLinker('/sub/docs', 'never'), { base: '/docs', siteBase: '/sub', trailingSlash: 'never' });
+    expect(rewrite('/')).toBe('/sub');
+    expect(rewrite('/?x=1')).toBe('/sub?x=1');
+    expect(rewrite('/quickstart')).toBe('/sub/docs/quickstart');
+  });
+
+  it('changes only docs links when the site has no base', () => {
+    const rewrite = siteHrefRewriter(pages, createLinker('/docs', 'ignore'), { base: '/docs', siteBase: '', trailingSlash: 'ignore' });
+    expect(rewrite('/quickstart')).toBe('/docs/quickstart');
+    expect(rewrite('/')).toBeNull();
+    expect(rewrite('/pricing')).toBeNull();
+  });
+
+  it('rewrites links in rendered content', () => {
+    const sheet = new InlineStyleSheet();
+    const html = sheet.extract('<a href="/">home</a><a href="/quickstart">q</a><a href="/pricing">p</a>', {
+      href: siteHrefRewriter(pages, createLinker('/sub/docs', 'always'), { base: '/docs', siteBase: '/sub', trailingSlash: 'always' }),
+    });
+    expect(html).toBe('<a href="/sub/">home</a><a href="/sub/docs/quickstart/">q</a><a href="/sub/pricing">p</a>');
   });
 });

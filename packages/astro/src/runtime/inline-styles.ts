@@ -11,11 +11,13 @@
  *    its hash with Astro's CSP. The rules are `!important`, so they keep the
  *    precedence an inline style had.
  *
- * 2. Site-root links to docs pages gain the docs base (and, when Astro has a
- *    `base`, site-root images gain it). Content written for a
- *    Next.js theme (docs at `/`) links `/quickstart`; under `/docs` that has
- *    to be `/docs/quickstart`. Only links whose path is a page of this docs
- *    site change, so links to the host's own pages and assets are left alone.
+ * 2. Site-root links and images get the paths the browser should request.
+ *    Content written for a Next.js theme (docs at `/`) links `/quickstart`;
+ *    under `/docs` that has to be `/docs/quickstart`, so a link whose path is
+ *    a page of this docs site goes through the docs linker. Any other
+ *    site-root link or image (`/`, `/pricing`, `/shots/a.png`) gains Astro's
+ *    `base`, the way `next/link` adds `basePath`, so it still reaches the
+ *    host's page when the site is served from a subpath.
  */
 
 import { fromHtml } from 'hast-util-from-html';
@@ -147,17 +149,57 @@ export function assetRewriter(siteBase: string): HrefRewriter {
 
 /**
  * A rewriter for site-root links to pages of this docs site: `/quickstart#x`
- * → `link('quickstart') + '#x'` when `quickstart` is one of `paths`. The
- * docs home (`/`) is left alone, since on a host site it means the host's home.
+ * → `link('quickstart') + '#x'` when `quickstart` is one of `paths`. A link
+ * that already starts with the docs `base` (`/docs/quickstart`) is found too,
+ * so it gets `publicBase` and the trailing slash like the rest. The site root
+ * (`/`) is left alone, since on a host site it means the host's home.
  */
-export function docsLinkRewriter(paths: ReadonlySet<string>, link: (path: string) => string): HrefRewriter {
+export function docsLinkRewriter(paths: ReadonlySet<string>, link: (path: string) => string, base = ''): HrefRewriter {
+  const prefix = base.replace(/^\/+|\/+$/g, '');
   return (href) => {
     if (!href.startsWith('/') || href.startsWith('//')) return null;
     const cut = href.search(/[?#]/);
     const pathname = cut === -1 ? href : href.slice(0, cut);
     const suffix = cut === -1 ? '' : href.slice(cut);
     const path = pathname.replace(/^\/+|\/+$/g, '');
-    if (!path || !paths.has(path)) return null;
-    return link(path) + suffix;
+    if (!path) return null;
+    if (paths.has(path)) return link(path) + suffix;
+    if (prefix && (path === prefix || path.startsWith(`${prefix}/`))) {
+      const rest = path.slice(prefix.length + 1);
+      if (paths.has(rest)) return link(rest) + suffix;
+    }
+    return null;
+  };
+}
+
+export interface SiteHrefOptions {
+  /** The docs route base (`/docs`), normalized. */
+  base: string;
+  /** Astro's own `base`, normalized. */
+  siteBase: string;
+  trailingSlash: 'always' | 'never' | 'ignore';
+}
+
+/**
+ * Every site-root href Inkform prints, from docs.json (navbar links, anchors,
+ * the CTA, sidebar links) or from content: a page of this docs site goes
+ * through `link` (docs base, `publicBase`, trailing slash); any other
+ * site-root path gets Astro's `base` in front. `/` is the host's home, which
+ * under a base is `<base>/` (`<base>` with `trailingSlash: 'never'`). Absolute,
+ * protocol-relative, relative and hash-only hrefs, and paths already under
+ * Astro's base, are left alone.
+ */
+export function siteHrefRewriter(
+  paths: ReadonlySet<string>,
+  link: (path: string) => string,
+  { base, siteBase, trailingSlash }: SiteHrefOptions,
+): HrefRewriter {
+  const docs = docsLinkRewriter(paths, link, base);
+  const asset = assetRewriter(siteBase);
+  return (href) => {
+    const docsHref = docs(href);
+    if (docsHref !== null) return docsHref;
+    if (siteBase && trailingSlash === 'never' && /^\/(?=[?#]|$)/.test(href)) return siteBase + href.slice(1);
+    return asset(href);
   };
 }

@@ -11,6 +11,9 @@ describe('pageUrl', () => {
     expect(pageUrl(path.join('a', 'b.html'), '/docs', 'ignore')).toBe('/docs/a/b');
     expect(pageUrl(path.join('quickstart', 'index.html'), '', 'ignore')).toBe('/quickstart');
     expect(pageUrl(path.join('quickstart', 'index.html'), '/docs', 'always')).toBe('/docs/quickstart/');
+    // Under Astro's base, publicBase carries it.
+    expect(pageUrl('index.html', '/sub/docs', 'always')).toBe('/sub/docs/');
+    expect(pageUrl(path.join('quickstart', 'index.html'), '/sub/docs', 'always')).toBe('/sub/docs/quickstart/');
   });
 });
 
