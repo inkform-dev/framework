@@ -18,6 +18,8 @@ export default defineConfig({
       // The site's own MDX components, and the CSS they use.
       components: './src/mdx-components.tsx',
       customCss: ['./src/styles/docs.css'],
+      // "Built with Inkform" under each page. Off unless a site turns it on.
+      credits: true,
     }),
   ],
   // This site has no Markdown pages of its own. Docs code blocks are

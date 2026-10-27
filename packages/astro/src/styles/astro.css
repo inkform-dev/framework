@@ -243,3 +243,23 @@ html:not(.dark) .fw-shell-brand-logo--dark {
   line-height: 1.3;
   scroll-margin-top: calc(var(--fw-header-h) + 1rem);
 }
+
+/* ── "Built with Inkform" (the `credits` option) ──────────────────────── */
+
+.fw-credits {
+  margin-top: var(--fw-space-8);
+  padding-top: var(--fw-space-4);
+  border-top: 1px solid var(--fw-border);
+  font-size: 0.8125rem;
+}
+
+.fw-credits-link {
+  color: var(--fw-muted);
+  text-decoration: none;
+}
+
+.fw-credits-link:hover {
+  color: var(--fw-fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

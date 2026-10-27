@@ -1,7 +1,8 @@
 ---
 /**
  * The three-zone docs shell: header (logo, tabs, search, theme toggle, CTA),
- * sidebar, article, on-this-page rail. Same markup and `fw-shell*` classes as
+ * sidebar, article, on-this-page rail, and the "Built with Inkform" line
+ * under the article when the `credits` option is on. Same markup and `fw-shell*` classes as
  * the framework's DocsShell, so @inkform/framework/styles.css and theme
  * tokens style it unchanged. The mobile drawer, TOC highlight and theme
  * toggle are wired up by ../client/shell.ts.
@@ -41,6 +42,8 @@ const hasSidebar = !!sidebar && sidebar.length > 0;
 const hasToc = !!toc && toc.length > 0;
 const showMenu = hasSidebar || links.length > 0 || !!cta;
 const TYPE_LABEL = { doc: 'Docs', api: 'API', changelog: 'Changelog', blog: 'Blog' } as const;
+// Where the `credits` link goes: the open-source repository this package lives in.
+const INKFORM_URL = 'https://github.com/inkform-dev/framework';
 ---
 
 <div class:list={['fw-shell', !hasSidebar && 'fw-shell--no-sidebar', !hasToc && 'fw-shell--no-toc']}>
@@ -115,6 +118,15 @@ const TYPE_LABEL = { doc: 'Docs', api: 'API', changelog: 'Changelog', blog: 'Blo
     <main class="fw-shell-main" id="main-content" data-pagefind-body data-pagefind-filter={`type:${TYPE_LABEL[contentType]}`}>
       <div class="fw-shell-content">
         <slot />
+        {
+          config.credits ? (
+            <footer class="fw-credits" data-pagefind-ignore="all">
+              <a class="fw-credits-link" href={INKFORM_URL}>
+                Built with Inkform
+              </a>
+            </footer>
+          ) : null
+        }
       </div>
     </main>
 

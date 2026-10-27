@@ -53,6 +53,11 @@ export interface InkformOptions {
   mermaid?: boolean;
   /** Serve `<base>/llms.txt` and `<base>/llms-full.txt`. Default `true`. */
   llmsTxt?: boolean;
+  /**
+   * Show a small "Built with Inkform" link, to the Inkform repository, at the
+   * foot of every docs page. Default `false`.
+   */
+  credits?: boolean;
 }
 
 /** Facts about the host's Astro config that the options resolve against. */
@@ -91,6 +96,7 @@ export interface ResolvedOptions {
   search: boolean;
   mermaid: boolean;
   llmsTxt: boolean;
+  credits: boolean;
   trailingSlash: HostConfig['trailingSlash'];
   csp: boolean;
   cspAlgorithm: CspAlgorithm;
@@ -136,6 +142,7 @@ export function resolveOptions(options: InkformOptions, host: HostConfig): Resol
     search: options.search ?? true,
     mermaid: options.mermaid ?? false,
     llmsTxt: options.llmsTxt ?? true,
+    credits: options.credits ?? false,
     trailingSlash: host.trailingSlash,
     csp: host.csp,
     cspAlgorithm: host.cspAlgorithm ?? 'SHA-256',
